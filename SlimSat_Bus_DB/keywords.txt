@@ -1,0 +1,43 @@
+#######################################
+# Datatypes (KEYWORD1)
+#######################################
+
+ScBusDb	KEYWORD1
+ScBusMode	KEYWORD1
+ScBusTime	KEYWORD1
+
+
+#######################################
+# Methods and Functions (KEYWORD2)
+#######################################
+
+##############################
+# Class Payload
+##############################
+
+getScBusMode	KEYWORD2
+setScBusMode	KEYWORD2
+setScBusStreamDataState	KEYWORD2
+getScBusStreamDataState	KEYWORD2
+print KEYWORD2
+
+##############################
+# Class ...
+##############################
+
+
+##############################
+# Global Functions
+##############################
+
+
+#######################################
+# Constants (LITERAL1)
+#######################################
+
+VERBOSE_SC_BUS_DB_OUTPUT LITERAL1
+MIN_SC_BUS_MODE_VALUE LITERAL1
+MAX_SC_BUS_MODE_VALUE LITERAL1
+INITIALIZED LITERAL1
+SAFE LITERAL1
+NOMINAL_ON LITERAL1

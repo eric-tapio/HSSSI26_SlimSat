@@ -1,0 +1,36 @@
+#######################################
+# Datatypes (KEYWORD1)
+#######################################
+
+Ping_Sensor	KEYWORD1
+
+
+#######################################
+# Methods and Functions (KEYWORD2)
+#######################################
+
+##############################
+# Class Ping_Sensor
+##############################
+
+print	KEYWORD2
+getRangeMeasurementInCm	KEYWORD2
+getRangeMeasurementInIn	KEYWORD2
+setNumMeasurements	KEYWORD2
+setPingPin	KEYWORD2
+getPulseDuration	KEYWORD2
+microsecondsToInches	KEYWORD2
+microsecondsToCentimeters	KEYWORD2
+
+
+##############################
+# Global Functions
+##############################
+
+
+#######################################
+# Constants (LITERAL1)
+#######################################
+
+DEFAULT_PING_PIN LITERAL1
+VERBOSE_OUTPUT LITERAL1

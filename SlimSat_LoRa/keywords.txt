@@ -1,0 +1,40 @@
+#######################################
+# Datatypes (KEYWORD1)
+#######################################
+
+LoRaRadio	KEYWORD1
+
+
+#######################################
+# Methods and Functions (KEYWORD2)
+#######################################
+
+##############################
+# Class Payload
+##############################
+
+initializeLoRa	KEYWORD2
+setFrequency	KEYWORD2
+getFrequency	KEYWORD2
+setBandwidth	KEYWORD2
+getBandwidth	KEYWORD2
+setSpreadFactor	KEYWORD2
+getSpreadFactor	KEYWORD2
+getRssi	KEYWORD2
+setRegister	KEYWORD2
+getRegister	KEYWORD2
+print KEYWORD2
+
+##############################
+# Class ...
+##############################
+
+##############################
+# Global Functions
+##############################
+
+#######################################
+# Constants (LITERAL1)
+#######################################
+
+VERBOSE_LORA_OUTPUT LITERAL1

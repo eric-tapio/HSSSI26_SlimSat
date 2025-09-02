@@ -1,0 +1,11 @@
+$GS01,5,*20 // Get LoRA Radio Frequency
+$GS01,19,*1D // Get Payload Op Period (Should initially be 5000 ms, or 5 seconds)
+
+
+
+Convention used:
+
+SlimSatBus - Capital Camel - Class
+initializeScBus - Lower Case Camel - function or method
+some_variable - lower ? - variable
+Some_object - Capital ? - object
