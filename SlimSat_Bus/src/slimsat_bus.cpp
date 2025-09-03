@@ -53,12 +53,6 @@ void SlimSatBus::performScBusOperationIteration(void) {
 		handleScBusCmd();
 	}
 	
-	
-	if (Sc_database.getScBusStreamDataState() == 1) {
-		// Then stream the data
-		
-	}
-	
 	return;
 }
 
@@ -128,13 +122,36 @@ void SlimSatBus::handleScBusCmd(void) {
 	}
 	
 	Msg_handler.handleNmeaMsg(sc_cmd_msg, Sc_database, Payload1, LoRa, Payload_timer, Beacon_timer);
-	
-	if (1) {
-		Serial.print(F("\n ~ Received response from S/C: "));
+
+	// Transmit any responses
+	if (VERBOSE_SC_BUS_OUTPUT) {
+		Serial.println(F("\n ~ Transmitting all S/C response messages ..."));
 	}
 	
-	uint8_t num_bfr_msgs = Msg_handler.Sc_cbfr.getCircularBufferNumMsgs();
-	sc_response_msg = Msg_handler.Sc_cbfr.circularBufferPopMsg();
+	if (1) {
+		//Serial.print(F("\n ~ Received response from S/C: "));
+		Serial.print(F(" ~ Received response from S/C: "));
+	}
+	
+	// Create a new method in Msg Handler for this
+	uint8_t num_msgs = Msg_handler.Sc_cbfr.getCircularBufferNumMsgs();
+	char* xmit_msg = NULL;
+	
+	if (VERBOSE_MSG_HANDLER_OUTPUT) {
+		Serial.print(F("\n ~ num_msgs is: "));
+		Serial.println(num_msgs);
+	}
+	
+	for (uint8_t i = 0; i < num_msgs; i++) {
+		xmit_msg = Msg_handler.transmitNextMsg();
+	}
+
+	// Oh, add it right here!
+	//uint8_t num_bfr_msgs = Msg_handler.Sc_cbfr.getCircularBufferNumMsgs();
+	//sc_response_msg = Msg_handler.Sc_cbfr.circularBufferPopMsg();
+		// Transmit any messages generated
+	//uint8_t num_xmited_msgs = Msg_handlertransmitAllMsgs();
+	
 
 	return;
 }
@@ -175,5 +192,36 @@ void SlimSatBus::displayNewSerialTermData(void) {
 		newCmdRxd = 0; // Reset flag for next message
 	}
 
+	return;
+}
+
+
+void SlimSatBus::performPayloadOp(void) {
+	// This method enables the S/C bus to send payload commands to the payload directly
+	// The commands can be scripted, and potentially even set by command
+	
+	if (Sc_database.getScBusStreamDataState() == 1) {
+		// Then stream the data
+		// Do this by sending the payload commands
+		Msg_handler.handlePayloadCmd(Payload1, 34, 0);
+		Msg_handler.handlePayloadCmd(Payload1, 35, 0);
+		Msg_handler.handlePayloadCmd(Payload1, 36, 0);
+	}
+	else {
+		Payload1.performPayloadOperationIteration();
+	}
+	
+	uint8_t num_msgs = Msg_handler.Sc_cbfr.getCircularBufferNumMsgs();
+	char* xmit_msg = NULL;
+	
+	if (VERBOSE_SC_BUS_OUTPUT) {
+		Serial.print(F("\n ~ num_msgs is: "));
+		Serial.println(num_msgs);
+	}
+	
+	for (uint8_t i = 0; i < num_msgs; i++) {
+		xmit_msg = Msg_handler.transmitNextMsg();
+	}
+	
 	return;
 }

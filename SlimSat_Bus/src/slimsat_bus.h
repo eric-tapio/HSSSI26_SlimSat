@@ -54,6 +54,7 @@ public:
 	void getScBusCmd(void);
 	void handleScBusCmd(void);
 	void print(void) const;
+	void performPayloadOp(void);
 
 	// Serial Terminal Input methods
 	void getSerialTermInput(void);

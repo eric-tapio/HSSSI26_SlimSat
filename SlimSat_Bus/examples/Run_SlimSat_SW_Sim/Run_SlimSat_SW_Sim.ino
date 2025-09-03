@@ -7,7 +7,7 @@
 #include <Adafruit_TinyUSB.h> // for Serial
 #include <slimsat_bus.h>
 
-#define DEFAULT_PAYLOAD_OP_PERIOD_IN_MS 5000L
+#define DEFAULT_PAYLOAD_OP_PERIOD_IN_MS 10000L
 #define DEFAULT_BEACON_PERIOD_IN_MS 33000L
 
 // Construct the SlimSat Bus
@@ -36,7 +36,7 @@ void loop() {
 
 	if (Slimsat.Payload_timer.timerHasElapsed()) {
 		Serial.println("\n ~ Performing Payload Op ...");
-		Slimsat.Payload1.performPayloadOperationIteration();
+		Slimsat.performPayloadOp();
 	}
 
 	if (Slimsat.Beacon_timer.timerHasElapsed()) {

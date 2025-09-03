@@ -92,6 +92,8 @@ public:
 	char* popMsgFromCircBuffer(void);
 	void printCircBuffer(void) const;
 	uint8_t circBufferIsEmpty(void) const;
+	char* transmitNextMsg(void);
+	//uint8_t msgsToTransmitAvailable(void) const;
 	
 	// New
 	void handlePayloadCmd(Payload& Payload, uint8_t command_id, uint32_t command_value);

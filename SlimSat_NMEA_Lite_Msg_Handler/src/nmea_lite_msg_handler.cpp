@@ -656,14 +656,14 @@ void NmeaMsgHandler::handlePayloadCmd(Payload& Payload, uint8_t command_id, uint
 	for (uint8_t i=0; i<num_msgs; i++) {
 		pl_msg = Payload.getNextPayloadDataMsg();
 		
+		constructResponseMsg(pl_msg);
+		
 		if (VERBOSE_MSG_HANDLER_OUTPUT) {
 			Serial.print(F(" ~ Payload Msg["));
 			Serial.print(i);
 			Serial.print(F("] is: "));
 			Serial.println(pl_msg);
 		}
-		
-		constructResponseMsg(pl_msg);
 	}
 
 	return;
@@ -953,4 +953,32 @@ char* NmeaMsgHandler::findCharInStr(char* start_adr, char chr_to_find) {
 	}
 
 	return char_ptr;
+}
+
+
+// uint8_t NmeaMsgHandler::msgsToTransmitAvailable(void) const {
+	// // This method returns whether or not there are messages in the circ buffer to transmit
+	
+	// uint8_t num_msgs = Sc_cbfr.getCircularBufferNumMsgs();
+	
+	// if (num_msgs > 0) {
+		// return 1;
+	// }
+	// else {
+		// return 0;
+	// }
+// }
+
+
+char* NmeaMsgHandler::transmitNextMsg(void) {
+	// This method transmits the next message in the circ buffer
+	
+	char* xmit_msg = Sc_cbfr.circularBufferPopMsg();
+	
+	if (1) {
+		//Serial.print(F("\n ~ Transmitting Msg: "));
+		Serial.println(xmit_msg);
+	}
+	
+	return xmit_msg;
 }
