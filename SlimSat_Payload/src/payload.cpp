@@ -36,7 +36,7 @@ void Payload::initializeDataMembers(void) {
 void Payload::print(void) const {
 	// This method prints the Payload data members
 
-	Serial.println(F("/n ~ Printing Payload ... "));
+	Serial.println(F("\n ~ Printing Payload ... "));
 	Serial.print(F("    Payload State is: "));
 	Serial.println(pl_state);
 	Serial.print(F("    Number Measurements is: "));

@@ -34,14 +34,14 @@ void loop() {
 	// Operations is performed by sending the payload commands
 
 	// Test the Ping Payload command (Ping as in, send a message expecting a response, which is different from Ping, the name of the sensor that is being used. Expect an Acknowledgement ("A") back
-	Serial.print(" ~ Sending payload command: ");
+	Serial.print("\n ~ Sending payload command: ");
 	Serial.println(PING_PAYLOAD_CMD_ID);
 	pl.handlePayloadCommand(PING_PAYLOAD_CMD_ID, 0);
 	Serial.print(" ~ Received response from payload: ");
 	Serial.println(pl.getPayloadDataStr());
 
 	// Test the get Payload State command. Expect an Acknowledgement ("A") and that the Payload is Initialized (1)
-	Serial.print(" ~ Sending payload command: ");
+	Serial.print("\n ~ Sending payload command: ");
 	Serial.println(GET_PAYLOAD_STATE_CMD_ID);
 	pl.handlePayloadCommand(GET_PAYLOAD_STATE_CMD_ID, 0);
 	Serial.print(" ~ Received response from payload: ");
@@ -49,35 +49,35 @@ void loop() {
 
 
 	// Test the Take Measurement command. Expect there to be only one measurement when printed
-	Serial.print(" ~ Sending payload command: ");
+	Serial.print("\n ~ Sending payload command: ");
 	Serial.println(TAKE_MEASUREMENTS_CMD_ID);
 	pl.handlePayloadCommand(TAKE_MEASUREMENTS_CMD_ID, 0);
 
 	// Test the Print Measurement command
-	Serial.print(" ~ Sending payload command: ");
+	Serial.print("\n ~ Sending payload command: ");
 	Serial.print(PRINT_MEASUREMENTS_CMD_ID);
 	pl.handlePayloadCommand(PRINT_MEASUREMENTS_CMD_ID, 0);
 	
 	// Test the Get Processed Measurements command
-	Serial.print(" ~ Sending payload command: ");
+	Serial.print("\n ~ Sending payload command: ");
 	Serial.println(GET_PROCESSED_MEASUREMENT_DATA_CMD_ID);
 	pl.handlePayloadCommand(GET_PROCESSED_MEASUREMENT_DATA_CMD_ID, 0);
 	Serial.print(" ~ Received response from payload: ");
-	Serial.print(pl.getPayloadDataStr());
+	Serial.println(pl.getPayloadDataStr());
 
 
 	// Now set the new number of consecutive measurements to take in each round
-	Serial.print(" ~ Sending payload command: ");
+	Serial.print("\n ~ Sending payload command: ");
 	Serial.println(SET_NUMBER_MEASUREMENTS_TO_TAKE_CMD_ID);
 	pl.handlePayloadCommand(SET_NUMBER_MEASUREMENTS_TO_TAKE_CMD_ID, 16);
 
 	// Test the Take Measurement command. Expect there to be only one measurement when printed
-	Serial.print(" ~ Sending payload command: ");
+	Serial.print("\n ~ Sending payload command: ");
 	Serial.println(TAKE_MEASUREMENTS_CMD_ID);
 	pl.handlePayloadCommand(TAKE_MEASUREMENTS_CMD_ID, 0);
 
 	// Test the Print Measurement command
-	Serial.print(" ~ Sending payload command: ");
+	Serial.print("\n ~ Sending payload command: ");
 	Serial.print(PRINT_MEASUREMENTS_CMD_ID);
 	pl.handlePayloadCommand(PRINT_MEASUREMENTS_CMD_ID, 0);
 
