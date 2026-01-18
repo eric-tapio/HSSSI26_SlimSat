@@ -1,0 +1,101 @@
+#######################################
+# Datatypes (KEYWORD1)
+#######################################
+
+FlashMemoryIf	KEYWORD1
+Adafruit_FlashTransport_QSPI	KEYWORD1
+Adafruit_SPIFlash	KEYWORD1
+BusDbRegisterValues	KEYWORD1
+
+#######################################
+# Methods and Functions (KEYWORD2)
+#######################################
+
+##############################
+# Class
+##############################
+
+begin	KEYWORD2
+printJedecId	KEYWORD2
+writeValueToFlashAddress	KEYWORD2
+readValueFromFlashAddress	KEYWORD2
+flashEraseChip	KEYWORD2
+flashEraseAllSectors	KEYWORD2
+flashEraseSector	KEYWORD2
+flashEraseAllBlocks	KEYWORD2
+flashEraseBlock	KEYWORD2
+getFlashReturnResult	KEYWORD2
+incrementAndReturnBootCount	KEYWORD2
+incrementAndReturnValidMessageCount	KEYWORD2
+incrementAndReturnInvalidMessageCount	KEYWORD2
+incrementAndReturnNumberBusDataRecRecords	KEYWORD2
+incrementAndReturnNumberPayloadDataRecords	KEYWORD2
+initializeBusFlashMemoryDbValues	KEYWORD2
+getBootCount	KEYWORD2
+getValidMessageCount	KEYWORD2
+getInvalidMessageCount	KEYWORD2
+getNextPayloadDataWriteToAddress	KEYWORD2
+getNextBusDataWriteToAddress	KEYWORD2
+getNumberPayloadDataRecords	KEYWORD2
+getNumberBusDataRecords	KEYWORD2
+incrementFlashBootCount	KEYWORD2
+incrementFlashValidMessageCount	KEYWORD2
+incrementFlashInvalidMessageCount	KEYWORD2
+incrementFlashNumberBusDataRecordCount	KEYWORD2
+incrementFlashNumberPayloadDataRecordCount	KEYWORD2
+incrementFlashCounterValue	KEYWORD2
+writeBusDataRecordToFlash	KEYWORD2
+readBusDataRecordFromFlash	KEYWORD2
+getBusDatabaseRegisterValues	KEYWORD2
+writePayloadDataRecordToFlash	KEYWORD2
+readPayloadDataRecordFromFlash	KEYWORD2
+flashEraseAllBusDataRecordBlocks	KEYWORD2
+flashEraseAllPayloadDataRecordBlocks	KEYWORD2
+getBusDataRecordFromFlash	KEYWORD2
+getPayloadDataRecordSize	KEYWORD2
+getPayloadDataRecordFromFlash	KEYWORD2
+initializePayloadDataFlashMemoryDbValues	KEYWORD2
+initializeBusDataFlashMemoryDbValues	KEYWORD2
+validatePayloadDataStartWriteToAdress	KEYWORD2
+incrementFlashNextBusDataWriteToAddress	KEYWORD2
+incrementFlashNextPayloadDataWriteToAddress	KEYWORD2
+validateBusDataStartWriteToAdress	KEYWORD2
+read32	KEYWORD2
+print	KEYWORD2
+writePartialPayloadDataRecordToFlash	KEYWORD2
+writePartialBusDataRecordToFlash	KEYWORD2
+	
+##############################
+# Global Functions
+##############################
+
+#######################################
+# Constants (LITERAL1)
+#######################################
+
+BUS_DATA_START_WRITE_BLOCK_NUMBER LITERAL1
+BUS_DATA_STOP_WRITE_BLOCK_NUMBER LITERAL1
+PAYLOAD_DATA_START_WRITE_BLOCK_NUMBER LITERAL1
+PAYLOAD_DATA_STOP_WRITE_BLOCK_NUMBER LITERAL1
+BUS_DATA_START_WRITE_SECTOR_NUMBER LITERAL1
+PAYLOAD_DATA_START_WRITE_SECTOR_NUMBER LITERAL1
+BOOT_COUNT_SECTOR_NUMBER LITERAL1
+NUM_VALID_MSGS_RXD_SECTOR_NUMBER LITERAL1
+NUM_INVALID_MSGS_RXD_SECTOR_NUMBER LITERAL1
+NUM_BUS_DATA_RECORDS_SECTOR_NUMBER LITERAL1
+NEXT_BUS_DATA_WRITE_TO_ADDRESS_SECTOR_NUMBER LITERAL1
+NUM_PAYLOAD_DATA_RECORDS_SECTOR_NUMBER LITERAL1
+NEXT_PAYLOAD_DATA_WRITE_TO_ADDRESS_SECTOR_NUMBER LITERAL1
+FLASH_SECTOR_SIZE_IN_BYTES LITERAL1
+BOOT_COUNT_ADDRESS LITERAL1
+NUM_VALID_MSGS_RXD_ADDRESS LITERAL1
+NUM_INVALID_MSGS_RXD_ADDRESS LITERAL1
+NUM_BUS_DATA_RECORDS_ADDRESS LITERAL1
+NEXT_BUS_DATA_WRITE_TO_ADR_ADDRESS LITERAL1
+NUM_PAYLOAD_DATA_RECORDS_ADDRESS LITERAL1
+NEXT_PAYLOAD_DATA_WRITE_TO_ADR_ADDRESS LITERAL1
+INITIAL_BUS_DATA_START_WRITE_ADDRESS LITERAL1
+INITIAL_PAYLOAD_DATA_START_WRITE_ADDRESS LITERAL1
+NUM_FLASH_BLOCKS LITERAL1
+SUCCESS_ERASE_VALUE LITERAL1
+VERBOSE_BUS_FLASH_MEMORY_OUTPUT LITERAL1
