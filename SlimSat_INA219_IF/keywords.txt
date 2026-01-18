@@ -1,0 +1,44 @@
+#######################################
+# Datatypes (KEYWORD1)
+#######################################
+
+Ina219If	KEYWORD1
+Adafruit_INA219	KEYWORD1
+
+#######################################
+# Methods and Functions (KEYWORD2)
+#######################################
+
+##############################
+# Class
+##############################
+
+begin	KEYWORD2
+success	KEYWORD2
+initializeDevice	KEYWORD2
+getCurrent	KEYWORD2
+getShuntVoltage	KEYWORD2
+getBusVoltage	KEYWORD2
+getLoadVoltage	KEYWORD2
+getPower	KEYWORD2
+setCalibration_32V_1A	KEYWORD2
+print KEYWORD2
+initializeDataMembers KEYWORD2
+	
+##############################
+# Class ...
+##############################
+
+
+##############################
+# Global Functions
+##############################
+
+
+#######################################
+# Constants (LITERAL1)
+#######################################
+
+VERBOSE_INA219_OUTPUT LITERAL1
+INA219_I2C_ADR LITERAL1
+NUM_MILLVOLTS_PER_VOLT LITERAL1
