@@ -1,10 +1,23 @@
-// CAPE-Twiggs HSSSI-26 SlimSat Project
-// Copyright (c) 2025, Eric Tapio. All rights reserved.
-// Licensed under the MIT license. See LICENSE file in the project root for full license information.
+/**
+ * @file ping_sensor.cpp
+ * @brief Ping Ultrasonic Sensor Implementation
+ * 
+ * @details This file implements the Ping_Sensor class methods for ultrasonic
+ * distance measurement using a Parallax PING sensor. Provides pulse timing,
+ * distance calculations, and pin management functionality.
+ * 
+ * CAPE-Twiggs HSSSI-26 SlimSat Project
+ * Copyright (c) 2025, Eric Tapio. All rights reserved.
+ * Licensed under the MIT license. See LICENSE file in the project root for full license information.
+ */
 
 #include <ping_sensor.h>
 
-
+/**
+ * @brief Default constructor for Ping Sensor
+ * @details Initializes the sensor with default pin (pin 7) and clears
+ * duration and range values. Called when no input arguments are given.
+ */
 Ping_Sensor::Ping_Sensor(void) {
 	// This is the Ping Sensor default constructor, which is called when no input arguments are given
 	duration = 0;
@@ -13,6 +26,12 @@ Ping_Sensor::Ping_Sensor(void) {
 }
 
 
+/**
+ * @brief Constructor with pin parameter
+ * @details Initializes the sensor with a specified digital pin and clears
+ * duration and range values. Called when a pin number is provided.
+ * @param ping_hw_pin Digital pin number for PING sensor
+ */
 Ping_Sensor::Ping_Sensor(uint8_t ping_hw_pin) {
 	// This is the Ping Sensor constructor, which is called when a Ping HW Pin Input is given
 	duration = 0;
@@ -21,6 +40,11 @@ Ping_Sensor::Ping_Sensor(uint8_t ping_hw_pin) {
 }
 
 
+/**
+ * @brief Print sensor information
+ * @details Outputs comprehensive sensor data including pin configuration
+ * and last measurement duration for debugging and diagnostic purposes.
+ */
 void Ping_Sensor::print(void) const {
 	// This method prints the Ping Sensor Class data members
     Serial.println(F("\n ~ Printing Ping Data Members:"));
@@ -32,6 +56,12 @@ void Ping_Sensor::print(void) const {
     return;
 }
 
+/**
+ * @brief Get pulse duration from PING sensor
+ * @details Triggers the PING sensor and measures the echo pulse duration.
+ * The sensor is triggered by a HIGH pulse of 2+ microseconds, then measures
+ * the time for the echo to return. Uses modified timing for reliable operation.
+ */
 void Ping_Sensor::getPulseDuration(void) {
 	// This method gets the measured duration of the Ping sensor's ping
 	// The PING))) is triggered by a HIGH pulse of 2 or more microseconds.
@@ -56,6 +86,12 @@ void Ping_Sensor::getPulseDuration(void) {
 }
 
 
+/**
+ * @brief Set PING sensor pin
+ * @details Configures which digital pin to use for the PING sensor.
+ * Allows runtime reconfiguration of the sensor pin assignment.
+ * @param pin Digital pin number to use for the sensor
+ */
 void Ping_Sensor::setPingPin(uint8_t pin) {
 	// This method enables the ping pin to be set by the user
 	ping_pin = pin;
@@ -64,6 +100,12 @@ void Ping_Sensor::setPingPin(uint8_t pin) {
 }
 
 
+/**
+ * @brief Get range measurement in centimeters
+ * @details Performs a complete measurement cycle including pulse generation,
+ * echo timing, and distance calculation. Returns distance in centimeters.
+ * @return Distance to object in centimeters
+ */
 uint32_t Ping_Sensor::getRangeMeasurementInCm(void) {
 	// This method returns the range measurement in cm
 	getPulseDuration();
@@ -79,6 +121,12 @@ uint32_t Ping_Sensor::getRangeMeasurementInCm(void) {
 }
 
 
+/**
+ * @brief Get range measurement in inches
+ * @details Performs a complete measurement cycle including pulse generation,
+ * echo timing, and distance calculation. Returns distance in inches.
+ * @return Distance to object in inches
+ */
 uint32_t Ping_Sensor::getRangeMeasurementInIn(void) {
 	// This method returns the range measurement in in
 	getPulseDuration();
@@ -94,6 +142,13 @@ uint32_t Ping_Sensor::getRangeMeasurementInIn(void) {
 }
 
 
+/**
+ * @brief Convert microseconds to inches
+ * @details Converts pulse duration to distance in inches using Parallax's
+ * specification of 73.746 microseconds per inch (sound at 1130 ft/sec).
+ * Divides by 2 since the pulse travels to object and back.
+ * @return Distance in inches
+ */
 uint32_t Ping_Sensor::microsecondsToInches(void) const {
 	// This method converts the measured duration to a range measurement in inches
 	// According to Parallax's datasheet for the PING))), there are 73.746
@@ -104,6 +159,13 @@ uint32_t Ping_Sensor::microsecondsToInches(void) const {
 	return duration / 74 / 2;
 }
 
+/**
+ * @brief Convert microseconds to centimeters
+ * @details Converts pulse duration to distance in centimeters using the
+ * speed of sound (340 m/s or 29 microseconds per cm). Divides by 2
+ * since the pulse travels to the object and back.
+ * @return Distance in centimeters
+ */
 uint32_t Ping_Sensor::microsecondsToCentimeters(void) const {
 	// This method converts the measured duration to a range measurement in cm
 	// The speed of sound is 340 m/s or 29 microseconds per centimeter.

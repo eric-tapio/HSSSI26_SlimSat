@@ -10,7 +10,7 @@ Ping_Sensor	KEYWORD1
 #######################################
 
 ##############################
-# Class Ping_Sensor
+# Class
 ##############################
 
 print	KEYWORD2
@@ -33,4 +33,4 @@ microsecondsToCentimeters	KEYWORD2
 #######################################
 
 DEFAULT_PING_PIN LITERAL1
-VERBOSE_OUTPUT LITERAL1
+PING_VERBOSE_OUTPUT LITERAL1
