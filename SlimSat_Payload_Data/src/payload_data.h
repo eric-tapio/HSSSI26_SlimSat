@@ -1,0 +1,38 @@
+//
+//  Payload Data Record
+//
+// CAPE-Twiggs HSSSI-26 SlimSat Project
+// Copyright (c) 2025, Eric Tapio. All rights reserved.
+// Licensed under the MIT license. See LICENSE file in the project root for full license information.
+
+#ifndef SLIMSAT_PAYLOAD_DATA_HEADER
+#define SLIMSAT_PAYLOAD_DATA_HEADER
+
+#include <Arduino.h>
+
+#define PAYLOAD_DATA_ARY_SIZE 24 // Change the size of the payload data arrary to suit the needs for your payload
+#define PAYLOAD_DATA_VERBOSE_OUTPUT 0
+
+
+class PlDataRec {
+private:
+	double pl_data_array[PAYLOAD_DATA_ARY_SIZE];
+	double* pl_data_ptr;
+	
+public:
+	uint32_t time;
+	uint16_t pl_rec_number;
+	PlDataRec(void);
+	void initializeArray(void);
+	void printRecord(void);
+	void printArray(void);
+	uint8_t getRecordSize(void);
+	void setArrayElement(uint8_t index, double value);
+	double getArrayElement(uint8_t index);
+	uint32_t getTime(void);
+	void setTime(uint32_t time_val);
+	uint16_t getRecordNumber(void);
+	void setRecordNumber(uint16_t rec_number);
+};
+
+#endif
