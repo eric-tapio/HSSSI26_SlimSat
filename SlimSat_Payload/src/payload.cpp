@@ -1,129 +1,91 @@
-// CAPE-Twiggs HSSSI-26 SlimSat Project
-// Copyright (c) 2025, Eric Tapio. All rights reserved.
-// Licensed under the MIT license. See LICENSE file in the project root for full license information.
-
+/**
+ * @file payload.cpp
+ * @brief SlimSat Payload System Implementation
+ * 
+ * @details This file implements the Payload class methods for managing
+ * the payload subsystem including sensor operations, measurement collection,
+ * data processing, and command handling for SlimSat payload instruments.
+ * 
+ * CAPE-Twiggs HSSSI-26 SlimSat Project
+ * Copyright (c) 2025, Eric Tapio. All rights reserved.
+ * Licensed under the MIT license. See LICENSE file in the project root for full license information.
+ */
 
 #include <payload.h>
 
+/**
+ * @brief Default constructor for the payload class
+ * @details Initializes the payload system by setting up data members
+ * and performing system initialization. This is the only constructor
+ * available for the payload class.
+ */
 Payload::Payload(void) {
 	// The default constructor, and only constructor, for the payload class
-
 	initializeDataMembers();
-	initializePayload();
 
 	return;
 }
 
 
+/**
+ * @brief Initialize payload data members
+ * @details Sets all class data members to their default/initial values
+ * including payload state, measurement arrays, and configuration parameters.
+ */
 void Payload::initializeDataMembers(void) {
 	// This method initiailizes all class data members 
 
-	pl_state = STOPPED;
-	num_measurements_to_take = 1;
-	max_measurement_value = 0;
-	min_measurement_value = 0;
-	mean_measurement_value = 0;
+	num_measurements_to_take = 10;
 	input_is_valid = 0;
-	sensor_ID = 0;
-	measurement_time_in_sec = 0;
+
 	initializePayloadMessageBuffer();
-	initializeRangeMeasAry();
 
 	return;
 }
 
 
+/**
+ * @brief Print payload information
+ * @details Outputs comprehensive payload state information including
+ * operational state, measurement configuration, and statistical data
+ * for debugging and diagnostic purposes.
+ */
 void Payload::print(void) const {
 	// This method prints the Payload data members
 
-	Serial.println(F("\n ~ Printing Payload ... "));
-	Serial.print(F("    Payload State is: "));
-	Serial.println(pl_state);
+	Serial.println(F("\n ~ Printing Payload ..."));
 	Serial.print(F("    Number Measurements is: "));
 	Serial.println(num_measurements_to_take);
-	Serial.print(F("    Measurement Time in Seconds is: "));
-	Serial.println(measurement_time_in_sec);
-	Serial.print(F("    Max Measurement is: "));
-	Serial.println(max_measurement_value);
-	Serial.print(F("    Min Measurement is: "));
-	Serial.println(min_measurement_value);
-	Serial.print(F("    Mean Measurement is: "));
-	Serial.println(mean_measurement_value);
 	Serial.print(F("    Input is Valid is: "));
 	Serial.println(input_is_valid);
-	Serial.print(F("    Sensor ID is: "));
-	Serial.println(sensor_ID);
 	Serial.println(F(""));
-	
-	printRangeAry();
- 
+	 
 	return;
 }
 
 
+/**
+ * @brief Initialize payload system
+ * @details Performs complete payload initialization including hardware
+ * configuration, pin setup, and system state initialization. Sets
+ * payload to STOPPED state for safe startup.
+ */
 void Payload::initializePayload(void) {
 	// This method initializes the payload, which can include setting hardware pin directions and input/output states
-
 	initializeDataMembers();
-	pl_state = STOPPED;
-
 	return;
 }
 
 
+/**
+ * Note: A Payload Message Buffer is provided, which may be used 
+ * @brief Initialize payload message buffer
+ * @details Clears the payload output message buffer by setting all
+ * elements to null characters for clean message formatting.
+ */
 void Payload::initializePayloadMessageBuffer(void) {
-	// This method initialized the payload message buffer used to output Payload data to the Bus
-
-	// Set all array elements of the buffer to 'null'
-	for (uint8_t i = 0; i < PAYLOAD_MSG_BUFFER_LENGTH; i++) {
-		pl_output_msg_buffer[i] = '\0';
-	}
-
-	return;
-}
-
-
-void Payload::initializeRangeMeasAry(void) {
-	// This method initialized the measurement range array
-
-	// Set all array elements of the array to zero
-	for (uint8_t i = 0; i < RANGE_MEASUREMENT_ARY_SIZE; i++) {
-		ranges_in_cm_ary[i] = 0;
-	}
-
-	return;
-}
-
-
-void Payload::printRangeAry(void) const {
-	// This method prints the measurement range array
-
-	if (VERBOSE_PAYLOAD_OUTPUT) {
-		Serial.println(F(" ~ Printing Range Array ..."));
-	}
-
-	for (uint8_t i = 0; i < RANGE_MEASUREMENT_ARY_SIZE; i++) {
-		Serial.print(F("   Range Array["));
-		Serial.print(i);
-		Serial.print(F("] = "));
-		Serial.println(ranges_in_cm_ary[i]);
-	}
-
-	Serial.println();
-
-	return;
-}
-
-
-void Payload::setMeasurementTime(void) {
-	// This method sets the measurement time data member
-	
-	if (VERBOSE_PAYLOAD_OUTPUT) {
-		Serial.println(F("\n ~ Setting Measurement Time ... "));
-	}
-
-	measurement_time_in_sec = getScBusUpTime();
-
+	// This method initializes the payload message buffer used to output Payload data to the Bus
+	memset(pl_output_msg_buffer, 0, sizeof(pl_output_msg_buffer));
 	return;
 }
 
@@ -132,12 +94,12 @@ void Payload::setNumMeasurementsToTake(uint8_t num_meas) {
 	// This method sets the number of measurements data member
 	
 	if (VERBOSE_PAYLOAD_OUTPUT) {
-		Serial.println(F("\n ~ Setting Number of Measurements ... "));
+		Serial.println(F("\n ~ Setting Number of Measurements ..."));
 	}
 
 	// ALWAYS Validate the input before making setting changes
 	// and use guards against invalid inputs
-	if (num_meas <= RANGE_MEASUREMENT_ARY_SIZE) {
+	if (num_meas <= PAYLOAD_DATA_ARY_SIZE) {
 		num_measurements_to_take = num_meas;
 	}
 	else {
@@ -147,12 +109,22 @@ void Payload::setNumMeasurementsToTake(uint8_t num_meas) {
 }
 
 
-uint8_t Payload::handlePayloadCommand(uint8_t cmd_id, uint32_t cmd_val) {
+/**
+ * @brief Handle payload command
+ * @details Processes payload commands received from the bus.
+ * Validates command IDs, executes appropriate actions, and generates
+ * response messages. Returns the number of messages created for transmission.
+ * This method can be customized by the payload development team as needed.
+ * @param cmd_id Command identifier (30-39 range)
+ * @param cmd_val Command value/parameter
+ * @return Number of response messages generated
+ */
+//char* Payload::handlePayloadCommand(uint8_t cmd_id, uint32_t cmd_val, PlDataRec& pl_data_rec) {
+char* Payload::handlePayloadCommand(uint8_t cmd_id, int32_t cmd_val, PlDataRec& pl_data_rec) {
 	// This method handles payload commands received from the Bus
 	// This method is to be populated, as desired, and tested by the payload development team
 	// This method returns the number of payload messages generated by handling the given command. It is not required that this method do so. It may be modified, as needed
 	
-	uint8_t num_data_msgs = 1; // By default there is only one message to process for each command
 	if (VERBOSE_PAYLOAD_OUTPUT) {
 		Serial.print(F("\n ~ Payload Handling Command with given Cmd ID: "));
 		Serial.println(cmd_id);
@@ -165,24 +137,11 @@ uint8_t Payload::handlePayloadCommand(uint8_t cmd_id, uint32_t cmd_val) {
 		switch (cmd_id) {
 		case (PING_PAYLOAD_CMD_ID):
 			Serial.println(F("\n ~ Received Payload Ping command"));
-			//Serial.println(F("     Note: Ignoring the command value for this command"));
-			sprintf(pl_output_msg_buffer, "A,%d", cmd_id);
-			// Put the msg on the circular buffer
-			Payload_cbfr.circularBufferPushMsg(pl_output_msg_buffer);
-			break;
-		case (GET_PAYLOAD_STATE_CMD_ID):
-			Serial.println(F("\n ~ Received command to output the Payload State"));
-			//Serial.println(F("     Note: Ignoring the command value for this command"));
-			sprintf(pl_output_msg_buffer, "A,%d,%d", cmd_id, getPayloadState());
-			// Put the msg on the circular buffer
-			Payload_cbfr.circularBufferPushMsg(pl_output_msg_buffer);
+			snprintf(pl_output_msg_buffer, sizeof(pl_output_msg_buffer), "A,%d", cmd_id);
 			break;
 		case (GET_NUMBER_MEASUREMENTS_TO_TAKE_CMD_ID):
 			Serial.println(F("\n ~ Received command to get the number of range measurements to take"));
-			//Serial.println(F("     Note: Ignoring the command value for this command"));
-			sprintf(pl_output_msg_buffer, "A,%d,%d", cmd_id, num_measurements_to_take);
-			// Put the msg on the circular buffer
-			Payload_cbfr.circularBufferPushMsg(pl_output_msg_buffer);
+			snprintf(pl_output_msg_buffer, sizeof(pl_output_msg_buffer), "A,%d,%d", cmd_id, num_measurements_to_take);	
 			break;
 		case (SET_NUMBER_MEASUREMENTS_TO_TAKE_CMD_ID):
 			Serial.println(F("\n ~ Received command to set the number of range measurements to take"));
@@ -191,270 +150,70 @@ uint8_t Payload::handlePayloadCommand(uint8_t cmd_id, uint32_t cmd_val) {
 			if ((MIN_NUMBER_MEASUREMENTS <= cmd_val) && (cmd_val <= MAX_NUMBER_MEASUREMENTS)) {
 				// Then set the number of measurements
 				setNumMeasurementsToTake(cmd_val);
-				sprintf(pl_output_msg_buffer, "A,%d,%d", cmd_id, num_measurements_to_take);
+				snprintf(pl_output_msg_buffer, sizeof(pl_output_msg_buffer), "A,%d,%d", cmd_id, num_measurements_to_take);
 			}
 			else {
-				sprintf(pl_output_msg_buffer, "N,%d,%d", cmd_id, cmd_val);
-			}	
-			// Put the msg on the circular buffer
-			Payload_cbfr.circularBufferPushMsg(pl_output_msg_buffer);
+				snprintf(pl_output_msg_buffer, sizeof(pl_output_msg_buffer), "N,%d,%d", cmd_id, cmd_val);
+			}
 			break;
 		case (TAKE_MEASUREMENTS_CMD_ID):
 			Serial.println(F("\n ~ Received command to take a round of range measurements"));
-			performPayloadOperationIteration();
-			sprintf(pl_output_msg_buffer, "A,%d", cmd_id);
-			// Put the msg on the circular buffer
-			Payload_cbfr.circularBufferPushMsg(pl_output_msg_buffer);
+			performPayloadOperationIteration(pl_data_rec);
+			snprintf(pl_output_msg_buffer, sizeof(pl_output_msg_buffer), "A,%d", cmd_id);
 			break;
 		case (PRINT_MEASUREMENTS_CMD_ID):
 			Serial.println(F("\n ~ Received command to print (but not return) the round of taken measurements"));
-			printRangeAry();
-			sprintf(pl_output_msg_buffer, "A,%d", cmd_id);
-			// Put the msg on the circular buffer
-			Payload_cbfr.circularBufferPushMsg(pl_output_msg_buffer);
+			pl_data_rec.printArray();
+			snprintf(pl_output_msg_buffer, sizeof(pl_output_msg_buffer), "A,%d", cmd_id);
 			break;
-		case (GET_RAW_MEASUREMENT_DATA_CMD_ID):
-			Serial.println(F("\n ~ Received command to output the measurement values"));
-			num_data_msgs = getPayloadDataMsgs();
-			break;	
-		case (GET_PROCESSED_MEASUREMENT_DATA_CMD_ID):
-			Serial.println(F("\n ~ Received command to output the processed measurement values"));
-			sprintf(pl_output_msg_buffer, "A,%d", cmd_id);
-			Payload_cbfr.circularBufferPushMsg(pl_output_msg_buffer);
-			sprintf(pl_output_msg_buffer, "%lu,%d,%d,%d", measurement_time_in_sec, min_measurement_value, max_measurement_value, mean_measurement_value);
-			// Put the msg on the circular buffer
-			//Serial.print(F(" ~ pl_output_msg_buffer is: "));
-			//Serial.println(pl_output_msg_buffer);
-			Payload_cbfr.circularBufferPushMsg(pl_output_msg_buffer);
-			num_data_msgs = 2; // One for each time a message was pushed onto the circular buffer
-			break;
+
 		case (MIN_PL_CMD_ID + 8):
 		case (MIN_PL_CMD_ID + 9):
 			Serial.println(F("\n ~ Note: Received Payload command that is not yet defined or supported"));
-			sprintf(pl_output_msg_buffer, "A,%d", cmd_id);
-			// Put the msg on the circular buffer
-			Payload_cbfr.circularBufferPushMsg(pl_output_msg_buffer);
+			
+			snprintf(pl_output_msg_buffer, sizeof(pl_output_msg_buffer), "A,%d", cmd_id);
 			break;
 		}
 
-		return num_data_msgs;
+		return pl_output_msg_buffer;
 	}
 	else {
 		Serial.print(F("\n ~ Error: Encountered Invalid Payload Command ID: "));
 		Serial.print(cmd_id);
 		Serial.println(F(" . Ignoring!"));
-		sprintf(pl_output_msg_buffer, "N,%d", cmd_id);
-		Payload_cbfr.circularBufferPushMsg(pl_output_msg_buffer);
+		
+		snprintf(pl_output_msg_buffer, sizeof(pl_output_msg_buffer), "N,%d", cmd_id);
 	}
 	
 	// Return the number of output messages
-	return num_data_msgs;
+	return pl_output_msg_buffer;
 }
 
 
-uint8_t Payload::getPayloadState(void) const {
-	// This method returns the Payload state
-	if (VERBOSE_PAYLOAD_OUTPUT) {
-		Serial.println(F(" ~ Getting Payload State ..."));
-		Serial.print(F("    Payload State is: "));
-		Serial.println(static_cast<uint8_t>(pl_state));
-	}
-
-	return static_cast<uint8_t>(pl_state);
-}
-
-
-uint8_t Payload::getNextPayloadDataMsg(uint8_t start_at_index, uint8_t message_num, uint8_t total_num_messages) {
-	// This method formats the next payload data message
-	
-	if (VERBOSE_PAYLOAD_OUTPUT) {
-		Serial.println(F("\n ~ Getting Next Data Message ..."));
-	}
-
-	uint8_t stopped_at_index = 0;
-	uint8_t max_index_not_reached = 1;
-	uint8_t max_temp_bfr_len_not_reached = 1;
-	char temp_bfr[TEMP_BUFFER_LENGTH] = { '\0' };
-	char temp_data_element_bfr[TEMP_DATA_ELEMENT_BUFFER_LENGTH] = { '\0' };
-	uint8_t temp_bfr_strlen = 0;
-	uint8_t temp_data_element_bfr_strlen = 0;
-	uint8_t pl_bfr_strlen = 0;
-	uint8_t num_data_elements = num_measurements_to_take + 1; // +1 to include the time element
-
-	// Format the data msg root
-	sprintf(temp_bfr, "%d,%d,%d", sensor_ID, message_num, total_num_messages);
-
-	while(max_temp_bfr_len_not_reached && max_index_not_reached) {
-
-		for (uint8_t i=start_at_index; i<num_data_elements; i++) {
-			// Get the next data element, and get the strlen of it
-			sprintf(temp_data_element_bfr, ",%d", ranges_in_cm_ary[i]);
-
-			if (i == 0) {
-				// Then get the time data element
-				sprintf(temp_data_element_bfr, ",%d", measurement_time_in_sec);
-			}
-			else {
-				// Get the pl data element
-				// Get the next data element, and get the strlen of it
-				sprintf(temp_data_element_bfr, ",%d", ranges_in_cm_ary[i-1]);
-			}
-
-			// Get the temp data element bfr strlen
-			temp_data_element_bfr_strlen = strlen(temp_data_element_bfr);
-
-			// Get the temp bfr strlen
-			temp_bfr_strlen = strlen(temp_bfr);
-			
-			if (0) {
-				Serial.print(F("\n ~ i is: "));
-				Serial.println(i);
-
-				Serial.print(F("\n ~ temp_data_element_bfr is: "));
-				Serial.println(temp_data_element_bfr);
-
-				Serial.print(F("\n ~ temp_bfr is: "));
-				Serial.println(temp_bfr);
-
-				Serial.print(F("\n ~ temp_bfr_strlen is: "));
-				Serial.println(temp_bfr_strlen);
-			}
-
-			// If there is room in the destination bfr, then copy it
-			if ((temp_bfr_strlen + temp_data_element_bfr_strlen) < PAYLOAD_MSG_BUFFER_LENGTH)  {
-				// Then concatenate the data element to the temp bfr
-				strcat(temp_bfr, temp_data_element_bfr);
-			}
-			else {
-				// Do not add it, and copy over the temp buffer to the PL buffer instead
-				// Set the max buffer length reached
-				max_temp_bfr_len_not_reached = 0;
-
-				// Copy over the buffer
-				strcat(pl_output_msg_buffer, temp_bfr);
-
-				pl_bfr_strlen = strlen(pl_output_msg_buffer);
-
-				// Decrement i before exiting, since the index was not used
-				i--;
-
-				if (0) {
-					Serial.print(F("\n ~ PL bfr length is: "));
-					Serial.println(pl_bfr_strlen);
-					Serial.println(F(" ~ Max Buffer length reached! Breaking out ..."));
-				}
-
-				stopped_at_index = i;
-
-				// Then break out of the for loop
-				break;
-			}
-
-			if (i == num_data_elements-1) {
-				// Set the max index reached
-				max_index_not_reached = 0;
-				stopped_at_index = i;
-				
-				// Copy over the buffer, which will be less than the Payload buffer length. It is whatever message data is left
-				strcat(pl_output_msg_buffer, temp_bfr);
-
-				if (VERBOSE_PAYLOAD_OUTPUT) {
-					Serial.println(F("\n ~ Max Index reached!"));
-				}
-			}
-		}
-	}
-
-	if (VERBOSE_PAYLOAD_OUTPUT) {
-		Serial.println(pl_output_msg_buffer);
-	}
-
-	// Put the msg on the circular buffer, only for when total_num_messages is not 0
-	if (total_num_messages != 0) {
-		Payload_cbfr.circularBufferPushMsg(pl_output_msg_buffer);
-	}
-	
-	return stopped_at_index;
-}
-
-
-uint8_t Payload::formatPayloadDataMsgs(uint8_t total_num_messages) {
-	// This method formats the current raw payload data into multiple smaller numbered messages, if required
-	if (0) {
-		Serial.println(F("\n ~ Formatting Data Messages ..."));
-	}
-
-	uint8_t start_at_index = 0;
-	uint8_t max_index_not_reached = 1;
-	uint8_t stopped_at_index = 0;
-	uint8_t num_messages = 0;
-	uint8_t message_number = 1;
-	
-	while(max_index_not_reached) {
-
-		if (0) {
-			Serial.print(F(" ~ start_at_index is: "));
-			Serial.println(start_at_index);
-		}
-
-		stopped_at_index = getNextPayloadDataMsg(start_at_index, message_number, total_num_messages);
-		start_at_index = stopped_at_index+1;
-		num_messages++;
-		message_number++;
-
-		if (0) {
-			Serial.print(F(" ~ stopped_at_index is: "));
-			Serial.println(stopped_at_index);
-		}
-
-		// Clear the buffer for the next iteration
-		initializePayloadMessageBuffer();
-
-		if (stopped_at_index >= num_measurements_to_take-1) {
-			// Set the max index reached
-			max_index_not_reached = 0;
-			if (VERBOSE_PAYLOAD_OUTPUT) {
-				Serial.println(F("\n ~ Done formatting messages ..."));
-			}
-		}
-	}
-
-	return num_messages;
-}
-
-
-uint8_t Payload::getPayloadDataMsgs(void) {
-	// This get method returns the computed number of payload data messages that the payload will output to the the S/C Bus 
-	if (VERBOSE_PAYLOAD_OUTPUT) {
-		Serial.println(F("\n ~ Getting Payload Data messages ..."));
-	}
-	
-	uint8_t num_messages = formatPayloadDataMsgs(0);
-	
-	num_messages = formatPayloadDataMsgs(num_messages);
-
-	return num_messages;
-}
-
-
-void Payload::findMaxRangeMeasurement(void) {
+/**
+ * @brief Find maximum range measurement
+ * @details Searches through the range measurement array to find the largest
+ * value and updates the max_measurement_value data member. Provides
+ * optional verbose output for debugging.
+ */
+double Payload::getMaxRangeMeasurement(PlDataRec& pl_data_rec) {
 	// This method deterermines the maximum value found in the range measurement array and updates the max measurement data member
 	
 	if (VERBOSE_PAYLOAD_OUTPUT) {
 		Serial.println(F("\n ~ Finding the Max Range Measurement ..."));
 	}
 
-	uint16_t max_value = ranges_in_cm_ary[0];
+	double max_measurement_value = pl_data_rec.getArrayElement(0);
 
 	// Step through the array and find the largest value
-	for (uint8_t i = 0; i < num_measurements_to_take; i++) {
-		if (ranges_in_cm_ary[i] > max_value) {
-			max_value = ranges_in_cm_ary[i];
+	for (uint8_t i=0; i<num_measurements_to_take; i++) {
+		if (pl_data_rec.getArrayElement(i) > max_measurement_value) {
+			max_measurement_value = pl_data_rec.getArrayElement(i);
 		}
 	}
 
 	// Assign the largest value to the data member
-	max_measurement_value = max_value;
+	//max_measurement_value = max_value;
 
 	if (VERBOSE_PAYLOAD_OUTPUT) {
 		Serial.print(F("\n ~ Max Range Measurement is: "));
@@ -462,28 +221,34 @@ void Payload::findMaxRangeMeasurement(void) {
 		Serial.println(F(""));
 	}
 
-	return;
+	return max_measurement_value;
 }
 
 
-void Payload::findMinRangeMeasurement(void) {
+/**
+ * @brief Find minimum range measurement
+ * @details Searches through the range measurement array to find the smallest
+ * value and updates the min_measurement_value data member. Provides
+ * optional verbose output for debugging.
+ */
+double Payload::getMinRangeMeasurement(PlDataRec& pl_data_rec) {
 	// This method deterermines the minimum value found in the range measurement array and updates the min measurement data member
 	
 	if (VERBOSE_PAYLOAD_OUTPUT) {
 		Serial.println(F(" ~ Finding the Min Range Measurement ..."));
 	}
 	
-	uint16_t min_value = ranges_in_cm_ary[0];
+	double min_measurement_value = pl_data_rec.getArrayElement(0);
 
 	// Step through the array and find the smallest value
-	for (uint8_t i = 0; i < num_measurements_to_take; i++) {
-		if (ranges_in_cm_ary[i] < min_value) {
-			min_value = ranges_in_cm_ary[i];
+	for (uint8_t i=0; i<num_measurements_to_take; i++) {
+		if (pl_data_rec.getArrayElement(i) < min_measurement_value) {
+			min_measurement_value = pl_data_rec.getArrayElement(i);
 		}
 	}
 
 	// Assign the smallest value to the data member
-	min_measurement_value = min_value;
+	//min_measurement_value = min_value;
 
 	if (VERBOSE_PAYLOAD_OUTPUT) {
 		Serial.print(F("\n ~ Min Range Measurement is: "));
@@ -491,31 +256,37 @@ void Payload::findMinRangeMeasurement(void) {
 		Serial.println(F(""));
 	}
 
-	return;
+	return min_measurement_value;
 }
 
 
-void Payload::findMeanRangeMeasurement(void) {
+/**
+ * @brief Find mean range measurement
+ * @details Calculates the arithmetic mean of all range measurements and
+ * updates the mean_measurement_value data member. Handles both single
+ * and multiple measurement cases.
+ */
+double Payload::getMeanRangeMeasurement(PlDataRec& pl_data_rec) {
 	// This method deterermines the mean value of the range measurement array and updates the mean measurement data member
 
 	if (VERBOSE_PAYLOAD_OUTPUT) {
 		Serial.println(F("\n ~ Finding the Mean Range Measurement ..."));
 	}
 	
-	uint16_t sum = 0;
+	double sum = 0;
 
 	if (num_measurements_to_take == 1) {
-		sum = ranges_in_cm_ary[0];
+		sum = pl_data_rec.getArrayElement(0);
 	}
 	else {
 		// Step through the array and find the smallest value
-		for (uint8_t i = 0; i < num_measurements_to_take; i++) {
-			sum += ranges_in_cm_ary[i];
+		for (uint8_t i=0; i<num_measurements_to_take; i++) {
+			sum += pl_data_rec.getArrayElement(i);
 		}
 	}
 
 	// Compute the mean
-	mean_measurement_value = uint16_t(sum/num_measurements_to_take);
+	double mean_measurement_value = sum / num_measurements_to_take;
 
 	if (VERBOSE_PAYLOAD_OUTPUT) {
 		Serial.print(F("\n ~ Mean Range Measurement is: "));
@@ -523,86 +294,71 @@ void Payload::findMeanRangeMeasurement(void) {
 		Serial.println(F(""));
 	}
 
-	return;
+	return mean_measurement_value;
 }
 
 
+/**
+ * @brief Get payload data string
+ * @details Returns a pointer to the payload output message buffer
+ * containing formatted payload data for transmission.
+ * @return Pointer to payload data string buffer
+ */
 char* Payload::getPayloadDataStr(void) {
 	// This method returns the Payload data string
 	return pl_output_msg_buffer;
 }
 
 
-uint8_t Payload::getNumPayloadDataMsgs(void) {
-	return Payload_cbfr.getCircularBufferNumMsgs();
-}
-
-
-char* Payload::getNextPayloadDataMsg(void) {
-	return Payload_cbfr.getCircularBufferNextMsg();
-}
-	
-
-void Payload::performRoundofMeasurements(void) {
+void Payload::performRoundofSensorMeasurements(PlDataRec& pl_data) {
 	// This method performs a round of range measurements
+	
+	double measurement = 0.0;
+	
+	// Initialize the payload data array 
+	pl_data.initializeArray();
+	
+	// Note pl_data.time & pl_data.pl_rec_num will both be populated by the bus before writing the data to flash memory (or outputting the data)
+	// As a result, these two fields are not to be populated in the payload code file
+
+	
 	if (VERBOSE_PAYLOAD_OUTPUT) {
 		Serial.println(F(" ~ Performing Round of Range Measurements ..."));
 		Serial.print(F("    num_measurements_to_take is: "));
 		Serial.println(num_measurements_to_take);
 	}
 
-	for (uint8_t i = 0; i < num_measurements_to_take; i++) {
-		ranges_in_cm_ary[i] = Ping.getRangeMeasurementInCm();
+	for (uint8_t i=0; i<num_measurements_to_take; i++) {
+		// An idea, if it is not already there. Add a commandable delta t between measurements
+		measurement = (double)(Ping.getRangeMeasurementInCm());
+		pl_data.setArrayElement(i, measurement);
 	}
 
 	// Then process the measurements
-	processRangeMeasurements();
+	pl_data.setArrayElement(MIN_MEASUREMENT_ARY_INDEX, getMinRangeMeasurement(pl_data));
+	pl_data.setArrayElement(MAX_MEASUREMENT_ARY_INDEX, getMaxRangeMeasurement(pl_data));
+	pl_data.setArrayElement(MEAN_MEASUREMENT_ARY_INDEX, getMeanRangeMeasurement(pl_data));
+	pl_data.setArrayElement(SENSOR_2_MEASUREMENT_ARY_INDEX, getSensor2Measurement());
 
 	return;
 }
 
 
-void Payload::processRangeMeasurements(void) {
-	// This method processess the range measurements taken
-	
-	if (VERBOSE_PAYLOAD_OUTPUT) {
-		Serial.println(F("\n ~ Processing Range Measurements ..."));
-	}
-
-	findMaxRangeMeasurement();
-	findMinRangeMeasurement();
-	findMeanRangeMeasurement();
-
-	return;
-}
-
-
-uint8_t Payload::performPayloadOperationIteration(void) {
-	// This method performs nominal operation of the Payload, and is intended to be called by the Bus at regular interval
-	
+void Payload::performPayloadOperationIteration(PlDataRec& pl_data) {
 	if (VERBOSE_PAYLOAD_OUTPUT) {
 		Serial.println(F("\n ~ Performing Payload Operation Iteration ..."));
 	}
+	
+	performRoundofSensorMeasurements(pl_data);
 
-	// This method can perform what ever is required to run the payload.
-	// For now, it will perform a round of range measurements and then proccess the measurements
-	pl_state = RUNNING;
-	setMeasurementTime();
-	performRoundofMeasurements();
-	processRangeMeasurements();
-
-	return 0;
+	return;
 }
 
 
-uint32_t Payload::getScBusUpTime(void) {
-	// This function gets the S/C Bus Up time (aka on time).  This function will be used for now as a stand-in for bus time
-
+double Payload::getSensor2Measurement(void) const {
 	if (VERBOSE_PAYLOAD_OUTPUT) {
-		Serial.println(F("\n ~ Getting S/C Bus Up-Time ..."));
+		Serial.println(F("\n ~ Getting Sensor 2 Measurement Value ..."));
 	}
-
-	uint32_t sc_bus_up_time_in_sec = uint32_t(millis()/NUM_MILLISEC_PER_SEC);
-
-	return sc_bus_up_time_in_sec;
+	
+	return 23.45;
 }

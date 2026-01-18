@@ -40,6 +40,13 @@ void loop() {
 	Serial.print(" ~ Received response from payload: ");
 	Serial.println(pl.getPayloadDataStr());
 
+	// Test the get Payload State command. Expect an Acknowledgement ("A") and that the Payload is Initialized (1)
+	Serial.print("\n ~ Sending payload command: ");
+	Serial.println(GET_PAYLOAD_STATE_CMD_ID);
+	pl.handlePayloadCommand(GET_PAYLOAD_STATE_CMD_ID, 0);
+	Serial.print(" ~ Received response from payload: ");
+	Serial.println(pl.getPayloadDataStr());
+
 
 	// Test the Take Measurement command. Expect there to be only one measurement when printed
 	Serial.print("\n ~ Sending payload command: ");
@@ -51,6 +58,14 @@ void loop() {
 	Serial.print(PRINT_MEASUREMENTS_CMD_ID);
 	pl.handlePayloadCommand(PRINT_MEASUREMENTS_CMD_ID, 0);
 	
+	// Test the Get Processed Measurements command
+	Serial.print("\n ~ Sending payload command: ");
+	Serial.println(GET_PROCESSED_MEASUREMENT_DATA_CMD_ID);
+	pl.handlePayloadCommand(GET_PROCESSED_MEASUREMENT_DATA_CMD_ID, 0);
+	Serial.print(" ~ Received response from payload: ");
+	Serial.println(pl.getPayloadDataStr());
+
+
 	// Now set the new number of consecutive measurements to take in each round
 	Serial.print("\n ~ Sending payload command: ");
 	Serial.println(SET_NUMBER_MEASUREMENTS_TO_TAKE_CMD_ID);
@@ -66,6 +81,12 @@ void loop() {
 	Serial.print(PRINT_MEASUREMENTS_CMD_ID);
 	pl.handlePayloadCommand(PRINT_MEASUREMENTS_CMD_ID, 0);
 
+	// Test the Get Processed Measurements command
+	Serial.print(" ~ Sending payload conmmand: ");
+	Serial.print(GET_PROCESSED_MEASUREMENT_DATA_CMD_ID);
+	pl.handlePayloadCommand(GET_PROCESSED_MEASUREMENT_DATA_CMD_ID, 0);
+	Serial.print(" ~ Received response from payload: ");
+	Serial.println(pl.getPayloadDataStr());
 
 	Serial.print(" ~ Done running SlimSat Payload Cmds ...");
 
