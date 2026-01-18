@@ -1,0 +1,41 @@
+#######################################
+# Datatypes (KEYWORD1)
+#######################################
+
+GPSIf	KEYWORD1
+TinyGPSPlus	KEYWORD1
+
+#######################################
+# Methods and Functions (KEYWORD2)
+#######################################
+
+##############################
+# Class
+##############################
+
+begin	KEYWORD2
+initializeGpsMessageBuffer KEYWORD2
+getGpsPositionMessage KEYWORD2
+encodeGpsMessage KEYWORD2
+print KEYWORD2
+initializeDataMembers KEYWORD2
+getGpsPositionMessagePayload KEYWORD2
+	
+##############################
+# Class ...
+##############################
+
+
+##############################
+# Global Functions
+##############################
+
+
+#######################################
+# Constants (LITERAL1)
+#######################################
+
+GPS_BAUD LITERAL1
+MAX_GPS_MSG_LENGTH LITERAL1
+MSG_GPS_BUFFER_LENGTH LITERAL1
+VERBOSE_GPS_OUTPUT LITERAL1
