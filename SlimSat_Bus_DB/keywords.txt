@@ -2,29 +2,26 @@
 # Datatypes (KEYWORD1)
 #######################################
 
-ScBusDb	KEYWORD1
-ScBusMode	KEYWORD1
-ScBusTime	KEYWORD1
-
+BusDb	KEYWORD1
+BusMode	KEYWORD1
+BusTime	KEYWORD1
+BusPowerMonitor	KEYWORD1
+FlashMemoryIf	KEYWORD1
 
 #######################################
 # Methods and Functions (KEYWORD2)
 #######################################
 
 ##############################
-# Class Payload
+# Class
 ##############################
 
-getScBusMode	KEYWORD2
-setScBusMode	KEYWORD2
-setScBusStreamDataState	KEYWORD2
-getScBusStreamDataState	KEYWORD2
+getBusMode	KEYWORD2
+setBusMode	KEYWORD2
+getBusSafeModeVoltageInMv	KEYWORD2
+setBusSafeModeVoltageInMv	KEYWORD2
+startPowerMonitor	KEYWORD2
 print KEYWORD2
-
-##############################
-# Class ...
-##############################
-
 
 ##############################
 # Global Functions
@@ -35,9 +32,11 @@ print KEYWORD2
 # Constants (LITERAL1)
 #######################################
 
-VERBOSE_SC_BUS_DB_OUTPUT LITERAL1
-MIN_SC_BUS_MODE_VALUE LITERAL1
-MAX_SC_BUS_MODE_VALUE LITERAL1
+MIN_BUS_MODE_VALUE LITERAL1
+MAX_BUS_MODE_VALUE LITERAL1
+DEFAULT_SAFE_MODE_VOLTAGE_IN_V LITERAL1
+NUM_MV_PER_V LITERAL1
+VERBOSE_BUS_DB_OUTPUT LITERAL1
 INITIALIZED LITERAL1
 SAFE LITERAL1
 NOMINAL_ON LITERAL1
