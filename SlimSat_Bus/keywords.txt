@@ -3,33 +3,38 @@
 #######################################
 
 SlimSatBus	KEYWORD1
-ScBusDb	KEYWORD1
+BusDb	KEYWORD1
 Payload	KEYWORD1
 NmeaMsgHandler	KEYWORD1
 SimpleTimer	KEYWORD1
+LoRaRadio	KEYWORD1
+BusDataRec	KEYWORD1
+PlDataRec	KEYWORD1
+GpsIf	KEYWORD1
 
 #######################################
 # Methods and Functions (KEYWORD2)
 #######################################
 
 ##############################
-# Class Payload
+# Class
 ##############################
 
-performScBusOperationIteration	KEYWORD2
-initializeScBus	KEYWORD2
+performBusOperationIteration	KEYWORD2
+initializeBus	KEYWORD2
 transmitBeaconMessage	KEYWORD2
-getScBusCmd	KEYWORD2
-handleScBusCmd	KEYWORD2
+getBusCmd	KEYWORD2
+handleBusCmd	KEYWORD2
 print	KEYWORD2
+performPayloadOp	KEYWORD2
 getSerialTermInput	KEYWORD2
 displayNewSerialTermData	KEYWORD2
-initializeserialTermReceivedChars	KEYWORD2
-
-
-##############################
-# Class ...
-##############################
+initializePinStates	KEYWORD2
+startLoRa	KEYWORD2
+recordBusData	KEYWORD2
+startGps	KEYWORD2
+performPartialPayloadOp	KEYWORD2
+recordPartialBusData	KEYWORD2
 
 
 ##############################
@@ -41,6 +46,25 @@ initializeserialTermReceivedChars	KEYWORD2
 # Constants (LITERAL1)
 #######################################
 
-MIN_PL_CMD_ID LITERAL1
-VERBOSE_SC_BUS_OUTPUT LITERAL1
-MAX_CHARS LITERAL1
+VERBOSE_BUS_OUTPUT LITERAL1
+MAX_SERIAL_TERM_BUFFER_CHARS LITERAL1
+USE_GPS_SENSOR LITERAL1
+
+BUS_RESET_PIN LITERAL1
+BUS_UNUSED_A1_PIN LITERAL1
+BUS_UNUSED_A2_PIN LITERAL1
+BUS_UNUSED_A3_PIN LITERAL1
+BUS_THERMISTOR_AIN_PIN LITERAL1
+BUS_UNUSED_A5_PIN LITERAL1
+BUS_UNUSED_D2_PIN LITERAL1
+BUS_WAG_WDT_PIN LITERAL1
+LORA_RST_PIN LITERAL1
+LORA_NSS_CS_PIN LITERAL1
+LORA_G0_PIN LITERAL1
+CUTDOWN_DO_PIN LITERAL1
+BUS_UNUSED_D12_PIN LITERAL1
+BUS_UNUSED_D13_PIN LITERAL1
+INA219_1_I2C_ADR LITERAL1
+INA219_2_I2C_ADR LITERAL1
+INA219_3_I2C_ADR LITERAL1
+TMP75A_I2C_ADR LITERAL1
