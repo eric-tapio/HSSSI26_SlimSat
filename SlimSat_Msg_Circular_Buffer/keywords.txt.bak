@@ -9,7 +9,7 @@ MsgCircularBuffer	KEYWORD1
 #######################################
 
 ##############################
-# Class
+# Class Payload
 ##############################
 
 advanceHeadPointer	KEYWORD2
