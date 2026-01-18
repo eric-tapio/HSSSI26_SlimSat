@@ -1,0 +1,36 @@
+#######################################
+# Datatypes (KEYWORD1)
+#######################################
+
+Tmp75aIf	KEYWORD1
+M2M_LM75A	KEYWORD1
+
+#######################################
+# Methods and Functions (KEYWORD2)
+#######################################
+
+##############################
+# Class
+##############################
+
+begin	KEYWORD2
+getTemperatureInDegC	KEYWORD2
+isConnected	KEYWORD2
+print KEYWORD2
+
+##############################
+# Class ...
+##############################
+
+
+##############################
+# Global Functions
+##############################
+
+
+#######################################
+# Constants (LITERAL1)
+#######################################
+
+VERBOSE_TMP75A_OUTPUT LITERAL1
+TMP75A_I2C_ADR LITERAL1
