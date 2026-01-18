@@ -4,9 +4,7 @@
 
 NmeaMsgHandler	KEYWORD1
 MsgCircularBuffer	KEYWORD1
-BusDataRec	KEYWORD1
-BusDbRegisterValues	KEYWORD1
-PlDataRec	KEYWORD1
+
 
 #######################################
 # Methods and Functions (KEYWORD2)
@@ -16,23 +14,21 @@ PlDataRec	KEYWORD1
 # Class
 ##############################
 
-initializeDataMembers  KEYWORD2
-reinitializeNmeaMsgHandlerMetadata  KEYWORD2
-copyMsgHeader  KEYWORD2
-getCharIndexOffsetFromAdr  KEYWORD2
-checksumIsValid  KEYWORD2
-computeXorChecksumValue  KEYWORD2
-respondToNmeaMsg  KEYWORD2
-pushMsgOntoCircBuffer  KEYWORD2
-cmdIdIsValid  KEYWORD2
-parseMsg  KEYWORD2
-incrementValidMsgCount  KEYWORD2
+reinitializeNmeaMsgHandlerMetadata	KEYWORD2
+copyMsgHeader	KEYWORD2
+getCharIndexOffsetFromAdr	KEYWORD2
+checksumIsValid	KEYWORD2
+computeXorChecksumValue	KEYWORD2
+respondToNmeaMsg	KEYWORD2
+pushMsgOntoCircBuffer	KEYWORD2
+reinitializeNmeaMsg	KEYWORD2
+cmdIdIsValid	KEYWORD2
+parseMsg	KEYWORD2
+incrementValidMsgCount KEYWORD2
 incrementInvalidMsgCount  KEYWORD2
 initializeNmeaMsgHeader  KEYWORD2
 findCharInStr  KEYWORD2
 constructResponseMsg  KEYWORD2
-initializeTempMessageBuffer  KEYWORD2
-initializeMessageBuffers  KEYWORD2
 print  KEYWORD2
 nmeaMsgIsValid  KEYWORD2
 computeChecksum  KEYWORD2
@@ -44,17 +40,7 @@ constructBeaconMsg  KEYWORD2
 popMsgFromCircBuffer  KEYWORD2
 printCircBuffer  KEYWORD2
 circBufferIsEmpty  KEYWORD2
-transmitNextMsg  KEYWORD2
-constructBusDataResponseMsg  KEYWORD2
-constructBusDbRegisterValueResponseMsg  KEYWORD2
-constructGpsPositionResponseMsg  KEYWORD2
-constructGetFlashRegisterValueResponseMsg  KEYWORD2
-constructSetFlashRegisterValueResponseMsg  KEYWORD2
-handlePayloadCmd  KEYWORD2
-formatMsgFragmentIntoMsgPayload  KEYWORD2
-constructMsgFragments  KEYWORD2
-constructResponseMsgGivenMsgPayload  KEYWORD2
-constructPayloadDataResponseMsg  KEYWORD2
+
 
 ##############################
 # Class ...
