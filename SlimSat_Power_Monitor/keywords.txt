@@ -1,0 +1,51 @@
+#######################################
+# Datatypes (KEYWORD1)
+#######################################
+
+BusPowerMonitor	KEYWORD1
+Ina219If	KEYWORD1
+Tmp75aIf	KEYWORD1
+
+#######################################
+# Methods and Functions (KEYWORD2)
+#######################################
+
+##############################
+# Class Payload
+##############################
+
+begin	KEYWORD2
+success	KEYWORD2
+start	KEYWORD2
+getShuntVoltage	KEYWORD2
+getBusVoltage	KEYWORD2
+getLoadVoltage	KEYWORD2
+getLoadVoltage	KEYWORD2
+getPower	KEYWORD2
+setCalibration_32V_1A KEYWORD2
+print KEYWORD2
+readThermistor	KEYWORD2
+collectBusData	KEYWORD2
+getShuntVoltage1	KEYWORD2
+getTemperature	KEYWORD2
+rebootBus	KEYWORD2
+initiateCutdown KEYWORD2
+initializeDataMembers KEYWORD2
+	
+##############################
+# Global Functions
+##############################
+
+
+#######################################
+# Constants (LITERAL1)
+#######################################
+
+VERBOSE_POWER_MONITOR_OUTPUT LITERAL1
+INA219_1_I2C_ADR LITERAL1
+INA219_2_I2C_ADR LITERAL1
+INA219_3_I2C_ADR LITERAL1
+NUM_INA219_DEVICES LITERAL1
+NUM_CURRENT_ITERATIONS LITERAL1
+MV_PER_LSB LITERAL1
+V_PER_LSB LITERAL1
