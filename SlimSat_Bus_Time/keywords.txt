@@ -2,7 +2,7 @@
 # Datatypes (KEYWORD1)
 #######################################
 
-ScBusTime	KEYWORD1
+BusTime	KEYWORD1
 
 #######################################
 # Methods and Functions (KEYWORD2)
@@ -13,13 +13,12 @@ ScBusTime	KEYWORD1
 ##############################
 
 getMillis	KEYWORD2
-getScBusTime	KEYWORD2
-setScBusEpochTime	KEYWORD2
+getBusTimeInMs	KEYWORD2
+getBusEpochTimeInMs	KEYWORD2
+setBusEpochTimeInMs	KEYWORD2
 print	KEYWORD2
+collectBusData	KEYWORD2
 
-##############################
-# Class ...
-##############################
 
 ##############################
 # Global Functions
@@ -29,4 +28,4 @@ print	KEYWORD2
 # Constants (LITERAL1)
 #######################################
 
-VERBOSE_SC_BUS_TIME_OUTPUT LITERAL1
+VERBOSE_BUS_TIME_OUTPUT LITERAL1
