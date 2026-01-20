@@ -1,8 +1,18 @@
-// CAPE-Twiggs HSSSI-26 SlimSat Project
-// Copyright (c) 2025, Eric Tapio. All rights reserved.
-// Licensed under the MIT license. See LICENSE file in the project root for full license information.
-
-// This file has been scrubbed, but not the library file
+/**
+ * @file nmea_lite_msg_handler.h
+ * @brief NMEA Lite Message Handler Header
+ * 
+ * @details This header file defines the NmeaMsgHandler class which provides
+ * NMEA-style message parsing, validation, and command processing for the
+ * SlimSat system. It handles command parsing, checksum validation, response
+ * generation, and message buffering using a circular buffer system.
+ * 
+ * This file has been scrubbed, but not the library file
+ * 
+ * CAPE-Twiggs HSSSI-26 SlimSat Project
+ * Copyright (c) 2025, Eric Tapio. All rights reserved.
+ * Licensed under the MIT license. See LICENSE file in the project root for full license information.
+ */
 
 #ifndef NMEA_LITE_MSG_HANDLER_HEADER
 #define NMEA_LITE_MSG_HANDLER_HEADER
@@ -60,6 +70,15 @@
 #define VERBOSE_MSG_HANDLER_OUTPUT 0
 #define VERBOSE_MSG_HANDLER_OUTPUT_TO_USER 0
 
+/**
+ * @brief NMEA Lite Message Handler Class
+ * 
+ * @details The NmeaMsgHandler class provides comprehensive NMEA-style message
+ * processing capabilities including message parsing, validation, command
+ * execution, and response generation. It supports checksum validation,
+ * circular buffer management, and integration with various SlimSat subsystems
+ * including payload, LoRa radio, GPS, and bus database operations.
+ */
 class NmeaMsgHandler {
 private:
 	// Data Members

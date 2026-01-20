@@ -1,13 +1,25 @@
-//
-//  Payload Data Record
-//
-// CAPE-Twiggs HSSSI-26 SlimSat Project
-// Copyright (c) 2025, Eric Tapio. All rights reserved.
-// Licensed under the MIT license. See LICENSE file in the project root for full license information.
+/**
+ * @file payload_data.cpp
+ * @brief Payload Data Record Implementation
+ * 
+ * @details This file implements the PlDataRec class methods for managing
+ * payload data records including initialization, array management, and
+ * data output formatting. The class provides structured storage for
+ * payload sensor measurements and processing results.
+ * 
+ * CAPE-Twiggs HSSSI-26 SlimSat Project
+ * Copyright (c) 2025, Eric Tapio. All rights reserved.
+ * Licensed under the MIT license. See LICENSE file in the project root for full license information.
+ */
 
 #include <payload_data.h>
 
-
+/**
+ * @brief Default constructor for the Payload Data Record class
+ * @details Initializes the payload data record with default values and
+ * sets up the data array pointer. Calls initialization method to clear
+ * the data array for clean startup state.
+ */
 PlDataRec::PlDataRec(void) {
 	// Default Constructor
 	time = 0;
@@ -19,6 +31,11 @@ PlDataRec::PlDataRec(void) {
 }
 
 
+/**
+ * @brief Initialize payload data array
+ * @details Clears all elements in the payload data array by setting them to zero.
+ * This ensures a clean state for new data collection and processing.
+ */
 void PlDataRec::initializeArray(void) {
 	// This method initializes the temp message buffer used to output data to the SlimSat
 	memset(pl_data_array, 0.0, sizeof(pl_data_array));
@@ -26,6 +43,12 @@ void PlDataRec::initializeArray(void) {
 }
 
 
+/**
+ * @brief Print payload data record
+ * @details Outputs the complete payload data record including array size,
+ * timestamp, record number, and all data array elements for debugging
+ * and monitoring purposes.
+ */
 void PlDataRec::printRecord(void) {
 
 	Serial.println(F("\n ~ Printing the Payload Data Record ..."));

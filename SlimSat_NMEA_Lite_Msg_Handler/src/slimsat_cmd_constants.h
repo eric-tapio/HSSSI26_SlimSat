@@ -1,7 +1,17 @@
-// CAPE-Twiggs HSSSI-26 SlimSat Project
-// Copyright (c) 2025, Eric Tapio. All rights reserved.
-// Licensed under the MIT license. See LICENSE file in the project root for full license information.
-
+/**
+ * @file slimsat_cmd_constants.h
+ * @brief SlimSat Command Constants Header
+ * 
+ * @details This header file defines all command constants used in the SlimSat
+ * NMEA message handling system. It includes command IDs for bus operations,
+ * radio configuration, payload control, timing operations, and system
+ * management functions. These constants ensure consistent command identification
+ * across the entire SlimSat communication system.
+ * 
+ * CAPE-Twiggs HSSSI-26 SlimSat Project
+ * Copyright (c) 2025, Eric Tapio. All rights reserved.
+ * Licensed under the MIT license. See LICENSE file in the project root for full license information.
+ */
 
 #ifndef SLIMSAT_CMD_CONSTANTS_HEADER
 #define SLIMSAT_CMD_CONSTANTS_HEADER

@@ -1,10 +1,24 @@
-// CAPE-Twiggs HSSSI-26 SlimSat Project
-// Copyright (c) 2025, Eric Tapio. All rights reserved.
-// Licensed under the MIT license. See LICENSE file in the project root for full license information.
+/**
+ * @file bus_power_monitor.cpp
+ * @brief Bus Power Monitor Implementation
+ * 
+ * @details This file implements the BusPowerMonitor class methods for managing
+ * multiple INA219 power monitoring sensors throughout the bus system. Provides
+ * initialization, calibration, data collection, and power management
+ * capabilities for comprehensive system power monitoring.
+ * 
+ * CAPE-Twiggs HSSSI-26 SlimSat Project
+ * Copyright (c) 2025, Eric Tapio. All rights reserved.
+ * Licensed under the MIT license. See LICENSE file in the project root for full license information.
+ */
 
 #include <bus_power_monitor.h>
 
-
+/**
+ * @brief Default constructor for Bus Power Monitor
+ * @details Initializes the power monitor with default I2C addresses for
+ * three INA219 sensors and sets up the pointer array for sensor management.
+ */
 BusPowerMonitor::BusPowerMonitor(void) : ina219_1(INA219_1_I2C_ADR), ina219_2(INA219_2_I2C_ADR), ina219_3(INA219_3_I2C_ADR) {
 	// Default Constructor
 	
