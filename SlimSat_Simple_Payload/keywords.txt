@@ -1,0 +1,62 @@
+#######################################
+# Datatypes (KEYWORD1)
+#######################################
+
+Payload	KEYWORD1
+Ping_Sensor	KEYWORD1
+
+#######################################
+# Methods and Functions (KEYWORD2)
+#######################################
+
+##############################
+# Class
+##############################
+
+initializeDataMembers	KEYWORD2
+setMeasurementTime	KEYWORD2
+getNextPayloadDataMsg	KEYWORD2
+formatPayloadDataMsgs	KEYWORD2
+initializePayloadDataAry	KEYWORD2
+
+setNumMeasurementsToTake  KEYWORD2
+performRoundofSensorMeasurements  KEYWORD2
+getMaxRangeMeasurement  KEYWORD2
+getMinRangeMeasurement  KEYWORD2
+getMeanRangeMeasurement  KEYWORD2
+print KEYWORD2  KEYWORD2
+initializePayload  KEYWORD2
+initializePayloadMessageBuffer  KEYWORD2
+handlePayloadCommand  KEYWORD2
+getPayloadDataStr  KEYWORD2
+performPayloadOperationIteration  KEYWORD2
+getSensor2Measurement  KEYWORD2
+
+##############################
+# Class ...
+##############################
+
+
+##############################
+# Global Functions
+##############################
+
+
+#######################################
+# Constants (LITERAL1)
+#######################################
+
+MIN_PL_CMD_ID LITERAL1
+MAX_PL_CMD_ID LITERAL1
+PING_PAYLOAD_CMD_ID LITERAL1
+GET_NUMBER_MEASUREMENTS_TO_TAKE_CMD_ID LITERAL1
+SET_NUMBER_MEASUREMENTS_TO_TAKE_CMD_ID LITERAL1
+TAKE_MEASUREMENTS_CMD_ID LITERAL1
+PRINT_MEASUREMENTS_CMD_ID LITERAL1
+MIN_MEASUREMENT_ARY_INDEX LITERAL1
+MAX_MEASUREMENT_ARY_INDEX LITERAL1
+MEAN_MEASUREMENT_ARY_INDEX LITERAL1
+SENSOR_2_MEASUREMENT_ARY_INDEX LITERAL1
+MIN_NUMBER_MEASUREMENTS LITERAL1
+MAX_NUMBER_MEASUREMENTS LITERAL1
+VERBOSE_PAYLOAD_OUTPUT LITERAL1
