@@ -1,11 +1,24 @@
-// CAPE-Twiggs HSSSI-26 SlimSat Project
-// Copyright (c) 2025, Eric Tapio. All rights reserved.
-// Licensed under the MIT license. See LICENSE file in the project root for full license information.
+/**
+ * @file ina219_if.cpp
+ * @brief INA219 Interface Implementation
+ * 
+ * @details This file implements the Ina219If class methods for interfacing
+ * with INA219 current/power monitoring sensors. Provides device initialization,
+ * calibration, measurement collection, and data processing capabilities
+ * for power monitoring throughout the SlimSat system.
+ * 
+ * CAPE-Twiggs HSSSI-26 SlimSat Project
+ * Copyright (c) 2025, Eric Tapio. All rights reserved.
+ * Licensed under the MIT license. See LICENSE file in the project root for full license information.
+ */
 
 #include <ina219_if.h>
 
-
-// Constructors
+/**
+ * @brief Default constructor for INA219 Interface
+ * @details Initializes the INA219 interface with the default I2C address
+ * using the member initializer list for the INA219 object.
+ */
 Ina219If::Ina219If(void) : ina219(INA219_I2C_ADR) {
 }
 

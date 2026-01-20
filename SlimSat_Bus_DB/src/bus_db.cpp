@@ -95,6 +95,12 @@ void BusDb::print(void) const {
 }
 
 
+/**
+ * @brief Get bus safe mode voltage in millivolts
+ * @details Returns the voltage threshold for safe mode operation with
+ * optional verbose output for debugging purposes when enabled.
+ * @return Safe mode voltage threshold in millivolts
+ */
 uint32_t BusDb::getBusSafeModeVoltageInMv(void) const {
 	// This method gets the Safe Mode Voltage level
 	if (VERBOSE_BUS_DB_OUTPUT) {
@@ -105,6 +111,12 @@ uint32_t BusDb::getBusSafeModeVoltageInMv(void) const {
 }
 
 
+/**
+ * @brief Set bus safe mode voltage in millivolts
+ * @details Sets the voltage threshold for safe mode operation with
+ * conversion from millivolts to volts for internal storage.
+ * @param sm_voltage_in_mv Safe mode voltage threshold in millivolts
+ */
 void BusDb::setBusSafeModeVoltageInMv(uint32_t sm_voltage_in_mv) {
 	// This method sets the Safe Mode Voltage level
 	if (VERBOSE_BUS_DB_OUTPUT) {
@@ -117,6 +129,12 @@ void BusDb::setBusSafeModeVoltageInMv(uint32_t sm_voltage_in_mv) {
 }
 
 
+/**
+ * @brief Start power monitor
+ * @details Initializes and starts the bus power monitoring system.
+ * Returns the status code from the power monitor initialization.
+ * @return Status code (0=success, non-zero=error)
+ */
 uint8_t BusDb::startPowerMonitor(void) {
 	if (VERBOSE_BUS_DB_OUTPUT) {
 		Serial.println(F("\n ~ Starting Power Monitor ..."));

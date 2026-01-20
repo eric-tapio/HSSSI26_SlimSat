@@ -1,16 +1,34 @@
-// CAPE-Twiggs HSSSI-26 SlimSat Project
-// Copyright (c) 2025, Eric Tapio. All rights reserved.
-// Licensed under the MIT license. See LICENSE file in the project root for full license information.
+/**
+ * @file gps_if.cpp
+ * @brief GPS Interface Implementation
+ * 
+ * @details This file implements the GpsIf class methods for managing
+ * GPS communication and data processing. Provides GPS initialization,
+ * message parsing, position tracking, and time synchronization
+ * capabilities for the SlimSat navigation system.
+ * 
+ * CAPE-Twiggs HSSSI-26 SlimSat Project
+ * Copyright (c) 2025, Eric Tapio. All rights reserved.
+ * Licensed under the MIT license. See LICENSE file in the project root for full license information.
+ */
 
 #include <gps_if.h>
 
-
-// Constructors
+/**
+ * @brief Default constructor for the GPS Interface class
+ * @details Initializes the GPS interface by calling the data member
+ * initialization method to set up default values and clear buffers.
+ */
 GpsIf::GpsIf(void) {
 	initializeDataMembers();
 }
 
 
+/**
+ * @brief Initialize GPS interface data members
+ * @details Sets all GPS data members to default values including time validity,
+ * position data, and message buffers. Prepares the GPS interface for operation.
+ */
 void GpsIf::initializeDataMembers(void) {
 	// This function initializes object data members
 	initializeGpsMessageBuffer();
@@ -30,6 +48,11 @@ void GpsIf::initializeDataMembers(void) {
 }
 
 
+/**
+ * @brief Initialize GPS message buffer
+ * @details Clears the GPS message buffer by setting all bytes to zero.
+ * Ensures clean buffer state for GPS message processing and output.
+ */
 void GpsIf::initializeGpsMessageBuffer(void) {
 	// This method initializes the GPS message buffer used to output Payload data to the Bus
 
@@ -39,6 +62,12 @@ void GpsIf::initializeGpsMessageBuffer(void) {
 }
 
 
+/**
+ * @brief Begin GPS operation
+ * @details Initializes the GPS device by starting serial communication
+ * at the specified baud rate. Provides optional verbose output showing
+ * library version information when debugging is enabled.
+ */
 void GpsIf::begin(void) {
 	// This method starts the GPS device
 	if (VERBOSE_GPS_OUTPUT) {

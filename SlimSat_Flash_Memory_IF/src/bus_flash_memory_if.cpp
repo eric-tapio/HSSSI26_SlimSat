@@ -1,11 +1,25 @@
-// CAPE-Twiggs HSSSI-26 SlimSat Project
-// Copyright (c) 2025, Eric Tapio. All rights reserved.
-// Licensed under the MIT license. See LICENSE file in the project root for full license information.
+/**
+ * @file bus_flash_memory_if.cpp
+ * @brief Bus Flash Memory Interface Implementation
+ * 
+ * @details This file implements the FlashMemoryIf class methods for managing
+ * flash memory operations including data storage, retrieval, erasing, and
+ * database management. Provides comprehensive flash memory interface for
+ * persistent data storage throughout the SlimSat bus system.
+ * 
+ * CAPE-Twiggs HSSSI-26 SlimSat Project
+ * Copyright (c) 2025, Eric Tapio. All rights reserved.
+ * Licensed under the MIT license. See LICENSE file in the project root for full license information.
+ */
 
 #include <bus_flash_memory_if.h>
 
-
-//constructors
+/**
+ * @brief Default constructor for Flash Memory Interface
+ * @details Initializes the flash memory interface with default values and
+ * automatically starts the flash QSPI communication. Sets up the flash
+ * transport layer and prepares the system for flash operations.
+ */
 FlashMemoryIf::FlashMemoryIf(void) : flash(&flashTransport){
 
 	address = 0;

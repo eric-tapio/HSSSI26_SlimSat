@@ -96,9 +96,25 @@ public:
 	 */
 	void setBusMode(uint8_t mode);
 	
+	/**
+	 * @brief Get bus safe mode voltage in millivolts
+	 * @details Returns the voltage threshold for safe mode operation
+	 * @return Safe mode voltage threshold in millivolts
+	 */
 	uint32_t getBusSafeModeVoltageInMv(void) const;
+	
+	/**
+	 * @brief Set bus safe mode voltage in millivolts
+	 * @details Sets the voltage threshold for safe mode operation
+	 * @param sm_voltage_in_mv Safe mode voltage threshold in millivolts
+	 */
 	void setBusSafeModeVoltageInMv(uint32_t sm_voltage_in_mv);
 	
+	/**
+	 * @brief Start power monitor
+	 * @details Initializes and starts the bus power monitoring system
+	 * @return Status code (0=success, non-zero=error)
+	 */
 	uint8_t startPowerMonitor(void);
 	
 };
