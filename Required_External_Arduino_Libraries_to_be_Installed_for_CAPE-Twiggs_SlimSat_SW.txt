@@ -1,0 +1,14 @@
+The following external Arduino libraries are also required for the CAPE-Twiggs SlimSat SW:
+
+Install the following Arduino libraries using the Arduino Libarary Manager:
+
+Required:
+  1) Adafruit SPIFlash by Adafruit
+  2) Adafruit INA219 by Adafruit
+  3) LM75A Arduino Library by M2M Solutions AB
+  4) RadioLib by Jan Gromes
+  5) TinyGPSPlus by Mikal Hart
+
+Optional:
+  1) Adafruit GFX by Adafruit
+  2) Adafruit SSD1306 by Adafruit
