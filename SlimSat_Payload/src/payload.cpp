@@ -35,7 +35,7 @@ Payload::Payload(void) {
 void Payload::initializeDataMembers(void) {
 	// This method initiailizes all class data members 
 
-	num_measurements_to_take = 10;
+	num_measurements_to_take = PAYLOAD_DATA_ARY_SIZE-4;
 	input_is_valid = 0;
 
 	initializePayloadMessageBuffer();

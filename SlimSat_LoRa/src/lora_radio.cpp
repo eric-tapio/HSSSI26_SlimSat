@@ -128,7 +128,7 @@ int16_t LoRaRadio::beginUsingStandardDefaultValues(void) {
 
 int16_t LoRaRadio::begin(void) {
 	// This method starts the LoRa Radio
-	radio_status_code = radio.begin(frequency_in_hz, bandwidth_in_hz, spread_factor, coding_rate, sync_word, output_power_in_dbm, preamble_length, gain);
+	radio_status_code = radio.begin(covnertHzToMhz(frequency_in_hz), covnertHzToKhz(bandwidth_in_hz), spread_factor, coding_rate, sync_word, output_power_in_dbm, preamble_length, gain);
 	
 	if (VERBOSE_LORA_OUTPUT) {
 		if (radio_status_code == RADIOLIB_ERR_NONE) {

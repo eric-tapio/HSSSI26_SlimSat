@@ -504,7 +504,7 @@ void NmeaMsgHandler::handleNmeaMsg(char* slimsat_msg, BusDb& Bus_Db, Payload& Pa
 				}
 				constructAckMsg();
 				if (VERBOSE_MSG_HANDLER_OUTPUT_TO_USER) {
-					Serial.println(F("\n ~ Ping Cmd received"));
+					Serial.println(F(" ~ Ping Cmd received"));
 				}
 				break;
 			case REBOOT_COMMAND_ID:
@@ -529,15 +529,13 @@ void NmeaMsgHandler::handleNmeaMsg(char* slimsat_msg, BusDb& Bus_Db, Payload& Pa
 					// Get new, current Payload Data
 					if (VERBOSE_MSG_HANDLER_OUTPUT_TO_USER) {
 						Serial.println(F("\n ~ Getting new, current Payload Data ..."));
-						Serial.print(F("\n ~ Cmd id in Case is: "));
-						Serial.println(cmd_id);
 					}
 					Payload.performPayloadOperationIteration(pl_data_rec);
 					//pl_data_rec.printRecord();
 					constructPayloadDataResponseMsg(pl_data_rec);
 				
 					if (VERBOSE_MSG_HANDLER_OUTPUT_TO_USER) {
-						Serial.println(F("\n ~ Payload Data Sent"));
+						Serial.println(F(" ~ Payload Data Sent"));
 					}
 				}
 				//else if ((cmd_value != 0) && (opt_cmd_arg_1 == 0)) {
@@ -551,7 +549,7 @@ void NmeaMsgHandler::handleNmeaMsg(char* slimsat_msg, BusDb& Bus_Db, Payload& Pa
 					data_rec_num_is_valid = Bus_Db.Flash_Memory.getPayloadDataRecordFromFlash(cmd_value, pl_data_rec);
 					
 					if (VERBOSE_MSG_HANDLER_OUTPUT_TO_USER) {
-						Serial.print(F("\n ~ data_rec_num_is_valid is: "));
+						Serial.print(F(" ~ data_rec_num_is_valid is: "));
 						Serial.println(data_rec_num_is_valid);
 					}
 				
@@ -570,7 +568,7 @@ void NmeaMsgHandler::handleNmeaMsg(char* slimsat_msg, BusDb& Bus_Db, Payload& Pa
 						Serial.print(F("\n ~ Getting range of Payload Data records..."));
 					}
 					
-					for (uint16_t i = cmd_value; i <= (cmd_value + opt_cmd_arg_1); i++) {
+					for (uint16_t i = cmd_value; i < (cmd_value + opt_cmd_arg_1); i++) {
 						// Get the Payload Data struct
 						if (VERBOSE_MSG_HANDLER_OUTPUT_TO_USER) {
 							Serial.print(F("\n -> Getting Payload Data Record: "));
@@ -580,7 +578,7 @@ void NmeaMsgHandler::handleNmeaMsg(char* slimsat_msg, BusDb& Bus_Db, Payload& Pa
 						data_rec_num_is_valid = Bus_Db.Flash_Memory.getPayloadDataRecordFromFlash(i, pl_data_rec);
 					
 						if (VERBOSE_MSG_HANDLER_OUTPUT_TO_USER) {
-							Serial.print(F("\n ~ data_rec_num_is_valid is: "));
+							Serial.print(F(" ~ data_rec_num_is_valid is: "));
 							Serial.println(data_rec_num_is_valid);
 						}
 					
@@ -610,7 +608,7 @@ void NmeaMsgHandler::handleNmeaMsg(char* slimsat_msg, BusDb& Bus_Db, Payload& Pa
 				Bus_Db.setBusSafeModeVoltageInMv(cmd_value);
 				constructAckMsg(1);
 				if (VERBOSE_MSG_HANDLER_OUTPUT_TO_USER) {
-				Serial.println(F("\n ~ Note: Safe Mode Voltage Set"));
+				Serial.println(F(" ~ Note: Safe Mode Voltage Set"));
 				}				
 				break;
 			case GET_RADIO_FREQUENCY_COMMAND_ID:
@@ -622,7 +620,7 @@ void NmeaMsgHandler::handleNmeaMsg(char* slimsat_msg, BusDb& Bus_Db, Payload& Pa
 				snprintf(temp_msg_buffer, sizeof(temp_msg_buffer), "%lu,%d", uint32_val, rxd_valid_msg_count);
 				constructResponseMsgGivenMsgPayload(cmd_id, 1, temp_msg_buffer);
 				if (VERBOSE_MSG_HANDLER_OUTPUT_TO_USER) {
-					Serial.print(F("\n ~ LoRa Frequency is: "));
+					Serial.print(F(" ~ LoRa Frequency is: "));
 					Serial.print(uint32_val);
 					Serial.println(F(" Hz"));
 				}
@@ -638,7 +636,7 @@ void NmeaMsgHandler::handleNmeaMsg(char* slimsat_msg, BusDb& Bus_Db, Payload& Pa
 					constructAckMsg(1);
 					
 					if (VERBOSE_MSG_HANDLER_OUTPUT_TO_USER) {
-						Serial.print(F("\n ~ LoRa Frequency has been set to: "));
+						Serial.print(F(" ~ LoRa Frequency has been set to: "));
 						Serial.print(cmd_value);
 						Serial.println(F(" Hz"));
 					}
@@ -647,7 +645,7 @@ void NmeaMsgHandler::handleNmeaMsg(char* slimsat_msg, BusDb& Bus_Db, Payload& Pa
 					constructNackMsg(radio_status_code);
 					
 					if (VERBOSE_MSG_HANDLER_OUTPUT_TO_USER) {
-						Serial.println(F("\n ~ Error: LoRa Frequency was NOT successfully set! "));
+						Serial.println(F(" ~ Error: LoRa Frequency was NOT successfully set! "));
 					}
 				}					
 				break;
@@ -660,7 +658,7 @@ void NmeaMsgHandler::handleNmeaMsg(char* slimsat_msg, BusDb& Bus_Db, Payload& Pa
 				constructResponseMsgGivenMsgPayload(cmd_id, 1, temp_msg_buffer);
 				
 				if (VERBOSE_MSG_HANDLER_OUTPUT_TO_USER) {
-					Serial.print(F("\n ~ LoRa Bandwidth is: "));
+					Serial.print(F(" ~ LoRa Bandwidth is: "));
 					Serial.print(uint32_val);
 					Serial.println(F(" Hz"));
 				}
@@ -676,7 +674,7 @@ void NmeaMsgHandler::handleNmeaMsg(char* slimsat_msg, BusDb& Bus_Db, Payload& Pa
 					constructAckMsg(1);
 					
 					if (VERBOSE_MSG_HANDLER_OUTPUT_TO_USER) {
-						Serial.print(F("\n ~ LoRa Bandwidth has been set to: "));
+						Serial.print(F(" ~ LoRa Bandwidth has been set to: "));
 						Serial.print(cmd_value);
 						Serial.println(F(" Hz"));
 					}
@@ -685,7 +683,7 @@ void NmeaMsgHandler::handleNmeaMsg(char* slimsat_msg, BusDb& Bus_Db, Payload& Pa
 					constructNackMsg(radio_status_code);
 					
 					if (VERBOSE_MSG_HANDLER_OUTPUT_TO_USER) {
-						Serial.println(F("\n ~ Error: LoRa Bandwidth was NOT successfully set! "));
+						Serial.println(F(" ~ Error: LoRa Bandwidth was NOT successfully set! "));
 					}
 				}
 				break;
@@ -698,7 +696,7 @@ void NmeaMsgHandler::handleNmeaMsg(char* slimsat_msg, BusDb& Bus_Db, Payload& Pa
 				constructResponseMsgGivenMsgPayload(cmd_id, 1, temp_msg_buffer);
 				
 				if (VERBOSE_MSG_HANDLER_OUTPUT_TO_USER) {
-					Serial.println(F("\n ~ LoRa Spread Factor is: "));
+					Serial.print(F(" ~ LoRa Spread Factor is: "));
 					Serial.println(uint32_val);
 				}
 				break;
@@ -712,7 +710,7 @@ void NmeaMsgHandler::handleNmeaMsg(char* slimsat_msg, BusDb& Bus_Db, Payload& Pa
 					constructAckMsg(1);
 					
 					if (VERBOSE_MSG_HANDLER_OUTPUT_TO_USER) {
-						Serial.print(F("\n ~ LoRa Spread Factor has been set to: "));
+						Serial.print(F(" ~ LoRa Spread Factor has been set to: "));
 						Serial.println(cmd_value);
 					}
 				}
@@ -720,7 +718,7 @@ void NmeaMsgHandler::handleNmeaMsg(char* slimsat_msg, BusDb& Bus_Db, Payload& Pa
 					constructNackMsg(radio_status_code);
 					
 					if (VERBOSE_MSG_HANDLER_OUTPUT_TO_USER) {
-						Serial.println(F("\n ~ Error: LoRa Spread Factor was NOT successfully set! "));
+						Serial.println(F(" ~ Error: LoRa Spread Factor was NOT successfully set! "));
 					}
 				}
 				break;							
@@ -733,7 +731,7 @@ void NmeaMsgHandler::handleNmeaMsg(char* slimsat_msg, BusDb& Bus_Db, Payload& Pa
 				constructResponseMsgGivenMsgPayload(cmd_id, 1, temp_msg_buffer);
 				
 				if (VERBOSE_MSG_HANDLER_OUTPUT_TO_USER) {
-					Serial.print(F("\n ~ LoRa Coding Rate is: "));
+					Serial.print(F(" ~ LoRa Coding Rate is: "));
 					Serial.println(uint32_val);
 				}
 				break;
@@ -747,7 +745,7 @@ void NmeaMsgHandler::handleNmeaMsg(char* slimsat_msg, BusDb& Bus_Db, Payload& Pa
 					constructAckMsg(1);
 					
 					if (VERBOSE_MSG_HANDLER_OUTPUT_TO_USER) {
-						Serial.print(F("\n ~ LoRa Coding Rate has been set to: "));
+						Serial.print(F(" ~ LoRa Coding Rate has been set to: "));
 						Serial.println(cmd_value);
 					}
 				}
@@ -755,7 +753,7 @@ void NmeaMsgHandler::handleNmeaMsg(char* slimsat_msg, BusDb& Bus_Db, Payload& Pa
 					constructNackMsg(radio_status_code);
 					
 					if (VERBOSE_MSG_HANDLER_OUTPUT_TO_USER) {
-						Serial.println(F("\n ~ Error: LoRa Coding Rate was NOT successfully set! "));
+						Serial.println(F(" ~ Error: LoRa Coding Rate was NOT successfully set! "));
 					}
 				}
 				break;							
@@ -768,7 +766,7 @@ void NmeaMsgHandler::handleNmeaMsg(char* slimsat_msg, BusDb& Bus_Db, Payload& Pa
 				constructResponseMsgGivenMsgPayload(cmd_id, 1, temp_msg_buffer);
 				
 				if (VERBOSE_MSG_HANDLER_OUTPUT_TO_USER) {
-					Serial.print(F("\n ~ LoRa Output Power is: "));
+					Serial.print(F(" ~ LoRa Output Power is: "));
 					Serial.println(uint32_val);
 				}
 				break;
@@ -782,7 +780,7 @@ void NmeaMsgHandler::handleNmeaMsg(char* slimsat_msg, BusDb& Bus_Db, Payload& Pa
 					constructAckMsg(1);
 					
 					if (VERBOSE_MSG_HANDLER_OUTPUT_TO_USER) {
-						Serial.print(F("\n ~ LoRa Output Power has been set to: "));
+						Serial.print(F(" ~ LoRa Output Power has been set to: "));
 						Serial.println(cmd_value);
 					}
 				}
@@ -790,7 +788,7 @@ void NmeaMsgHandler::handleNmeaMsg(char* slimsat_msg, BusDb& Bus_Db, Payload& Pa
 					constructNackMsg(radio_status_code);
 					
 					if (VERBOSE_MSG_HANDLER_OUTPUT_TO_USER) {
-						Serial.println(F("\n ~ Error: LoRa Output Power was NOT successfully set! "));
+						Serial.println(F(" ~ Error: LoRa Output Power was NOT successfully set! "));
 					}
 				}
 				break;
@@ -803,7 +801,7 @@ void NmeaMsgHandler::handleNmeaMsg(char* slimsat_msg, BusDb& Bus_Db, Payload& Pa
 				constructResponseMsgGivenMsgPayload(cmd_id, 1, temp_msg_buffer);
 				
 				if (VERBOSE_MSG_HANDLER_OUTPUT_TO_USER) {
-					Serial.print(F("\n ~ LoRa Current Limit is: "));
+					Serial.print(F(" ~ LoRa Current Limit is: "));
 					Serial.print(uint32_val);
 					Serial.println(F(" mA"));
 				}
@@ -820,7 +818,7 @@ void NmeaMsgHandler::handleNmeaMsg(char* slimsat_msg, BusDb& Bus_Db, Payload& Pa
 					constructAckMsg(1);
 					
 					if (VERBOSE_MSG_HANDLER_OUTPUT_TO_USER) {
-						Serial.print(F("\n ~ LoRa Current Limit has been set to: "));
+						Serial.print(F(" ~ LoRa Current Limit has been set to: "));
 						Serial.print(cmd_value);
 						Serial.println(F(" mA"));
 					}
@@ -829,7 +827,7 @@ void NmeaMsgHandler::handleNmeaMsg(char* slimsat_msg, BusDb& Bus_Db, Payload& Pa
 					constructNackMsg(radio_status_code);
 					
 					if (VERBOSE_MSG_HANDLER_OUTPUT_TO_USER) {
-						Serial.println(F("\n ~ Error: LoRa Current Limit was NOT successfully set! "));
+						Serial.println(F(" ~ Error: LoRa Current Limit was NOT successfully set! "));
 					}
 				}
 				break;
@@ -841,7 +839,7 @@ void NmeaMsgHandler::handleNmeaMsg(char* slimsat_msg, BusDb& Bus_Db, Payload& Pa
 				LoRa.setPreambleLength(cmd_value);
 				
 				if (VERBOSE_MSG_HANDLER_OUTPUT_TO_USER) {
-					Serial.print(F("\n ~ LoRa Preamble Length has been set to: "));
+					Serial.print(F(" ~ LoRa Preamble Length has been set to: "));
 					Serial.println(cmd_value);
 				}
 				break;
@@ -854,7 +852,7 @@ void NmeaMsgHandler::handleNmeaMsg(char* slimsat_msg, BusDb& Bus_Db, Payload& Pa
 				constructResponseMsgGivenMsgPayload(cmd_id, 1, temp_msg_buffer);
 				
 				if (VERBOSE_MSG_HANDLER_OUTPUT_TO_USER) {
-					Serial.print(F("\n ~ LoRa Preamble Length is: "));
+					Serial.print(F(" ~ LoRa Preamble Length is: "));
 					Serial.println(uint32_val);
 				}
 				break;
@@ -869,7 +867,7 @@ void NmeaMsgHandler::handleNmeaMsg(char* slimsat_msg, BusDb& Bus_Db, Payload& Pa
 					constructAckMsg(1);
 					
 					if (VERBOSE_MSG_HANDLER_OUTPUT_TO_USER) {
-						Serial.print(F("\n ~ LoRa Gain has been set to: "));
+						Serial.print(F(" ~ LoRa Gain has been set to: "));
 						Serial.println(cmd_value);
 					}
 				}
@@ -877,7 +875,7 @@ void NmeaMsgHandler::handleNmeaMsg(char* slimsat_msg, BusDb& Bus_Db, Payload& Pa
 					constructNackMsg(radio_status_code);
 					
 					if (VERBOSE_MSG_HANDLER_OUTPUT_TO_USER) {
-						Serial.println(F("\n ~ Error: LoRa Gain was NOT successfully set! "));
+						Serial.println(F(" ~ Error: LoRa Gain was NOT successfully set! "));
 					}
 				}						
 				break;
@@ -890,7 +888,7 @@ void NmeaMsgHandler::handleNmeaMsg(char* slimsat_msg, BusDb& Bus_Db, Payload& Pa
 				constructResponseMsgGivenMsgPayload(cmd_id, 1, temp_msg_buffer);
 				
 				if (VERBOSE_MSG_HANDLER_OUTPUT_TO_USER) {
-					Serial.print(F("\n ~ LoRa Gain is: "));
+					Serial.print(F(" ~ LoRa Gain is: "));
 					Serial.print(uint32_val);
 					Serial.println(" dB");
 				}
@@ -904,7 +902,7 @@ void NmeaMsgHandler::handleNmeaMsg(char* slimsat_msg, BusDb& Bus_Db, Payload& Pa
 				constructResponseMsgGivenMsgPayload(cmd_id, 1, temp_msg_buffer);
 				
 				if (VERBOSE_MSG_HANDLER_OUTPUT_TO_USER) {
-					Serial.print(F("\n ~ LoRa Frequency Error is: "));
+					Serial.print(F(" ~ LoRa Frequency Error is: "));
 					Serial.print(double_val);
 					Serial.println(" Hz");
 				}
@@ -918,7 +916,7 @@ void NmeaMsgHandler::handleNmeaMsg(char* slimsat_msg, BusDb& Bus_Db, Payload& Pa
 				constructResponseMsgGivenMsgPayload(cmd_id, 1, temp_msg_buffer);
 				
 				if (VERBOSE_MSG_HANDLER_OUTPUT_TO_USER) {
-					Serial.print(F("\n ~ LoRa SNR is: "));
+					Serial.print(F(" ~ LoRa SNR is: "));
 					Serial.print(double_val);
 					Serial.println(" dBm");
 				}
@@ -932,7 +930,7 @@ void NmeaMsgHandler::handleNmeaMsg(char* slimsat_msg, BusDb& Bus_Db, Payload& Pa
 				constructResponseMsgGivenMsgPayload(cmd_id, 1, temp_msg_buffer);
 				
 				if (VERBOSE_MSG_HANDLER_OUTPUT_TO_USER) {
-					Serial.print(F("\n ~ LoRa RSSI is: "));
+					Serial.print(F(" ~ LoRa RSSI is: "));
 					Serial.print(double_val);
 					Serial.println(" dBm");
 				}
@@ -947,7 +945,7 @@ void NmeaMsgHandler::handleNmeaMsg(char* slimsat_msg, BusDb& Bus_Db, Payload& Pa
 				constructResponseMsgGivenMsgPayload(cmd_id, 1, temp_msg_buffer);
 				
 				if (VERBOSE_MSG_HANDLER_OUTPUT_TO_USER) {
-					Serial.print(F("\n ~ Beacon Period is: "));
+					Serial.print(F(" ~ Beacon Period is: "));
 					Serial.print(uint32_val);
 					Serial.println(F(" ms"));
 				}
@@ -960,7 +958,7 @@ void NmeaMsgHandler::handleNmeaMsg(char* slimsat_msg, BusDb& Bus_Db, Payload& Pa
 				uint32_val = Bcn_Timer.setIntervalInMs(cmd_value);
 				
 				if (VERBOSE_MSG_HANDLER_OUTPUT_TO_USER) {
-					Serial.print(F("\n ~ Beacon Period has been set to: "));
+					Serial.print(F(" ~ Beacon Period has been set to: "));
 					Serial.print(cmd_value);
 					Serial.println(F("  ms"));							
 				}
@@ -974,7 +972,7 @@ void NmeaMsgHandler::handleNmeaMsg(char* slimsat_msg, BusDb& Bus_Db, Payload& Pa
 				constructResponseMsgGivenMsgPayload(cmd_id, 1, temp_msg_buffer);
 				
 				if (VERBOSE_MSG_HANDLER_OUTPUT_TO_USER) {
-					Serial.print(F("\n ~ Bus Mode is: "));
+					Serial.print(F(" ~ Bus Mode is: "));
 					Serial.println(uint32_val);
 				}
 				break;
@@ -986,7 +984,7 @@ void NmeaMsgHandler::handleNmeaMsg(char* slimsat_msg, BusDb& Bus_Db, Payload& Pa
 				Bus_Db.setBusMode((uint8_t)cmd_value);
 				
 				if (VERBOSE_MSG_HANDLER_OUTPUT_TO_USER) {
-					Serial.print(F("\n ~ Bus Mode set to: "));
+					Serial.print(F(" ~ Bus Mode set to: "));
 					Serial.println(cmd_value);
 				}
 				break;
@@ -999,7 +997,7 @@ void NmeaMsgHandler::handleNmeaMsg(char* slimsat_msg, BusDb& Bus_Db, Payload& Pa
 				constructResponseMsgGivenMsgPayload(cmd_id, 1, temp_msg_buffer);
 				
 				if (VERBOSE_MSG_HANDLER_OUTPUT_TO_USER) {
-					Serial.print(F("\n ~ Bus Time is: "));
+					Serial.print(F(" ~ Bus Time is: "));
 					Serial.print(uint32_val);
 					Serial.println(F("  ms"));
 				}
@@ -1012,7 +1010,7 @@ void NmeaMsgHandler::handleNmeaMsg(char* slimsat_msg, BusDb& Bus_Db, Payload& Pa
 				Bus_Db.Bus_Time.setBusEpochTimeInMs(cmd_value);
 				
 				if (VERBOSE_MSG_HANDLER_OUTPUT_TO_USER) {
-					Serial.print(F("\n ~ Bus Epoch Time set to: "));
+					Serial.print(F(" ~ Bus Epoch Time set to: "));
 					Serial.print(uint32_val);
 					Serial.println(F("  ms"));	
 				}
@@ -1026,7 +1024,7 @@ void NmeaMsgHandler::handleNmeaMsg(char* slimsat_msg, BusDb& Bus_Db, Payload& Pa
 				constructResponseMsgGivenMsgPayload(cmd_id, 1, temp_msg_buffer);
 				
 				if (VERBOSE_MSG_HANDLER_OUTPUT_TO_USER) {
-					Serial.print(F("\n ~ Bus Time is: "));
+					Serial.print(F(" ~ Bus Time is: "));
 					Serial.print(uint32_val);
 					Serial.println(F("  ms"));
 				}
@@ -1041,7 +1039,7 @@ void NmeaMsgHandler::handleNmeaMsg(char* slimsat_msg, BusDb& Bus_Db, Payload& Pa
 				if (cmd_value == 0) {
 					// Get new, current Bus Data
 					if (VERBOSE_MSG_HANDLER_OUTPUT_TO_USER) {
-						Serial.print(F("\n ~ Getting new, current Bus Data ..."));
+						Serial.println(F(" ~ Getting new, current Bus Data ..."));
 					}
 					
 					Bus_Db.Bus_Power_Monitor.collectBusData(bus_data);
@@ -1052,12 +1050,12 @@ void NmeaMsgHandler::handleNmeaMsg(char* slimsat_msg, BusDb& Bus_Db, Payload& Pa
 					// Note: a cmd value of 0 is invalid, and hence it is protected against here
 					// Get the cmd value specified bus data record from flash memory
 					if (VERBOSE_MSG_HANDLER_OUTPUT_TO_USER) {
-						Serial.println(F("\n ~ Getting single Bus Data record ..."));
+						Serial.println(F(" ~ Getting single Bus Data record ..."));
 					}
 					data_rec_num_is_valid = Bus_Db.Flash_Memory.getBusDataRecordFromFlash(cmd_value, bus_data);
 					
 					if (VERBOSE_MSG_HANDLER_OUTPUT_TO_USER) {
-						Serial.print(F("\n ~ data_rec_num_is_valid is: "));
+						Serial.print(F(" ~ data_rec_num_is_valid is: "));
 						Serial.println(data_rec_num_is_valid);
 					}
 				
@@ -1073,7 +1071,7 @@ void NmeaMsgHandler::handleNmeaMsg(char* slimsat_msg, BusDb& Bus_Db, Payload& Pa
 				else if ((cmd_value > 0) && (opt_cmd_arg_1 != 0)) {
 					// Get the range of bus data records starting from cmd value specified value through the opt cmd arg 1 value from flash memory
 					if (VERBOSE_MSG_HANDLER_OUTPUT_TO_USER) {
-						Serial.println(F("\n ~ Getting range of Bus Data records..."));
+						Serial.println(F(" ~ Getting range of Bus Data records..."));
 					}
 					
 					Serial.println(" ~ About to enter loop ...");
@@ -1084,18 +1082,18 @@ void NmeaMsgHandler::handleNmeaMsg(char* slimsat_msg, BusDb& Bus_Db, Payload& Pa
 					Serial.print(F(" ~ ropt_cmd_arg_1 is: "));
 					Serial.println(opt_cmd_arg_1);
 					
-					for (uint16_t i = cmd_value; i <= (cmd_value + opt_cmd_arg_1); i++) {
+					for (uint16_t i = cmd_value; i < (cmd_value + opt_cmd_arg_1); i++) {
 						// Get the Bus Data struct
 						
 						if (VERBOSE_MSG_HANDLER_OUTPUT_TO_USER) {
-							Serial.print(F("\n ~ retreiving Bus Data Rec: "));
+							Serial.print(F(" ~ retreiving Bus Data Rec: "));
 							Serial.println(i);
 						}
 						
 						data_rec_num_is_valid = Bus_Db.Flash_Memory.getBusDataRecordFromFlash(i, bus_data);
 					
 						if (VERBOSE_MSG_HANDLER_OUTPUT_TO_USER) {
-							Serial.print(F("\n ~ data_rec_num_is_valid is: "));
+							Serial.print(F(" ~ data_rec_num_is_valid is: "));
 							Serial.println(data_rec_num_is_valid);
 						}
 					
@@ -1132,7 +1130,7 @@ void NmeaMsgHandler::handleNmeaMsg(char* slimsat_msg, BusDb& Bus_Db, Payload& Pa
 				constructResponseMsgGivenMsgPayload(cmd_id, 1, temp_msg_buffer);
 				
 				if (VERBOSE_MSG_HANDLER_OUTPUT_TO_USER) {
-					Serial.print(F("\n ~ Payload Op Period is: "));
+					Serial.print(F(" ~ Payload Op Period is: "));
 					Serial.print(uint32_val);
 					Serial.println(F(" ms"));
 				}
@@ -1145,7 +1143,7 @@ void NmeaMsgHandler::handleNmeaMsg(char* slimsat_msg, BusDb& Bus_Db, Payload& Pa
 				constructAckMsg(1);
 				
 				if (VERBOSE_MSG_HANDLER_OUTPUT_TO_USER) {
-					Serial.print(F("\n ~ Payload Op Period has been set to: "));
+					Serial.print(F(" ~ Payload Op Period has been set to: "));
 					Serial.print(cmd_value);
 					Serial.println(F(" ms"));
 				}
@@ -1160,7 +1158,7 @@ void NmeaMsgHandler::handleNmeaMsg(char* slimsat_msg, BusDb& Bus_Db, Payload& Pa
 				constructResponseMsgGivenMsgPayload(cmd_id, 1, temp_msg_buffer);
 				
 				if (VERBOSE_MSG_HANDLER_OUTPUT_TO_USER) {
-					Serial.print(F("\n ~ Bus Data Record Period is: "));
+					Serial.print(F(" ~ Bus Data Record Period is: "));
 					Serial.print(uint32_val);
 					Serial.println(F(" ms"));
 				}
@@ -1173,7 +1171,7 @@ void NmeaMsgHandler::handleNmeaMsg(char* slimsat_msg, BusDb& Bus_Db, Payload& Pa
 				constructAckMsg(1);
 				
 				if (VERBOSE_MSG_HANDLER_OUTPUT_TO_USER) {
-					Serial.print(F("\n ~  Bus Data Record Period has been set to: "));
+					Serial.print(F(" ~  Bus Data Record Period has been set to: "));
 					Serial.print(cmd_value);
 					Serial.println(F(" ms"));
 				}
@@ -1190,7 +1188,7 @@ void NmeaMsgHandler::handleNmeaMsg(char* slimsat_msg, BusDb& Bus_Db, Payload& Pa
 					constructGetFlashRegisterValueResponseMsg(uint32_val);
 					
 					if (VERBOSE_MSG_HANDLER_OUTPUT_TO_USER) {
-						Serial.print(F("\n ~ Value read from address "));
+						Serial.print(F(" ~ Value read from address "));
 						Serial.print(cmd_value);
 						Serial.print(F(": "));
 						Serial.println(uint32_val);
@@ -1200,11 +1198,11 @@ void NmeaMsgHandler::handleNmeaMsg(char* slimsat_msg, BusDb& Bus_Db, Payload& Pa
 					constructNackMsg(num_bytes_read);
 					
 					if (VERBOSE_MSG_HANDLER_OUTPUT_TO_USER) {
-						Serial.println(F("\n ~ Error: Value not read from Flash Memory! "));
+						Serial.println(F(" ~ Error: Value not read from Flash Memory! "));
 					}
 				}
 				if (VERBOSE_MSG_HANDLER_OUTPUT_TO_USER) {
-					Serial.print(F("\n ~ Register Value is: "));
+					Serial.print(F(" ~ Register Value is: "));
 					Serial.println(uint32_val);
 				}
 				break;
@@ -1221,7 +1219,7 @@ void NmeaMsgHandler::handleNmeaMsg(char* slimsat_msg, BusDb& Bus_Db, Payload& Pa
 					constructSetFlashRegisterValueResponseMsg(opt_cmd_arg_1);
 					
 					if (VERBOSE_MSG_HANDLER_OUTPUT_TO_USER) {
-						Serial.print(F("\n ~ Value wrote to address "));
+						Serial.print(F(" ~ Value wrote to address "));
 						Serial.print(cmd_value);
 						Serial.print(F(": "));
 						Serial.println(opt_cmd_arg_1);
@@ -1231,11 +1229,11 @@ void NmeaMsgHandler::handleNmeaMsg(char* slimsat_msg, BusDb& Bus_Db, Payload& Pa
 					constructNackMsg(num_bytes_read);
 					
 					if (VERBOSE_MSG_HANDLER_OUTPUT_TO_USER) {
-						Serial.println(F("\n ~ Error: Value not written to Flash Memory! "));
+						Serial.println(F(" ~ Error: Value not written to Flash Memory! "));
 					}
 				}
 				if (VERBOSE_MSG_HANDLER_OUTPUT_TO_USER) {
-					Serial.print(F("\n ~ Register Value: "));
+					Serial.print(F(" ~ Register Value: "));
 					Serial.println(opt_cmd_arg_1);
 				}
 				break;
@@ -1250,14 +1248,14 @@ void NmeaMsgHandler::handleNmeaMsg(char* slimsat_msg, BusDb& Bus_Db, Payload& Pa
 					constructResponseMsgGivenMsgPayload(cmd_id, 1, temp_msg_buffer);
 					
 					if (VERBOSE_MSG_HANDLER_OUTPUT_TO_USER) {
-						Serial.println(F("\n ~ Flash Chip Memory Erased"));
+						Serial.println(F(" ~ Flash Chip Memory Erased"));
 					}
 				}
 				else {
 					constructNackMsg(num_bytes_read);
 					
 					if (VERBOSE_MSG_HANDLER_OUTPUT_TO_USER) {
-						Serial.println(F("\n ~ Error: Chip Flash Memory Not Erased! "));
+						Serial.println(F(" ~ Error: Chip Flash Memory Not Erased! "));
 					}
 				}
 				break;
@@ -1273,7 +1271,7 @@ void NmeaMsgHandler::handleNmeaMsg(char* slimsat_msg, BusDb& Bus_Db, Payload& Pa
 						constructResponseMsgGivenMsgPayload(cmd_id, 1, temp_msg_buffer);
 						
 						if (VERBOSE_MSG_HANDLER_OUTPUT_TO_USER) {
-							Serial.print(F("\n ~ Flash Block: "));
+							Serial.print(F(" ~ Flash Block: "));
 							Serial.print(cmd_value);
 							Serial.println(F(" Memory Erased"));
 						}
@@ -1282,7 +1280,7 @@ void NmeaMsgHandler::handleNmeaMsg(char* slimsat_msg, BusDb& Bus_Db, Payload& Pa
 						constructNackMsg(num_bytes_read);
 						
 						if (VERBOSE_MSG_HANDLER_OUTPUT_TO_USER) {
-							Serial.println(F("\n ~ Error: Value not written to Flash Memory! "));
+							Serial.println(F(" ~ Error: Flash Memory Block Not Erased!"));
 						}
 					}
 				}
@@ -1290,7 +1288,7 @@ void NmeaMsgHandler::handleNmeaMsg(char* slimsat_msg, BusDb& Bus_Db, Payload& Pa
 					constructNackMsg(num_bytes_read);
 						
 					if (VERBOSE_MSG_HANDLER_OUTPUT_TO_USER) {
-						Serial.println(F("\n ~ Error: Ignoring invalid Block Number! "));
+						Serial.println(F(" ~ Error: Ignoring invalid Block Number! "));
 					}
 				}
 				break;
@@ -1306,7 +1304,7 @@ void NmeaMsgHandler::handleNmeaMsg(char* slimsat_msg, BusDb& Bus_Db, Payload& Pa
 						constructResponseMsgGivenMsgPayload(cmd_id, 1, temp_msg_buffer);
 						
 						if (VERBOSE_MSG_HANDLER_OUTPUT_TO_USER) {
-							Serial.print(F("\n ~ Flash Sector: "));
+							Serial.print(F(" ~ Flash Sector: "));
 							Serial.print(cmd_value);
 							Serial.println(F(" Memory Erased"));
 						}
@@ -1315,7 +1313,7 @@ void NmeaMsgHandler::handleNmeaMsg(char* slimsat_msg, BusDb& Bus_Db, Payload& Pa
 						constructNackMsg(num_bytes_read);
 						
 						if (VERBOSE_MSG_HANDLER_OUTPUT_TO_USER) {
-							Serial.println(F("\n ~ Error: Value not written to Flash Memory! "));
+							Serial.println(F(" ~ Error: Flash Memory Sector Not Erased!"));
 						}
 					}
 				}
@@ -1323,7 +1321,7 @@ void NmeaMsgHandler::handleNmeaMsg(char* slimsat_msg, BusDb& Bus_Db, Payload& Pa
 					constructNackMsg(num_bytes_read);
 						
 					if (VERBOSE_MSG_HANDLER_OUTPUT_TO_USER) {
-						Serial.println(F("\n ~ Error: Ignoring invalid Block Number! "));
+						Serial.println(F(" ~ Error: Ignoring invalid Sector Number! "));
 					}
 				}
 				break;
@@ -1337,9 +1335,14 @@ void NmeaMsgHandler::handleNmeaMsg(char* slimsat_msg, BusDb& Bus_Db, Payload& Pa
 				if (gps_pos_msg != nullptr) {
 					constructGpsPositionResponseMsg(gps_pos_msg);
 				}
+				else {
+					if (VERBOSE_MSG_HANDLER_OUTPUT_TO_USER) {
+						Serial.println(F(" ~ Returned GPS Msg is Nullptr ..."));
+					}				
+				}
 				
 				if (VERBOSE_MSG_HANDLER_OUTPUT_TO_USER) {
-					Serial.println(F("\n ~ GPS Position Msg Sent."));
+					Serial.println(F(" ~ GPS Position Msg Sent."));
 				}
 				break;
 			case ERASE_BUS_DATA_FLASH_BLOCKS_COMMAND_ID:
@@ -1347,7 +1350,7 @@ void NmeaMsgHandler::handleNmeaMsg(char* slimsat_msg, BusDb& Bus_Db, Payload& Pa
 					Serial.println(F("\n ~ Handling Rx'd Erase Bus Data Flash Sectors Command ..."));
 				}
 				if (VERBOSE_MSG_HANDLER_OUTPUT_TO_USER) {
-					Serial.println(F("\n ~  Bus Data Flash Sectors Erased - TBV"));
+					Serial.println(F(" ~  Bus Data Flash Sectors Erased - TBV"));
 				}
 				
 				constructAckMsg();
@@ -1362,7 +1365,7 @@ void NmeaMsgHandler::handleNmeaMsg(char* slimsat_msg, BusDb& Bus_Db, Payload& Pa
 				
 				Bus_Db.Flash_Memory.flashEraseAllPayloadDataRecordBlocks();
 				if (VERBOSE_MSG_HANDLER_OUTPUT_TO_USER) {
-					Serial.println(F("\n ~ Payload Flash Sectors Erased - TBV"));
+					Serial.println(F(" ~ Payload Flash Sectors Erased - TBV"));
 				}
 				break;
 			case CUTDOWN_BURN_WIRE_COMMAND_ID:
@@ -1372,7 +1375,7 @@ void NmeaMsgHandler::handleNmeaMsg(char* slimsat_msg, BusDb& Bus_Db, Payload& Pa
 				constructAckMsg();
 				Bus_Db.Bus_Power_Monitor.initiateCutdown();
 				if (VERBOSE_MSG_HANDLER_OUTPUT_TO_USER) {
-					Serial.println(F("\n ~ Cutdown started ..."));
+					Serial.println(F(" ~ Cutdown initiated ..."));
 				}
 				break;
 			case SLIMSAT_CMD_47:
@@ -1619,8 +1622,10 @@ void NmeaMsgHandler::constructGpsPositionResponseMsg(char* gps_pos_msg) {
 		Serial.println(F("\n ~ Constructing SlimSat Get Flash Register Value Response Msg ..."));
 	}
 	
-	Serial.print(F("\n ~ Before constructing response message, GPS Position msg is: "));
-	Serial.println(gps_pos_msg);
+	if (0) {
+		Serial.print(F("\n ~ Before constructing response message, GPS Position msg is: "));
+		Serial.println(gps_pos_msg);
+	}
 		
 	// Note, using temp_msg_buffer here because will be passing the temp buffer to construct response, which will build on it using bus buffer 
 	initializeTempMessageBuffer();
@@ -1888,7 +1893,7 @@ char* NmeaMsgHandler::getNextMsg(void) {
 	char* xmit_msg = Bus_cbfr.circularBufferPopMsg();
 	
 	if (VERBOSE_MSG_HANDLER_OUTPUT) {
-		Serial.println(F("\n ~ Getting Next Circular Buffer Msg ..."));
+		Serial.println(F(" ~ Getting Next Circular Buffer Msg ..."));
 	}
 	
 	//Serial.println(xmit_msg);

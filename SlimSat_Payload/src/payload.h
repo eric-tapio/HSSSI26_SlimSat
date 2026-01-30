@@ -26,10 +26,15 @@
 // The next 3 elements of the payload data array, 21 thru 23, are allocated for processed range measurements (min, max, & mean)
 // The last element is allocated for a second (simulated) sensor which outputs a single measurement value
 
-#define MIN_MEASUREMENT_ARY_INDEX 20
-#define MAX_MEASUREMENT_ARY_INDEX 21
-#define MEAN_MEASUREMENT_ARY_INDEX 22
-#define SENSOR_2_MEASUREMENT_ARY_INDEX 23
+//#define MIN_MEASUREMENT_ARY_INDEX 20
+//#define MAX_MEASUREMENT_ARY_INDEX 21
+//#define MEAN_MEASUREMENT_ARY_INDEX 22
+//#define SENSOR_2_MEASUREMENT_ARY_INDEX 23
+
+#define MIN_MEASUREMENT_ARY_INDEX 6
+#define MAX_MEASUREMENT_ARY_INDEX 7
+#define MEAN_MEASUREMENT_ARY_INDEX 8
+#define SENSOR_2_MEASUREMENT_ARY_INDEX 9
 
 #define MIN_NUMBER_MEASUREMENTS 1
 #define MAX_NUMBER_MEASUREMENTS 20

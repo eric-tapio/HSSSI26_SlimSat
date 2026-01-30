@@ -22,8 +22,8 @@
  */
 PlDataRec::PlDataRec(void) {
 	// Default Constructor
-	time = 0;
 	pl_rec_number = 0;
+	time = 0;
 	pl_data_array;
 	pl_data_ptr = &(pl_data_array[0]);
 	
@@ -57,11 +57,11 @@ void PlDataRec::printRecord(void) {
 	Serial.println(PAYLOAD_DATA_ARY_SIZE);
 	Serial.print(F("    Payload Data Array Size in Bytes is: "));
 	Serial.println(getRecordSize());	
+	Serial.print(F("    Rec Number is: "));
+	Serial.println(pl_rec_number);
 	Serial.print(F("    Time is: "));
 	Serial.println(time);
 	
-	Serial.print(F("    Rec Number is: "));
-	Serial.println(pl_rec_number);
 
 	printArray();
 	

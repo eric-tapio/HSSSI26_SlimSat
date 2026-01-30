@@ -68,7 +68,7 @@
 #define DECIMAL_BASE 10
 
 #define VERBOSE_MSG_HANDLER_OUTPUT 0
-#define VERBOSE_MSG_HANDLER_OUTPUT_TO_USER 0
+#define VERBOSE_MSG_HANDLER_OUTPUT_TO_USER 1
 
 /**
  * @brief NMEA Lite Message Handler Class
