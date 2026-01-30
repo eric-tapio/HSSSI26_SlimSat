@@ -31,8 +31,8 @@
 class BusDataRec {
 public:
 	// Data Members
-	uint32_t time;                    ///< Timestamp for the data record
 	uint16_t bus_rec_number;          ///< Sequential record number
+	uint32_t time;                    ///< Timestamp for the data record
 	float temp_C;                     ///< Temperature in Celsius
 	float thermistor_V;               ///< Thermistor voltage reading
 	float shunt_voltage_mV_1;         ///< Shunt voltage sensor 1 in millivolts

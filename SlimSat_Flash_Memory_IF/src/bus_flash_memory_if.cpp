@@ -525,15 +525,13 @@ void FlashMemoryIf::writeBusDataRecordToFlash(BusDataRec& bus_data) {
 		bus_data.printRecord();
 	}
 	
-	// Ugh! Must remember we're dealing with flash, which must be erased before being updated, and writeValueToFlashAddress only writes. It assumes that the memory has already been initialized
-	
 	uint8_t num_bytes_written = 0;
 	
-	num_bytes_written = writeValueToFlashAddress(address, bus_data.time);
+	num_bytes_written = writeValueToFlashAddress(address, bus_data.bus_rec_number);
 	incrementFlashNextBusDataWriteToAddress(num_bytes_written);
 	address += num_bytes_written;
 	
-	num_bytes_written = writeValueToFlashAddress(address, bus_data.bus_rec_number);
+	num_bytes_written = writeValueToFlashAddress(address, bus_data.time);
 	incrementFlashNextBusDataWriteToAddress(num_bytes_written);
 	address += num_bytes_written;
 	
@@ -609,9 +607,9 @@ void FlashMemoryIf::readBusDataRecordFromFlash(uint32_t address, BusDataRec& bus
 	}
 	
 	// Need to initialize or specify the address to read from, since can be any record, not just the next record
-	flash_return_result = readValueFromFlashAddress(address, &bus_data.time);
-	address += flash_return_result;
 	flash_return_result = readValueFromFlashAddress(address, &bus_data.bus_rec_number);
+	address += flash_return_result;
+	flash_return_result = readValueFromFlashAddress(address, &bus_data.time);
 	address += flash_return_result;
 	flash_return_result = readValueFromFlashAddress(address, &bus_data.temp_C);
 	address += flash_return_result;
@@ -653,11 +651,11 @@ void FlashMemoryIf::writePartialBusDataRecordToFlash(BusDataRec& bus_data) {
 	
 	uint8_t num_bytes_written = 0;
 	
-	num_bytes_written = writeValueToFlashAddress(address, bus_data.time);
+	num_bytes_written = writeValueToFlashAddress(address, bus_data.bus_rec_number);
 	incrementFlashNextBusDataWriteToAddress(num_bytes_written);
 	address += num_bytes_written;
 	
-	num_bytes_written = writeValueToFlashAddress(address, bus_data.bus_rec_number);
+	num_bytes_written = writeValueToFlashAddress(address, bus_data.time);
 	incrementFlashNextBusDataWriteToAddress(num_bytes_written);
 	address += num_bytes_written;
 	
@@ -768,22 +766,6 @@ void FlashMemoryIf::writePayloadDataRecordToFlash(PlDataRec& pl_data) {
 	// The number of payload data records will formally get incremented once all data has been written to flash
 	pl_data.pl_rec_number = 1 + getNumberPayloadDataRecords();
 	
-	// Write the payload record time
-	num_bytes_written = writeValueToFlashAddress(address, pl_data.time);
-	incrementFlashNextPayloadDataWriteToAddress(num_bytes_written);
-	
-	if (0) {
-		Serial.print(F("\n ~ num_bytes_written is: "));
-		Serial.println(num_bytes_written);
-	}
-	
-	address += num_bytes_written;
-	
-	if (0) {
-		Serial.print(F("\n ~ Writing Payload Record to Flash Starting Address is now: "));
-		Serial.println(address);
-	}
-	
 	// Write the payload rec number
 	num_bytes_written = writeValueToFlashAddress(address, pl_data.pl_rec_number);
 	incrementFlashNextPayloadDataWriteToAddress(num_bytes_written);
@@ -792,7 +774,19 @@ void FlashMemoryIf::writePayloadDataRecordToFlash(PlDataRec& pl_data) {
 	if (0) {
 		Serial.print(F("\n ~ pl_rec_number is: "));
 		Serial.println(pl_data.pl_rec_number);
+		
+		Serial.print(F("\n ~ num_bytes_written is: "));
+		Serial.println(num_bytes_written);
+	
+		Serial.print(F("\n ~ Writing Payload Record to Flash Starting Address is now: "));
+		Serial.println(address);
 	}
+	
+	// Write the payload record time
+	num_bytes_written = writeValueToFlashAddress(address, pl_data.time);
+	incrementFlashNextPayloadDataWriteToAddress(num_bytes_written);
+	address += num_bytes_written;
+
 	
 	// Write the data array
 	for (uint8_t i=0; i<PAYLOAD_DATA_ARY_SIZE; i++) {
@@ -832,10 +826,10 @@ void FlashMemoryIf::writePayloadDataRecordToFlash(PlDataRec& pl_data) {
 		Serial.println(F("\n ~ Reading Payload Data Record From Flash Memory ..."));
 	}
 	
-	flash_return_result = readValueFromFlashAddress(address, &pl_data.time);
+	flash_return_result = readValueFromFlashAddress(address, &pl_data.pl_rec_number);
 	address += flash_return_result;
 	
-	flash_return_result = readValueFromFlashAddress(address, &pl_data.pl_rec_number);
+	flash_return_result = readValueFromFlashAddress(address, &pl_data.time);
 	address += flash_return_result;
 	
 	if (0) {

@@ -217,8 +217,8 @@ int16_t SlimSatBus::startLoRa(void) {
 		Serial.println(F("\n ~ Starting the LoRa Radio ..."));
 	}
 	
-	int16_t radio_status_code = LoRa.beginUsingStandardDefaultValues();
-	//int16_t radio_status_code = LoRa.begin();
+	//int16_t radio_status_code = LoRa.beginUsingStandardDefaultValues();
+	int16_t radio_status_code = LoRa.begin();
 	
 	if (radio_status_code == 0) {
 		if (VERBOSE_BUS_OUTPUT) {
@@ -375,7 +375,7 @@ char* SlimSatBus::getReceivedMsgFromLoraRadio(void) {
 	rxd_message_ptr = LoRa.receiveUsingInterrupt();
 	
 	if (rxd_message_ptr != nullptr) {
-		if (0) {
+		if (1) {
 			Serial.println(F("\n ~ Message received from Lora Radio."));
 			Serial.println(rxd_message_ptr);
 		}

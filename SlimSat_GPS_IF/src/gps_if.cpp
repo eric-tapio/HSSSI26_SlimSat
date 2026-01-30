@@ -97,6 +97,8 @@ char* GpsIf::encodeGpsMessage(void) {
 			long_pos = gps.location.lng();
 			alt_pos = gps.altitude.meters();
 			
+			//print();
+			
 			return getGpsPositionMessagePayload();
 		}
 	}
@@ -121,13 +123,26 @@ char* GpsIf::getGpsPositionMessage(void) {
 char* GpsIf::getGpsPositionMessagePayload(void) {
 	// This method populates and returns the GPS Position Message 'Payload'
 	
-	if (time_is_valid) {
-			
+	bool update_not_performed = true;
+	
+	if (time_is_valid && update_not_performed) {
+		update_not_performed = false;
+		
+		if (VERBOSE_GPS_OUTPUT) {
+			Serial.println(F(" ~ Time is Valid."));
+		}
+		
 		// Only update if the time has changed	
 		if (update_time_sec != last_update_time_sec) {
 
+			if (VERBOSE_GPS_OUTPUT) {
+				Serial.println(F(" ~ Time has been updated."));
+			}	
+		
 			// Update the last update time
 			last_update_time_sec = update_time_sec;
+			
+			//print();
 			
 			// Construct the output message
 			if (position_is_valid) {
@@ -146,12 +161,16 @@ char* GpsIf::getGpsPositionMessagePayload(void) {
 		}
 	}
 	
+	if (VERBOSE_GPS_OUTPUT) {
+		Serial.println(F(" ~ Returning Null Ptr as the GPS message."));
+	}
+		
 	return nullptr;
 }
 
 
 void GpsIf::print(void) const {
-	Serial.println(F(" ~ Printing GPS Sensor Interface Data Members ..."));
+	Serial.println(F("\n ~ Printing GPS Sensor Interface Data Members ..."));
 
 	Serial.print(F("     Update Time is Valid: "));
 	Serial.println(time_is_valid);

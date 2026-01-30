@@ -22,8 +22,8 @@
  */
 BusDataRec::BusDataRec(void) {
 	// Default Constructor
-	time = 0;
 	bus_rec_number = 0; // This value gets populated by the bus before being written to flash memory
+	time = 0;
 	temp_C = 0.0;
 	thermistor_V = 0.0;
 	shunt_voltage_mV_1 = 0.0;
@@ -57,10 +57,10 @@ void BusDataRec::printRecord(void) {
 	Serial.print(F("    Bus Data Record Size in Bytes is: "));
 	Serial.println(getRecordSize());	
 		
-	Serial.print(F("     Time: "));
-	Serial.println(time);
 	Serial.print(F("     Bus Rec Number: "));
 	Serial.println(bus_rec_number);
+	Serial.print(F("     Time: "));
+	Serial.println(time);
 	Serial.print(F("     Temp in deg C: "));
 	Serial.println(temp_C);
 	Serial.print(F("     thermistor_V: "));
