@@ -270,8 +270,8 @@ void BusPowerMonitor::collectBusData(BusDataRec& Bus_data) {
 		Serial.println(F(" ~ Collecting Bus Data ..."));
 	}
 
-	Bus_data.time = 0; // Note: This value gets populated by the Bus outside this method
 	Bus_data.bus_rec_number = 0; // Note: This value gets populated by the Bus outside this method
+	Bus_data.time = 0; // Note: This value gets populated by the Bus outside this method
 		
 	Bus_data.temp_C = getTemperature();
 	Bus_data.thermistor_V = readThermistor();
