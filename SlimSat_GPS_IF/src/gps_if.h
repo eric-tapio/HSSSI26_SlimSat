@@ -12,8 +12,10 @@
 #define GPS_BAUD 9600
 #define MAX_GPS_MSG_LENGTH 60
 #define MSG_GPS_BUFFER_LENGTH (MAX_GPS_MSG_LENGTH+1)
+#define MAX_NUM_GPS_MSG_READ_TRIES 10
 
 #define VERBOSE_GPS_OUTPUT 0
+
 
 class GpsIf {
 private:
@@ -28,6 +30,7 @@ private:
 	uint8_t last_update_time_sec;
 	char* getGpsPositionMessagePayload(void);
 	void initializeDataMembers(void);
+	char* getEmptyGpsPositionMessage(void);
 
 public:
 	TinyGPSPlus gps;
