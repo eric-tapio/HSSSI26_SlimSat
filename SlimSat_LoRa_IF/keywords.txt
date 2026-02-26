@@ -1,0 +1,82 @@
+#######################################
+# Datatypes (KEYWORD1)
+#######################################
+
+LoRaRadio	KEYWORD1
+SX1276	KEYWORD1
+
+#######################################
+# Methods and Functions (KEYWORD2)
+#######################################
+
+##############################
+# Class
+##############################
+
+initializeLoRa	KEYWORD2
+setFrequency	KEYWORD2
+getFrequency	KEYWORD2
+setBandwidth	KEYWORD2
+getBandwidth	KEYWORD2
+setSpreadFactor	KEYWORD2
+getSpreadFactor	KEYWORD2
+getRssi	KEYWORD2
+print KEYWORD2
+beginUsingStandardDefaultValues	KEYWORD2
+begin	KEYWORD2
+setCodingRate	KEYWORD2
+getCodingRate	KEYWORD2
+setSyncWord	KEYWORD2
+getSyncWord	KEYWORD2
+setOutputPower	KEYWORD2
+getOutputPower	KEYWORD2
+setCurrentLimit	KEYWORD2
+getCurrentLimit	KEYWORD2
+setPreambleLength	KEYWORD2
+getPreambleLength	KEYWORD2
+setGain	KEYWORD2
+getGain	KEYWORD2
+transmitUsingBlocking	KEYWORD2
+transmitUsingInterrupt	KEYWORD2
+startTransmit	KEYWORD2
+finishTransmit	KEYWORD2
+receiveUsingBlocking	KEYWORD2
+receiveUsingInterrupt	KEYWORD2
+startReceive	KEYWORD2
+readData	KEYWORD2
+initializeRxMessageBuffer	KEYWORD2
+setRadioParameters	KEYWORD2
+covnertHzToMhz	KEYWORD2
+covnertHzToKhz	KEYWORD2
+getSnr	KEYWORD2
+getFrequencyError	KEYWORD2
+getDataRate	KEYWORD2
+
+##############################
+# Class ...
+##############################
+
+##############################
+# Global Functions
+##############################
+
+#######################################
+# Constants (LITERAL1)
+#######################################
+
+VERBOSE_LORA_OUTPUT LITERAL1
+DEFAULT_SLIMSAT_FREQUENCY_IN_HZ LITERAL1
+DEFAULT_SLIMSAT_BANDWIDTH_IN_HZ LITERAL1
+DEFAULT_SLIMSAT_SPREAD_FACTOR LITERAL1
+DEFAULT_SLIMSAT_SYNC_WORD LITERAL1
+DEFAULT_SLIMSAT_CODING_RATE LITERAL1
+DEFAULT_SLIMSAT_OUTPUT_POWER_IN_DBM LITERAL1
+DEFAULT_SLIMSAT_CURRENT_LIMIT_IN_MA LITERAL1
+DEFAULT_SLIMSAT_PREAMBLE_LENGTH LITERAL1
+DEFAULT_SLIMSAT_GAIN LITERAL1
+MSG_BUFFER_SIZE LITERAL1
+RADIO_TX_WAIT_IN_MS LITERAL1
+NUM_HZ_PER_MHZ LITERAL1
+NUM_HZ_PER_KHZ LITERAL1
+FALSE_FLAG LITERAL1
+TRUE_FLAG LITERAL1
