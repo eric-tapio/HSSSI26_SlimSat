@@ -37,7 +37,7 @@
 #define SLIMSAT_MSG_OPTIONAL_CMD_ARG_1_FIELD_INDEX 3
 //#define SLIMSAT_MSG_OPTIONAL_CMD_ARG_2_FIELD_INDEX 4
 
-#define SLIMSAT_MSG_TALKER "$G"
+//#define SLIMSAT_MSG_TALKER "$G"
 
 #define SLIMSAT_MSG_START_CHAR '$'
 #define SLIMSAT_MSG_STOP_CHAR '*'
@@ -46,6 +46,7 @@
 #define MIN_SLIMSAT_CMD_ID 1
 #define MAX_SLIMSAT_CMD_ID 59
 
+//#define SLIMSAT_MSG_HEADER_LENGTH 5
 #define SLIMSAT_MSG_MAX_HEADER_LENGTH (5+1)
 
 #define MAX_MSG_HANDLER_MSG_LENGTH 160
@@ -82,6 +83,7 @@
 class NmeaMsgHandler {
 private:
 	// Data Members
+	char slimsat_msg_header[SLIMSAT_MSG_MAX_HEADER_LENGTH];
 	char full_msg_header[SLIMSAT_MSG_MAX_HEADER_LENGTH];
 	char bus_output_msg_buffer[MSG_HANDLER_BUFFER_LENGTH];
 	char temp_msg_buffer[MSG_HANDLER_BUFFER_LENGTH];
@@ -89,10 +91,10 @@ private:
 	uint16_t rxd_valid_msg_count;
 	uint16_t rxd_invalid_msg_count;
 	uint8_t cmd_id;
-	//uint32_t cmd_value;
-	int32_t cmd_value; // Going to unsigned!
+	int32_t cmd_value;
 	int32_t opt_cmd_arg_1;
 	//uint32_t opt_cmd_arg_2;
+	const char* slimsat_id;
 
 	// Methods
 	void initializeDataMembers(void);
@@ -129,7 +131,6 @@ public:
 	uint8_t computeChecksum(char* slimsat_msg);
 	void initializeMessageBuffer(void);
 	void handleNmeaMsg(char* slimsat_msg, BusDb& Bus_Db, Payload& Payload, LoRaRadio& LoRa, GpsIf& Gps, SimpleTimer& Bus_Timer, SimpleTimer& Pl_Timer, SimpleTimer& Bcn_Timer);
-	//void constructAckMsg(uint8_t include_cmd_val=0);
 	void constructAckMsg(int8_t include_cmd_val=0);
 	void constructNackMsg(int16_t error_value=0);
 	void constructBeaconMsg(char* beacon_msg);
@@ -142,7 +143,6 @@ public:
 	void constructGpsPositionResponseMsg(char* gps_pos_msg);
 	void constructGetFlashRegisterValueResponseMsg(uint32_t uint32_value);
 	void constructSetFlashRegisterValueResponseMsg(uint32_t uint32_value);
-	//void handlePayloadCmd(Payload& Payload, uint8_t command_id, uint32_t command_value);
 	void handlePayloadCmd(Payload& Payload, uint8_t command_id, int32_t command_value);
 	
 	void formatMsgFragmentIntoMsgPayload(uint8_t cmd_id, uint8_t is_ack, char* fragment, uint8_t fragment_number);

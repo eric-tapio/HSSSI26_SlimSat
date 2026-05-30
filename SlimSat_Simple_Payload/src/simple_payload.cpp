@@ -42,7 +42,7 @@ void Payload::initializePayload(void) {
 }
 
 
-void Payload::performPayloadOperationIteration(PlDataRec& pl_data) {
+void Payload::performPayloadLoopIteration(PlDataRec& pl_data) {
 	// This method performs the operations desired each time a payload operation is performed
 	
 	double measurement = 0.0;

@@ -41,6 +41,9 @@ void NmeaMsgHandler::initializeDataMembers(void) {
 	rxd_valid_msg_count = 0;
 	rxd_invalid_msg_count = 0;
 	
+	// Construct the full SlimSat ID Header based on the SlimSat ID Number
+	snprintf(slimsat_msg_header, sizeof(slimsat_msg_header), "$GS%02d", SLIMSAT_ID_NUM);
+	slimsat_id = slimsat_msg_header;
 
 	return;
 }
@@ -110,15 +113,8 @@ void NmeaMsgHandler::initializeTempMessageBuffer(void) {
 void NmeaMsgHandler::incrementValidMsgCount(BusDb& Bus_Db) {
 	// This method increments the valid received message counter	
 	// Write the value to flash
-	rxd_valid_msg_count = Bus_Db.Flash_Memory.getValidMessageCount();
-	
-	//Serial.print(F(" ---> Initial Valid Message Count Read from Flash is: "));
-	//Serial.println(rxd_valid_msg_count);
-	
+	rxd_valid_msg_count = Bus_Db.Flash_Memory.getValidMessageCount();	
 	rxd_valid_msg_count = Bus_Db.Flash_Memory.incrementAndReturnValidMessageCount();
-	
-	//Serial.print(F(" ---> After Incrementing, Valid Message Count Read from Flash is: "));
-	//Serial.println(rxd_valid_msg_count);	
 
 	return;
 }
@@ -159,8 +155,6 @@ uint8_t NmeaMsgHandler::nmeaMsgIsValid(char* slimsat_msg) {
 	uint8_t checksum_is_valid = 0;
 	uint8_t msg_index_offset = 0;
 	uint8_t slimsat_id_matches = 0;
-	
-	const char SLIMSAT_FULL_HEADER_ID[] = SLIMSAT_MSG_TALKER SLIMSAT_ID;
 
 	reinitializeNmeaMsgHandlerMetadata();
 
@@ -182,7 +176,7 @@ uint8_t NmeaMsgHandler::nmeaMsgIsValid(char* slimsat_msg) {
 	copyMsgHeader(msg_adr, strfunc_result_ptr, msg_index_offset);
 					
 	// Then check if the cmd is for this SlimSat ID
-	if (strncmp(full_msg_header, SLIMSAT_FULL_HEADER_ID, strlen(SLIMSAT_FULL_HEADER_ID)) == STRNCMP_MATCHES_RESULT) {
+	if (strncmp(full_msg_header, slimsat_id, strlen(slimsat_id)) == STRNCMP_MATCHES_RESULT) {
 		slimsat_id_matches = 1;
 	}
 	else {
@@ -483,11 +477,10 @@ void NmeaMsgHandler::handleNmeaMsg(char* slimsat_msg, BusDb& Bus_Db, Payload& Pa
 	double double_val = 0.0;
 	int16_t radio_status_code = 0;
 	uint8_t num_bytes_read = 0;
-	char* gps_pos_msg = nullptr;
-	//PlDataRecord* pl_data_rec_ptr = nullptr;
 	uint8_t data_rec_num_is_valid = 0;
+	char* gps_pos_msg = nullptr;
 	
-	// For now, I'm going with inclusion of cmd val being inserted into acknowledgements for set commands, to be left off for get commands since data is returned
+	// For now, the cmd val will be included in the acknowledgement for set commands, to be left off for get commands since data is returned
 	
 	// Reinitialize the Cmd ID to 0
 	cmd_id = 0;
@@ -503,7 +496,7 @@ void NmeaMsgHandler::handleNmeaMsg(char* slimsat_msg, BusDb& Bus_Db, Payload& Pa
 					Serial.println(F("\n ~ Handling Rx'd Ping Command ..."));
 				}
 				constructAckMsg();
-				if (VERBOSE_MSG_HANDLER_OUTPUT_TO_USER) {
+				if (0) {
 					Serial.println(F(" ~ Ping Cmd received"));
 				}
 				break;
@@ -530,7 +523,7 @@ void NmeaMsgHandler::handleNmeaMsg(char* slimsat_msg, BusDb& Bus_Db, Payload& Pa
 					if (VERBOSE_MSG_HANDLER_OUTPUT_TO_USER) {
 						Serial.println(F("\n ~ Getting new, current Payload Data ..."));
 					}
-					Payload.performPayloadOperationIteration(pl_data_rec);
+					Payload.performPayloadLoopIteration(pl_data_rec);
 					//pl_data_rec.printRecord();
 					constructPayloadDataResponseMsg(pl_data_rec);
 				
@@ -767,7 +760,7 @@ void NmeaMsgHandler::handleNmeaMsg(char* slimsat_msg, BusDb& Bus_Db, Payload& Pa
 				
 				if (VERBOSE_MSG_HANDLER_OUTPUT_TO_USER) {
 					Serial.print(F(" ~ LoRa Output Power is: "));
-					Serial.println(uint32_val);
+					Serial.println(int32_val);
 				}
 				break;
 			case SET_RADIO_OUTPUT_POWER_COMMAND_ID:	
@@ -1383,18 +1376,18 @@ void NmeaMsgHandler::handleNmeaMsg(char* slimsat_msg, BusDb& Bus_Db, Payload& Pa
 			case SLIMSAT_CMD_49:
 				constructNackMsg();
 				break;
-			case PAYLOAD_CMD_1:
-			case PAYLOAD_CMD_2:
-			case PAYLOAD_CMD_3:
-			case PAYLOAD_CMD_4:
-			case PAYLOAD_CMD_5:
-			case PAYLOAD_CMD_6:
-			case PAYLOAD_CMD_7:
-			case PAYLOAD_CMD_8:
-			case PAYLOAD_CMD_9:
-			case PAYLOAD_CMD_10:
-				handlePayloadCmd(Payload, cmd_id, cmd_value);
-				break;
+			// case PAYLOAD_CMD_1:
+			// case PAYLOAD_CMD_2:
+			// case PAYLOAD_CMD_3:
+			// case PAYLOAD_CMD_4:
+			// case PAYLOAD_CMD_5:
+			// case PAYLOAD_CMD_6:
+			// case PAYLOAD_CMD_7:
+			// case PAYLOAD_CMD_8:
+			// case PAYLOAD_CMD_9:
+			// case PAYLOAD_CMD_10:
+				// handlePayloadCmd(Payload, cmd_id, cmd_value);
+				// break;
 			default:
 				
 				if (VERBOSE_MSG_HANDLER_OUTPUT_TO_USER) {
@@ -1423,26 +1416,25 @@ void NmeaMsgHandler::handleNmeaMsg(char* slimsat_msg, BusDb& Bus_Db, Payload& Pa
 		}
 		// Then do nothing
 		// Do not respond to message, nor increment anything
-		//constructNackMsg();
-		//incrementInvalidMsgCount(Bus_Db);
+		constructNackMsg(-1);
+		incrementInvalidMsgCount(Bus_Db);
 	}
 
 	return;
 }
 
 
-//void NmeaMsgHandler::handlePayloadCmd(Payload& Payload, uint8_t command_id, uint32_t command_value) {
-void NmeaMsgHandler::handlePayloadCmd(Payload& Payload, uint8_t command_id, int32_t command_value) {
-	Serial.print(F("\n ~ Handling Rx'd Payload Command ..."));
-	char* pl_msg = nullptr;
+// void NmeaMsgHandler::handlePayloadCmd(Payload& Payload, uint8_t command_id, int32_t command_value) {
+	// Serial.print(F("\n ~ Handling Rx'd Payload Command ..."));
+	// char* pl_msg = nullptr;
 		
-	pl_msg = Payload.handlePayloadCommand(command_id, command_value, pl_data_rec);	
-	pl_msg = Payload.getPayloadDataStr();
+	// pl_msg = Payload.handlePayloadCommand(command_id, command_value, pl_data_rec);	
+	// pl_msg = Payload.getPayloadDataStr();
 		
-	constructResponseMsgGivenMsgPayload(command_id, 1, pl_msg);
+	// constructResponseMsgGivenMsgPayload(command_id, 1, pl_msg);
 
-	return;
-}
+	// return;
+// }
 
 
 //void NmeaMsgHandler::constructAckMsg(uint8_t include_cmd_val) {
@@ -1470,6 +1462,22 @@ void NmeaMsgHandler::constructAckMsg(int8_t include_cmd_val) {
 
 	return;
 }
+
+
+// void NmeaMsgHandler::constructReceivedInvalidMsgNackMsg(void) {
+	// // This method constructs an Not Acknowledged message to the received command message
+	// // SlimSat Acknowledgement Msg
+	// // $GS01,N,-1*hh<CR><LF>
+
+	// if (VERBOSE_MSG_HANDLER_OUTPUT) {
+		// Serial.print(F("\n ~ Constructing Received Invalid Msg SlimSat NACK Msg ..."));
+	// }
+	
+	// snprintf(temp_msg_buffer, sizeof(temp_msg_buffer), "%ld", 255);
+	// constructResponseMsgGivenMsgPayload(cmd_id, 0, temp_msg_buffer);
+
+	// return;
+// }
 
 
 void NmeaMsgHandler::constructNackMsg(int16_t error_value) {
@@ -1500,7 +1508,8 @@ void NmeaMsgHandler::constructResponseMsg(char* msg) {
 	char checksum_bfr[3] = {'\0'};
 
 	// Construct the reply
-	snprintf(bus_output_msg_buffer, sizeof(bus_output_msg_buffer), "$%sG,%s*", SLIMSAT_ID, msg);
+	//snprintf(bus_output_msg_buffer, sizeof(bus_output_msg_buffer), "$%sG,%s*", SLIMSAT_ID, msg);
+	snprintf(bus_output_msg_buffer, sizeof(bus_output_msg_buffer), "$S%02dG,%s*", SLIMSAT_ID_NUM, msg);
 	msg_int_checksum = computeChecksum(bus_output_msg_buffer);
 	snprintf(checksum_bfr, sizeof(checksum_bfr), "%02X", msg_int_checksum);
 	strcat(bus_output_msg_buffer, checksum_bfr);
@@ -1917,9 +1926,7 @@ void NmeaMsgHandler::formatMsgFragmentIntoMsgPayload(uint8_t cmd_id, uint8_t is_
 		Serial.println(fragment);
 	}
 	
-	// First Append the A
 	if (fragment_number == 1) {
-		// Have decided not to transmit the rxd valid msg count. Potentially not providing value currently
 		if (!is_ack) {
 			ack_char = 'N';
 		}

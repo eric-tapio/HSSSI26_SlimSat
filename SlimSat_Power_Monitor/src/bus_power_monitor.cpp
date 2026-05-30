@@ -19,7 +19,7 @@
  * @details Initializes the power monitor with default I2C addresses for
  * three INA219 sensors and sets up the pointer array for sensor management.
  */
-BusPowerMonitor::BusPowerMonitor(void) : ina219_1(INA219_1_I2C_ADR), ina219_2(INA219_2_I2C_ADR), ina219_3(INA219_3_I2C_ADR) {
+BusPowerMonitor::BusPowerMonitor(void) : ina219_1(INA219_1_I2C_ADR), ina219_2(INA219_2_I2C_ADR), ina219_3(INA219_3_I2C_ADR), tmp75a_1(TMP75A_I2C_ADR) {
 	// Default Constructor
 	
 	// Put a pointer to each INA219 into the pointer array
@@ -33,8 +33,8 @@ BusPowerMonitor::BusPowerMonitor(void) : ina219_1(INA219_1_I2C_ADR), ina219_2(IN
 }
 
 
-BusPowerMonitor::BusPowerMonitor(uint8_t adr_1, uint8_t adr_2, uint8_t adr_3) : ina219_1(adr_1), ina219_2(adr_2), ina219_3(adr_3) {
-	// Input Specific Constructor
+BusPowerMonitor::BusPowerMonitor(uint8_t ina_1_adr, uint8_t ina_2_adr, uint8_t ina_3_adr) : ina219_1(ina_1_adr), ina219_2(ina_2_adr), ina219_3(ina_3_adr) {
+	// Input Specific Constructor for just INA I2C addresses
 	// Put a pointer to each INA219 into the pointer array
 	ina219_ary_ptr[0] = &ina219_1;
 	ina219_ary_ptr[1] = &ina219_2;
@@ -46,28 +46,43 @@ BusPowerMonitor::BusPowerMonitor(uint8_t adr_1, uint8_t adr_2, uint8_t adr_3) : 
 }
 
 
-// Need to update and complete this - TBD
+BusPowerMonitor::BusPowerMonitor(uint8_t ina_1_adr, uint8_t ina_2_adr, uint8_t ina_3_adr, uint8_t tmp_adr) : ina219_1(ina_1_adr), ina219_2(ina_2_adr), ina219_3(ina_3_adr), tmp75a_1(tmp_adr) {
+	// Input Specific Constructor for both INA & TMP I2C addresses
+	// Put a pointer to each INA219 into the pointer array
+	ina219_ary_ptr[0] = &ina219_1;
+	ina219_ary_ptr[1] = &ina219_2;
+	ina219_ary_ptr[2] = &ina219_3;
+	
+	// Initialize Power Monitor Data Members
+	// INA219 data members get initialized during construction
+	initializeDataMembers();
+}	
+
+
+// Need to update and complete this prior to loading it on the SlimSat Prototype - TBD
 uint8_t BusPowerMonitor::start(void) {
 	// This method initializes the Bus Power Monitor
 	
 	uint8_t return_status_0 = 0;
-	uint8_t return_status_1 = 1; // Simulate that this INA is present
-	uint8_t return_status_2 = 1; // Simulate that this INA is present
+	uint8_t return_status_1 = HW_DEVICE_IS_PRESENT; // Simulate that this INA is present
+	uint8_t return_status_2 = HW_DEVICE_IS_PRESENT; // Simulate that this INA is present
 	uint8_t return_status_3 = 0;
 	
 	// Start the INAs
 	return_status_0 = ina219_ary_ptr[0] -> begin();
 	ina219_ary_ptr[0] -> setCalibration_32V_1A();
 	return_status_0 = ina219_ary_ptr[0] -> success();
-
-	// // Uncomment these once they are present
-	// return_status_1 = ina219_ary_ptr[1] -> begin();
-	// ina219_ary_ptr[1] -> setCalibration_32V_1A();
-	// return_status_1 = ina219_ary_ptr[1] -> success();
 	
-	// return_status_2 = ina219_ary_ptr[2] -> begin();
-	// ina219_ary_ptr[2] -> setCalibration_32V_1A();
-	// return_status_2 = ina219_ary_ptr[2] -> success();
+	if (USING_SLIMSAT_MODULE_CONFIG) {
+		// // Uncomment these once they are present
+		return_status_1 = ina219_ary_ptr[1] -> begin();
+		ina219_ary_ptr[1] -> setCalibration_32V_1A();
+		return_status_1 = ina219_ary_ptr[1] -> success();
+		
+		return_status_2 = ina219_ary_ptr[2] -> begin();
+		ina219_ary_ptr[2] -> setCalibration_32V_1A();
+		return_status_2 = ina219_ary_ptr[2] -> success();
+	}
 	
 	// Start the tempeature sensor
 	return_status_3 = tmp75a_1.begin();
@@ -80,6 +95,12 @@ uint8_t BusPowerMonitor::start(void) {
 		}
 		else {
 			Serial.println(F(" ~ Bus Power Monitor initialization Failed!\n"));
+			// if (RAISE_PM_HW_START_ERRORS) {
+				// Serial.println(F(" ~ Error Encountered ..."));
+				// while (RAISE_PM_HW_START_ERRORS) {
+					// delay(10);  
+				// }
+			// }
 		}
 	}
 	
@@ -111,6 +132,15 @@ uint8_t BusPowerMonitor::begin(uint8_t ina219_index) {
 			Serial.println(return_status);
 		}
 		
+		if (RAISE_PM_HW_START_ERRORS) {
+			if (!HW_DEVICE_IS_PRESENT) {
+				Serial.println(F(" ~ Error Encountered ..."));
+				while (!HW_DEVICE_IS_PRESENT) {
+					delay(10);  
+				}
+			}
+		}
+		
 		return return_status;
 	}
 	else {
@@ -140,6 +170,7 @@ uint8_t BusPowerMonitor::success(uint8_t ina219_index) {
 
 float BusPowerMonitor::getCurrent(uint8_t ina219_index) {
 	// This method gets the INA219 measured Current in mA
+
 
 	// Ask Nick about this - TBD
 	// // Compute the average current
@@ -314,7 +345,7 @@ float BusPowerMonitor::readThermistor(void) {
 	// The voltage range is 0 to 3.6V, so the conversion factor is 3.6V/1024 steps.
 	//float mv_per_lsb = 3600.0F/1024.0F;
 
-	uint16_t adc_value = analogRead(BUS_THERMISTOR_AIN_PIN);
+	uint16_t adc_value = analogRead(THERMISOTOR_AIN_PIN);
 	//float thermistor_V = (float)adc_value * MV_PER_LSB;
 	float thermistor_V = (float)adc_value * V_PER_LSB;
 	
@@ -327,7 +358,11 @@ void BusPowerMonitor::rebootBus(void) {
 		Serial.println(F("\n ~ Rebooting the SlimSat ..."));
 	}
 
-	digitalWrite(BUS_RESET_PIN, LOW);
+	#if (USING_SLIMSAT_MODULE_CONFIG == 1)
+		digitalWrite(BUS_WAG_WDT_PIN, LOW);
+	#else
+		digitalWrite(SW_DEV_BUS_RESET_PIN, LOW);
+	#endif
 	
 	return;
 }

@@ -21,6 +21,9 @@
 #define MV_PER_LSB 3600.0F/1024.0F
 #define V_PER_LSB 3.6F/1024.0F
 
+#define RAISE_PM_HW_START_ERRORS 1
+#define HW_DEVICE_IS_PRESENT 1
+
 #define VERBOSE_POWER_MONITOR_OUTPUT 0
 
 
@@ -42,7 +45,8 @@ private:
 
 public:
 	BusPowerMonitor(void);
-	BusPowerMonitor(uint8_t adr_1, uint8_t adr_2, uint8_t adr_3);
+	BusPowerMonitor(uint8_t ina_1_adr, uint8_t ina_2_adr, uint8_t ina_3_adr);
+	BusPowerMonitor(uint8_t ina_1_adr, uint8_t ina_2_adr, uint8_t ina_3_adr, uint8_t tmp_adr);
 	uint8_t begin(uint8_t ina219_index);
 	uint8_t success(uint8_t ina219_index);
 	uint8_t start(void);

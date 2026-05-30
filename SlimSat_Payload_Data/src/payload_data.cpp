@@ -50,7 +50,7 @@ void PlDataRec::initializeArray(void) {
  * and monitoring purposes.
  */
 void PlDataRec::printRecord(void) {
-
+	// This method prints the payload data record
 	Serial.println(F("\n ~ Printing the Payload Data Record ..."));
 	
 	Serial.print(F("    Number Data Payload Data Array Elements is: "));
@@ -70,6 +70,7 @@ void PlDataRec::printRecord(void) {
 
 
 void PlDataRec::printArray(void) {
+	// This method prints the payload data record array (only)
 
 	Serial.println(F("\n ~ Printing the Payload Data Array ..."));
 
@@ -91,7 +92,7 @@ uint8_t PlDataRec::getRecordSize(void) {
 
 
 void PlDataRec::setArrayElement(uint8_t index, double value) {
-
+	// This method is a helper function to set the payload data record array element to the given value
 	if ((0 <= index) && (index < PAYLOAD_DATA_ARY_SIZE)) {
 		pl_data_array[index] = value;
 	}
@@ -101,7 +102,7 @@ void PlDataRec::setArrayElement(uint8_t index, double value) {
 
 
 double PlDataRec::getArrayElement(uint8_t index) {
-
+	// This method is a helper function to get the payload data record array element value
 	if ((0 <= index) && (index < PAYLOAD_DATA_ARY_SIZE)) {
 		return pl_data_array[index];
 	}
@@ -128,6 +129,7 @@ uint16_t PlDataRec::getRecordNumber(void) {
 
 
 void PlDataRec::setRecordNumber(uint16_t rec_number) {
+	// This method is a helper function to set the payload data record number
 	pl_rec_number = rec_number;
 	return;
 }

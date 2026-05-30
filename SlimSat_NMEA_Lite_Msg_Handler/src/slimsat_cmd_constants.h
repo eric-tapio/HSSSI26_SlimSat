@@ -75,16 +75,16 @@
 #define SLIMSAT_CMD_49 49
 
 // Alloacated payload command values
-#define PAYLOAD_CMD_1 50
-#define PAYLOAD_CMD_2 51
-#define PAYLOAD_CMD_3 52
-#define PAYLOAD_CMD_4 53
-#define PAYLOAD_CMD_5 54
-#define PAYLOAD_CMD_6 55
-#define PAYLOAD_CMD_7 56
-#define PAYLOAD_CMD_8 57
-#define PAYLOAD_CMD_9 58
-#define PAYLOAD_CMD_10 59
+// #define PAYLOAD_CMD_1 50
+// #define PAYLOAD_CMD_2 51
+// #define PAYLOAD_CMD_3 52
+// #define PAYLOAD_CMD_4 53
+// #define PAYLOAD_CMD_5 54
+// #define PAYLOAD_CMD_6 55
+// #define PAYLOAD_CMD_7 56
+// #define PAYLOAD_CMD_8 57
+// #define PAYLOAD_CMD_9 58
+// #define PAYLOAD_CMD_10 59
 
 #endif
 

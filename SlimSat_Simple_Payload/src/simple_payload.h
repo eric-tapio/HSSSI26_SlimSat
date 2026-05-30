@@ -48,7 +48,7 @@ public:
 	Payload(void);
 
 	void initializePayload(void);
-	void performPayloadOperationIteration(PlDataRec& pl_data_rec);
+	void performPayloadLoopIteration(PlDataRec& pl_data_rec);
 
 	//
 	// **************************************************

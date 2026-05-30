@@ -14,6 +14,6 @@
 #ifndef SLIMSAT_ID_CONSTANTS_HEADER
 #define SLIMSAT_ID_CONSTANTS_HEADER
 
-#define SLIMSAT_ID "S01" // SlimSat identification string
+const uint8_t SLIMSAT_ID_NUM = 1;
 
 #endif

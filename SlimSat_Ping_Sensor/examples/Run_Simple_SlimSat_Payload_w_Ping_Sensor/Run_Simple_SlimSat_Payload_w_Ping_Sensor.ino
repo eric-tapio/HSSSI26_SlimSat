@@ -30,7 +30,7 @@ void setup(void) {
 
 void loop(void) {
 	// Infinite loop - This is where SlimSat operations gets performed
-	SimplePing.performPayloadLoopIteration(PayloadDataRec);
+	SimplePing.performPayloadOperationIteration(PayloadDataRec);
 	PayloadDataRec.printRecord();
 	delay(PAYLOAD_OP_PERIOD_IN_MS);
 }

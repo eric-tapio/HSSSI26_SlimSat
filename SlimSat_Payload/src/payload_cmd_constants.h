@@ -14,16 +14,6 @@
 #ifndef PAYLOAD_CMD_CONSTANTS_HEADER
 #define PAYLOAD_CMD_CONSTANTS_HEADER
 
-// PayloadCmdConstantsHeader
-#define MIN_PL_CMD_ID 50 // Minimum valid payload command ID
-#define MAX_PL_CMD_ID 59 // Maximum valid payload command ID
-
-// As a payload designer, I have decided on the following Cmd IDs
-// You can define your own commands as needed
-#define PING_PAYLOAD_CMD_ID 50 // Payload ping command
-#define GET_NUMBER_MEASUREMENTS_TO_TAKE_CMD_ID 51 // Get number of measurements to take
-#define SET_NUMBER_MEASUREMENTS_TO_TAKE_CMD_ID 52 // Set number of measurements to take
-#define TAKE_MEASUREMENTS_CMD_ID 53 // Execute measurement sequence
-#define PRINT_MEASUREMENTS_CMD_ID 54 // Print measurements to console
+// Null
 
 #endif

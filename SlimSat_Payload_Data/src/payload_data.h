@@ -10,7 +10,7 @@
 
 #include <Arduino.h>
 
-#define PAYLOAD_DATA_ARY_SIZE 10 // Change the size of the payload data arrary to suit the needs for your payload
+#define PAYLOAD_DATA_ARY_SIZE 2 // Change the size of the payload data arrary to suit the needs for your payload
 #define PAYLOAD_DATA_VERBOSE_OUTPUT 0
 
 
@@ -36,3 +36,8 @@ public:
 };
 
 #endif
+
+
+
+
+
