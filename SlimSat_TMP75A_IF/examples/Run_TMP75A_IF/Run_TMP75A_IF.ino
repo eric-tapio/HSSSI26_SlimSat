@@ -1,9 +1,11 @@
 #include <Adafruit_TinyUSB.h>
 #include <tmp75a_if.h>
 
-// Construct the TMP7A IF object
-Tmp75aIf tmp75a_1;
+#define TMP_ADR 0x4B
 
+// Construct the TMP7A IF object
+Tmp75aIf tmp75a_1; // Default constructor using TMP75A_I2C_ADR
+//Tmp75aIf tmp75a_1(TMP_ADR); // Specific constructor using the specified I2C address
 
 void setup() {
 	// Open a serial port to the CPU

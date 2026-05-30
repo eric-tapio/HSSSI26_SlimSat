@@ -6,18 +6,32 @@
 
 
 // Constructors
-Tmp75aIf::Tmp75aIf(void) : lm75a(TMP75A_I2C_ADR){
+Tmp75aIf::Tmp75aIf(void) : lm75a(TMP75A_I2C_ADR) {
 
+	address = TMP75A_I2C_ADR;
+	initializeDataMembers();
+}
+
+
+Tmp75aIf::Tmp75aIf(uint8_t i2c_adr) : lm75a(i2c_adr) {
+
+	address = i2c_adr;
+	initializeDataMembers();
+}
+
+
+void Tmp75aIf::initializeDataMembers(void) {
+	// This method initializes the private data members
+	
 	temperature_in_deg_c = 0.0;
     is_connected = 0;
 	
-	// Automatically start the temp sensor
-	//begin();
+	return;
 }
 
 
 bool Tmp75aIf::begin(void) {
-// This method begins the temp sensor 
+	// This method begins the temp sensor 
 	lm75a.begin();
 	
 	// Check to see if the device is connected
@@ -25,12 +39,19 @@ bool Tmp75aIf::begin(void) {
 	
 	if (is_connected) {
         if (VERBOSE_TMP75A_OUTPUT) {
-			Serial.println(" ~ TMP75A Temp Sensor Started!");
+			Serial.println(F(" ~ TMP75A Temp Sensor Started!"));
 		}
 	}
 	else {
         if (VERBOSE_TMP75A_OUTPUT) {
-			Serial.println(" ~ Error, failed to initialize TMP75A Temp Sensor!");
+			Serial.println(F(" ~ Error, failed to initialize TMP75A Temp Sensor!"));
+		}
+		if (RAISE_TMP75_HW_START_ERRORS) {
+			Serial.println(F(" ~ Error, failed to initialize TMP75A Temp Sensor!"));
+			//Serial.println(F(" ~ Error Encountered ..."));
+			while (RAISE_TMP75_HW_START_ERRORS) {
+				delay(10);  
+			}
 		}
 	}
 	
@@ -43,7 +64,7 @@ float Tmp75aIf::getTemperatureInDegC(void) {
 	temperature_in_deg_c = lm75a.getTemperature();
 	
     if (VERBOSE_TMP75A_OUTPUT) {
-		Serial.print(" ~ Temp in Deg C is: ");
+		Serial.print(F(" ~ Temp in Deg C is: "));
 		Serial.println(temperature_in_deg_c);
 	}
 		
@@ -54,7 +75,7 @@ float Tmp75aIf::getTemperatureInDegC(void) {
 bool Tmp75aIf::isConnected(void) const {
 	// This method returns the is connected state
 	if (VERBOSE_TMP75A_OUTPUT) {
-		Serial.print(" ~ Is Connected is: ");
+		Serial.print(F(" ~ Is Connected is: "));
 		Serial.println(is_connected);
 	}
 	
@@ -64,6 +85,8 @@ bool Tmp75aIf::isConnected(void) const {
 	
 void Tmp75aIf::print(void) const {
 	Serial.println(F(" ~ Printing TMP75A Temperature Sensor Interface Data Members ..."));
+	Serial.print(F("     Address: "));
+	Serial.println(address);
 	Serial.print(F("     Is Connected: "));
 	Serial.println(is_connected);
 	Serial.print(F("     Temperature in Deg C: "));

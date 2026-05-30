@@ -3,7 +3,8 @@
 #include <Adafruit_TinyUSB.h>
 
 // 0x48 is the default LM75A address, and must specify otherwise
-#define I2C_ADR 0x4B
+//#define I2C_ADR 0x4B
+#define I2C_ADR 0x4F
 
 // Construct the LM75A Object
 M2M_LM75A lm75a(I2C_ADR);
