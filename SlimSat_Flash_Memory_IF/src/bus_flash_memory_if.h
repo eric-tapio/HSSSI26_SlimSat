@@ -174,7 +174,6 @@ public:
 	uint8_t flashEraseAllPayloadDataRecordBlocks(void);
 	uint8_t getBusDataRecordFromFlash(uint16_t bus_data_rec_num, BusDataRec& bus_data);
 	uint8_t getPayloadDataRecordSize(void);
-	//uint8_t getPayloadDataRecordFromFlash(uint16_t pl_data_rec_num, PlDataRec& pl_data);
 	uint8_t getPayloadDataRecordFromFlash(int16_t pl_data_rec_num, PlDataRec& pl_data);
 	uint8_t initializePayloadDataFlashMemoryDbValues(void);
 	uint8_t initializeBusDataFlashMemoryDbValues(void);
@@ -183,9 +182,8 @@ public:
 	uint8_t incrementFlashNextPayloadDataWriteToAddress(uint8_t num_bytes_to_incerment_by);
 	uint8_t validateBusDataStartWriteToAdress(BusDataRec& bus_data);
 	uint32_t read32(uint32_t addr);
-    //void print(void) const;
 	
-	// These methods are used only for testing and verification
+	// These methods are used only for testing and verification and will be removed
 	void writePartialPayloadDataRecordToFlash(PlDataRec& pl_data);
 	void writePartialBusDataRecordToFlash(BusDataRec& bus_data);
 };

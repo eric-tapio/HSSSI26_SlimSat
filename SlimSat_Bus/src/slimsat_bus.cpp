@@ -70,7 +70,7 @@ void SlimSatBus::print(void) const {
  * 3. Handle command execution and response generation
  * This method should be called continuously in the main program loop.
  */
-void SlimSatBus::performBusOperationIteration(void) {
+void SlimSatBus::performBusOpLoopIteration(void) {
 	// This method performs the SlimSat bus actions that should be performed every iteration
 	if (0) {
 		Serial.println(F("\n ~ Performing Sc Bus Opeation Iteration ..."));
@@ -160,32 +160,101 @@ void SlimSatBus::initializePinStates(void) {
 		Serial.println(F("\n ~ Initializing Pin States ..."));
 	}
 	
-	pinMode(BUS_RESET_PIN, OUTPUT);
-	pinMode(BUS_UNUSED_A1_PIN, OUTPUT);
-	pinMode(BUS_UNUSED_A2_PIN, OUTPUT);
-	//pinMode(BUS_UNUSED_A3_PIN, OUTPUT);  // Currently being used as the Payload Ping input signal
-	//pinMode(BUS_THERMISTOR_AIN_PIN, INPUT);  // Initialization not needed
-	pinMode(BUS_UNUSED_A5_PIN, OUTPUT);
-	pinMode(BUS_UNUSED_D2_PIN, OUTPUT);
-	pinMode(BUS_WAG_WDT_PIN, OUTPUT); // Initialization needed?
-	
-	//pinMode(LORA_RST_PIN, OUTPUT);  // Initialization not needed
-	//pinMode(LORA_NSS_CS_PIN, OUTPUT);  // Initialization not needed
-	//pinMode(LORA_G0_PIN, OUTPUT);  // Initialization not needed
-	//pinMode(LORA_DIO1_PIN, OUTPUT);  // Initialization not needed
-	pinMode(CUTDOWN_DO_PIN, OUTPUT);
-	pinMode(BUS_UNUSED_D12_PIN, OUTPUT); // Initialization needed?
-	pinMode(BUS_UNUSED_D13_PIN, OUTPUT); // Initialization needed?
+	#if (USING_SLIMSAT_MODULE_CONFIG == 1)
+		if (VERBOSE_BUS_OUTPUT) {
+			Serial.println(F("\n ~ Using SlimSat Module Beta Configuration ..."));
+		}
+		// Initialize Pins
+		// Note: Arduino analog input pins do not need to be initialized if using them for analog readings
+		// A0 -> analog input for Thermistor, no initialization needed
+		// A1-A4, D2, D5, D9, D11, D12  -> Initialized in common initialization section
+		// Set A5 to a DO
+		pinMode(BUS_PL_IF_D7_PIN, OUTPUT);
+		digitalWrite(BUS_PL_IF_D7_PIN, LOW);
 
-	digitalWrite(BUS_RESET_PIN, HIGH); // Setting this pin low would reset the ItsyBitsy
-	digitalWrite(BUS_UNUSED_A1_PIN, LOW);
-	digitalWrite(BUS_UNUSED_A2_PIN, LOW);
-	digitalWrite(CUTDOWN_DO_PIN, LOW);
-	//digitalWrite(BUS_UNUSED_A3_PIN, LOW);
-	//digitalWrite(BUS_UNUSED_A5_PIN, LOW); // Now letting LoRa use this pin as necessary. Not sure if needed yet
-	digitalWrite(BUS_UNUSED_D2_PIN, LOW);
-	digitalWrite(BUS_UNUSED_D12_PIN, LOW);
-	digitalWrite(BUS_UNUSED_D13_PIN, LOW);
+		pinMode(BUS_WAG_WDT_PIN, OUTPUT);
+		digitalWrite(BUS_WAG_WDT_PIN, LOW);
+
+		//pinMode(BUS_PL_IF_A5_PIN, OUTPUT);
+		//digitalWrite(BUS_PL_IF_A5_PIN, LOW);
+	#else
+		if (VERBOSE_BUS_OUTPUT) {
+			Serial.println(F("\n ~ Using SW Dev Board Configuration ..."));
+		}
+		// Initialize Pins
+		// A0 -> Initialize as a DO
+		pinMode(SW_DEV_BUS_RESET_PIN, OUTPUT);
+		digitalWrite(SW_DEV_BUS_RESET_PIN, HIGH); // Initialize HIGH and pull LOW to reset the bus
+		
+		// A1-A4, D2, D5, D9, D11, D12  -> Initialized in common initialization section
+		// A5 is uninitialized, so defaults to an analog input
+		pinMode(BUS_PL_IF_D12_PIN, OUTPUT);
+		digitalWrite(BUS_PL_IF_D12_PIN, LOW);
+		
+		pinMode(BUS_PL_IF_D13_PIN, OUTPUT);
+		digitalWrite(BUS_PL_IF_D13_PIN, LOW);
+	#endif
+
+	// Common configuration pin definitions
+	pinMode(LORA_NSS_CS_PIN, OUTPUT);
+	digitalWrite(LORA_NSS_CS_PIN, LOW); // Initialize LOW since a chip select (Note, for SSM, may be an active low)
+	
+	pinMode(LORA_INT_PIN, OUTPUT);
+	digitalWrite(LORA_INT_PIN, LOW); // Initialize LOW
+
+	pinMode(LORA_RST_PIN, OUTPUT);
+	digitalWrite(LORA_RST_PIN, LOW); // Initialize LOW
+
+	pinMode(LORA_DIO0_G0_PIN, OUTPUT);
+	digitalWrite(LORA_DIO0_G0_PIN, LOW); // Initialize LOW
+	
+	pinMode(CUTDOWN_DO_PIN, OUTPUT);
+	digitalWrite(CUTDOWN_DO_PIN, LOW); // Initialize LOW and pull HIGH to initiate burn
+		
+	// The PL Analog pins will all be configured and set to DO with a state of LOW until otherwise directed in the payload code
+	// Initialize A1 - A5
+	pinMode(BUS_PL_IF_A1_PIN, OUTPUT);
+	pinMode(BUS_PL_IF_A2_PIN, OUTPUT);
+	pinMode(BUS_PL_IF_A3_PIN, OUTPUT);
+	pinMode(BUS_PL_IF_A4_PIN, OUTPUT);
+	//pinMode(BUS_PL_IF_A5_PIN, OUTPUT);
+	
+	digitalWrite(BUS_PL_IF_A1_PIN, LOW);
+	digitalWrite(BUS_PL_IF_A2_PIN, LOW);
+	digitalWrite(BUS_PL_IF_A3_PIN, LOW);
+	digitalWrite(BUS_PL_IF_A4_PIN, LOW);
+	//digitalWrite(BUS_PL_IF_A5_PIN, LOW);
+			
+	// Initialize D5
+	pinMode(BUS_PL_IF_D5_PIN, OUTPUT);
+	digitalWrite(BUS_PL_IF_D5_PIN, LOW);
+	
+	// This is the original code
+	// pinMode(SW_DEV_BUS_RESET_PIN, OUTPUT);
+	// pinMode(BUS_PL_IF_A1_PIN, OUTPUT);
+	// pinMode(BUS_PL_IF_A2_PIN, OUTPUT);
+	// //pinMode(BUS_PL_IF_A3_PIN, OUTPUT);  // Currently being used as the Payload Ping input signal
+	// //pinMode(SW_DEV_BUS_RESET_PIN, INPUT);  // Initialization not needed
+	// pinMode(BUS_PL_IF_A5_PIN, OUTPUT);
+	// pinMode(LORA_INT_PIN, OUTPUT);
+	// pinMode(BUS_WAG_WDT_PIN, OUTPUT); // Initialization needed?
+	
+	// //pinMode(LORA_RST_PIN, OUTPUT);  // Initialization not needed
+	// //pinMode(LORA_NSS_CS_PIN, OUTPUT);  // Initialization not needed
+	// //pinMode(LORA_DIO0_G0_PIN, OUTPUT);  // Initialization not needed
+	// //pinMode(LORA_DIO1_PIN, OUTPUT);  // Initialization not needed
+	// pinMode(CUTDOWN_DO_PIN, OUTPUT);
+	// pinMode(SW_DEV_D12_WD_MR_BAR_PIN, OUTPUT); // Initialization needed?
+	// pinMode(SW_DEV_D13_WD_RST_BAR_PIN, OUTPUT); // Initialization needed?
+
+	// digitalWrite(SW_DEV_BUS_RESET_PIN, HIGH); // Setting this pin low would reset the ItsyBitsy
+
+	// digitalWrite(CUTDOWN_DO_PIN, LOW);
+	// //digitalWrite(BUS_PL_IF_A3_PIN, LOW);
+	// //digitalWrite(BUS_PL_IF_A5_PIN, LOW); // Now letting LoRa use this pin as necessary. Not sure if needed yet
+	// digitalWrite(LORA_INT_PIN, LOW);
+	// digitalWrite(SW_DEV_D12_WD_MR_BAR_PIN, LOW);
+	// digitalWrite(SW_DEV_D13_WD_RST_BAR_PIN, LOW);
 
 	return;
 }
@@ -217,8 +286,8 @@ int16_t SlimSatBus::startLoRa(void) {
 		Serial.println(F("\n ~ Starting the LoRa Radio ..."));
 	}
 	
-	//int16_t radio_status_code = LoRa.beginUsingStandardDefaultValues();
-	int16_t radio_status_code = LoRa.begin();
+	int16_t radio_status_code = LoRa.beginUsingStandardDefaultValues();
+	//int16_t radio_status_code = LoRa.begin();
 	
 	if (radio_status_code == 0) {
 		if (VERBOSE_BUS_OUTPUT) {
@@ -290,7 +359,7 @@ uint8_t SlimSatBus::CmdMsgIsForGs(char* msg) {
 }
 	
 
-void SlimSatBus::performGsOperationIteration(void) {
+void SlimSatBus::performGsOpLoopIteration(void) {
 	// This method performs the GS actions that should be performed every iteration
 	
 	if (0) {
@@ -309,6 +378,8 @@ void SlimSatBus::performGsOperationIteration(void) {
 	cmd_msg = getBusCmdFromSerialTerm();
 	
 	if (cmd_msg != nullptr) {
+		// For enhanced clarity add a new blank line to the output to distinguish current cmd responses from previous one(s)
+		Serial.println();
 		
 		is_gs_msg = CmdMsgIsForGs(cmd_msg);
 		
@@ -375,7 +446,7 @@ char* SlimSatBus::getReceivedMsgFromLoraRadio(void) {
 	rxd_message_ptr = LoRa.receiveUsingInterrupt();
 	
 	if (rxd_message_ptr != nullptr) {
-		if (1) {
+		if (0) {
 			Serial.println(F("\n ~ Message received from Lora Radio."));
 			Serial.println(rxd_message_ptr);
 		}
@@ -392,7 +463,7 @@ char* SlimSatBus::getReceivedMsgFromLoraRadio(void) {
 	// // This method checks and gets Bus commands from the LoRa
 	
 	// if (VERBOSE_BUS_OUTPUT) {
-		// Serial.println(F("\n ~ Getting Command from LoRa Radio (Using Inerrupt) ..."));
+		// Serial.println(F("\n ~ Getting Command from LoRa Radio (Using Interrupt) ..."));
 	// }
 	
 	// uint8_t num_bytes_rxd = LoRa.receiveUsingInterrupt();
@@ -649,7 +720,7 @@ void SlimSatBus::displayNewSerialTermData(void) {
  * In normal mode, performs standard payload operation iterations.
  * The commands can be scripted and potentially set by remote command.
  */
-void SlimSatBus::performPayloadOp(void) {
+void SlimSatBus::performPayloadOpLoopIteration(void) {
 	// This method performs a routine payload operation, getting payload data, and then writing it to flash memory
 
 	if (VERBOSE_BUS_OUTPUT) {
@@ -657,7 +728,7 @@ void SlimSatBus::performPayloadOp(void) {
 	}
 	
 	// Perform the Payload Operation Iteration and return the Payload Data
-	Payload1.performPayloadOperationIteration(Pl_data);
+	Payload1.performPayloadLoopIteration(Pl_data);
 	
 	// Write the Payload Data Rec to Memory
 	Bus_database.Flash_Memory.writePayloadDataRecordToFlash(Pl_data);
@@ -674,7 +745,7 @@ void SlimSatBus::performPartialPayloadOp(void) {
 	}
 	
 	// Perform the Payload Operation Iteration and return the Payload Data
-	Payload1.performPayloadOperationIteration(Pl_data);
+	Payload1.performPayloadLoopIteration(Pl_data);
 	
 	// Write the Payload Data Rec to Memory
 	Bus_database.Flash_Memory.writePartialPayloadDataRecordToFlash(Pl_data);

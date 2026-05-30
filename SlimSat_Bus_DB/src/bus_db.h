@@ -52,15 +52,14 @@ enum BusMode
 class BusDb {
 
 private:
-	// Data Members 
-	//uint8_t stream_data_mode; // Data streaming mode flag (0=off, 1=on)
+	// Data Members
 	float safe_mode_voltage_in_v;
 
 public:
 	// Data Member Objects
-	BusMode Bus_Mode; // Current bus operating mode
-	BusTime Bus_Time; // Spacecraft bus timing system object
-	BusPowerMonitor Bus_Power_Monitor; // Ugh! Note: The power monitor MUST be started! I've forgotten this
+	BusMode Bus_Mode; // Bus operating mode
+	BusTime Bus_Time; // Bus timing system object
+	BusPowerMonitor Bus_Power_Monitor; // Note: The power monitor must be started so that power monitor devices are started
 	FlashMemoryIf Flash_Memory;
 	
 	
@@ -116,7 +115,6 @@ public:
 	 * @return Status code (0=success, non-zero=error)
 	 */
 	uint8_t startPowerMonitor(void);
-	
 };
 
 

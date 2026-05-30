@@ -55,7 +55,7 @@ uint8_t BusDb::getBusMode(void) const {
  * @param mode New bus mode value to set (0=INITIALIZED, 1=SAFE, 2=NOMINAL_ON)
  */
 void BusDb::setBusMode(uint8_t mode) {
-	// This function sets the Bus Mode
+	// This method sets the Bus Mode
 
 	if ((MIN_BUS_MODE_VALUE <= mode) && (mode <= MAX_BUS_MODE_VALUE)) {
 		// Set the mode value
@@ -136,6 +136,7 @@ void BusDb::setBusSafeModeVoltageInMv(uint32_t sm_voltage_in_mv) {
  * @return Status code (0=success, non-zero=error)
  */
 uint8_t BusDb::startPowerMonitor(void) {
+	// This method starts the Power Monitor
 	if (VERBOSE_BUS_DB_OUTPUT) {
 		Serial.println(F("\n ~ Starting Power Monitor ..."));
 	}

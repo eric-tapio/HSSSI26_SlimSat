@@ -47,6 +47,7 @@ void Ina219If::initializeDataMembers(void) {
 	load_voltage_V = 0.0;
 	current_mA = 0.0;
 	power_mW = 0.0;
+	begin_successful = 0;
 	return_status = 0;
 
 	return;
@@ -56,6 +57,7 @@ void Ina219If::initializeDataMembers(void) {
 uint8_t Ina219If::begin(void) {
 
 	return_status = ina219.begin();
+	begin_successful = return_status;
 	
 	if (VERBOSE_INA219_OUTPUT) {
 		Serial.print(F(" ~ INA219 Begin Return Status: "));
@@ -73,6 +75,7 @@ uint8_t Ina219If::success(void) {
 	if (VERBOSE_INA219_OUTPUT) {
 		Serial.print(F(" ~ INA219 Success Return Status: "));
 		Serial.println(return_status);
+		Serial.println();
 	}
 	
 	return return_status;
@@ -124,6 +127,8 @@ void Ina219If::print(void) const {
 	Serial.println(F(" ~ Printing INA219 Voltage Current Sensor Interface Data Members ..."));
 	Serial.print(F("     Address: "));
 	Serial.println(address, HEX);
+	Serial.print(F("     Begin Successful: "));
+	Serial.println(begin_successful);
 	Serial.print(F("     Return Status: "));
 	Serial.println(return_status);
 	Serial.print(F("     Shunt Voltage in mV: "));

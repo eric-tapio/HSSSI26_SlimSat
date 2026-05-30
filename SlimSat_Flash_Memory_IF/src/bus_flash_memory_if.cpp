@@ -21,18 +21,20 @@
  * transport layer and prepares the system for flash operations.
  */
 FlashMemoryIf::FlashMemoryIf(void) : flash(&flashTransport){
-
+	// Default constructor for the Flash Memory Interface Object
+	
 	address = 0;
 	flash_register_value = 0;
     flash_return_result = 0;
 	
-	// Trying this for now
 	// Automatically start the flash QSPI
 	begin();
 }
 
 
 uint8_t FlashMemoryIf::flashEraseChip(void) {
+	// This method erases the entire flash chip
+	
 	flash_return_result = flash.eraseChip();
 	flash.waitUntilReady();
 	
@@ -44,7 +46,7 @@ uint8_t FlashMemoryIf::flashEraseChip(void) {
 
 
 uint8_t FlashMemoryIf::flashEraseSector(uint16_t sector_number) {
-	
+	// This method erases the given flash sector number 
 	if (0) {
         Serial.print(F(" ~ Erasing Flash Memory Sector Number: "));
 		Serial.println(sector_number);
@@ -68,7 +70,7 @@ uint8_t FlashMemoryIf::flashEraseSector(uint16_t sector_number) {
   
 
 uint8_t FlashMemoryIf::flashEraseAllSectors(void) {
-	
+	// This method erases all of the flash sectors 
 	for (uint8_t i=0; i<NUM_FLASH_BLOCKS; i++) {
 		flash_return_result = flashEraseBlock(i);
 	}
@@ -78,7 +80,7 @@ uint8_t FlashMemoryIf::flashEraseAllSectors(void) {
 
   
 uint8_t FlashMemoryIf::flashEraseAllBlocks(void) {
-	
+	// This method erases all of the flash blocks
 	for (uint8_t i=0; i<NUM_FLASH_BLOCKS; i++) {
 		flash_return_result = flashEraseBlock(i);
 	}
@@ -88,7 +90,7 @@ uint8_t FlashMemoryIf::flashEraseAllBlocks(void) {
 
 
 uint8_t FlashMemoryIf::flashEraseBlock(uint32_t block_num) {
-	
+	// This method erases the given flash block number	
     if (VERBOSE_BUS_FLASH_MEMORY_OUTPUT) {
         Serial.print(F(" ~ Erasing Flash Memory block: "));
 		Serial.println(block_num);
@@ -130,6 +132,7 @@ void FlashMemoryIf::printJedecId(void) {
 
 
 uint8_t FlashMemoryIf::getFlashReturnResult(void) const {
+	// This method returns the Flash Return Result 
     return flash_return_result;
 }
 
@@ -240,9 +243,6 @@ uint32_t FlashMemoryIf::getBootCount(void) {
 	// This method gets the boot count from Bus Flash Memory DB
 
 	flash_register_value = read32(BOOT_COUNT_ADDRESS);
-
-	//Serial.print(F(" ~ After the read, Flash Register Value is: "));
-	//Serial.println(flash_register_value);	
 	
 	return flash_register_value;
 }
@@ -890,7 +890,6 @@ uint8_t FlashMemoryIf::flashEraseAllPayloadDataRecordBlocks(void) {
 }
 
 
-//uint8_t FlashMemoryIf::getPayloadDataRecordFromFlash(uint16_t pl_data_rec_num, PlDataRec& pl_data) {
 uint8_t FlashMemoryIf::getPayloadDataRecordFromFlash(int16_t pl_data_rec_num, PlDataRec& pl_data) {
 	// This method gets the specified Payload Data struct from Flash memory
 	

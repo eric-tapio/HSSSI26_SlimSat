@@ -10,7 +10,7 @@
 
 #include <slimsat_bus.h>
 
-#define DEFAULT_PAYLOAD_OP_PERIOD_IN_S 10
+#define DEFAULT_PAYLOAD_OP_PERIOD_IN_S 30
 #define DEFAULT_BEACON_PERIOD_IN_S 1000
 #define DEFAULT_BUS_DATA_RECORD_PERIOD_IN_S 20 
 #define WAG_WDT_PERIOD_IN_MS 500L
@@ -20,7 +20,7 @@
 #define BEACON_PERIOD_IN_MS DEFAULT_BEACON_PERIOD_IN_S*NUM_MS_PER_S
 #define BUS_DATA_RECORD_PERIOD_IN_MS DEFAULT_BUS_DATA_RECORD_PERIOD_IN_S*NUM_MS_PER_S
 
-#define VERBOSE_OUTPUT 0
+#define VERBOSE_OUTPUT 1
 
 
 // Define a global volatile int flag for wagging the WDT
@@ -89,13 +89,13 @@ void setup(void) {
 
 void loop(void) {
 	// Infinite loop - This is where SlimSat operations gets performed
-	Slimsat.performBusOperationIteration();
+	Slimsat.performBusOpLoopIteration();
 
 	if (Slimsat.Payload_timer.timerHasElapsed()) {
 		if (VERBOSE_OUTPUT) {
 			Serial.println("\n ~ Performing Payload Op ...");
 		}
-		Slimsat.performPayloadOp();
+		Slimsat.performPayloadOpLoopIteration();
 	}
 
 	if (Slimsat.Beacon_timer.timerHasElapsed()) {

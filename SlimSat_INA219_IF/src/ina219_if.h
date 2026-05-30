@@ -22,6 +22,7 @@ private:
 	float load_voltage_V;
 	float current_mA;
 	float power_mW;
+	uint8_t begin_successful;
 	uint8_t return_status;
 
 public:

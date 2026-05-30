@@ -39,6 +39,7 @@
 #define COMPLETE_END_OF_TRANSMISSION_DELAY_IN_MS 10
 
 #define VERBOSE_LORA_OUTPUT 0
+
 //#define TRANSMIT_BEACON 0
 
 /**
@@ -88,11 +89,21 @@ void setOperationDoneFlag(void);
 class LoRaRadio{
 private:
 	// Data Members
-	// Note: LORA_DIO1_PIN is no longer connected to the LORA! IS this a problem? TBD Substituting BUS_UNUSED_A5_PIN for now, which may be used, if necessary
+	// Note: LORA_DIO1_PIN is no longer connected to the LORA! IS this a problem? TBD Substituting BUS_PL_IF_A5_PIN for now, which may be used, if necessary
+		//SX1276 radio = new Module(LORA_NSS_CS_PIN, LORA_DIO0_G0_PIN, LORA_RST_PIN, LORA_DIO1_PIN);
 	
-	//SX1276 radio = new Module(LORA_NSS_CS_PIN, LORA_G0_PIN, LORA_RST_PIN, LORA_DIO1_PIN);
-	SX1276 radio = new Module(LORA_NSS_CS_PIN, LORA_G0_PIN, LORA_RST_PIN, BUS_UNUSED_A5_PIN);
-
+	
+	SX1276 radio = new Module(LORA_NSS_CS_PIN, LORA_DIO0_G0_PIN, LORA_RST_PIN, LORA_INT_PIN);
+	//SX1276 radio = new Module(LORA_NSS_CS_PIN, LORA_DIO0_G0_PIN, LORA_RST_PIN, BUS_PL_IF_A5_PIN);
+	
+	// if (USING_SLIMSAT_MODULE_CONFIG) {
+		// SX1276 radio = new Module(LORA_NSS_CS_PIN, LORA_DIO0_G0_PIN, LORA_RST_PIN, BUS_PL_IF_A5_PIN);
+	// }
+	// else {
+		//Using SW Dev Board Config
+		// SX1276 radio = new Module(LORA_NSS_CS_PIN, LORA_DIO0_G0_PIN, LORA_RST_PIN, BUS_PL_IF_A5_PIN);
+	// }
+	
 	uint32_t frequency_in_hz; // LoRa radio frequency in Hz
 	uint8_t spread_factor; // LoRa spread factor, accepted range is 6 to 12
 	uint8_t coding_rate; // LoRa coding rate, accepted range is 4 to 8

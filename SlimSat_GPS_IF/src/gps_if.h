@@ -8,14 +8,17 @@
 #include <Arduino.h>
 #include <Adafruit_TinyUSB.h> // for Serial
 #include <TinyGPSPlus.h>
+#include <bus_pin_definitions.h>
 
 #define GPS_BAUD 9600
-#define MAX_GPS_MSG_LENGTH 60
-#define MSG_GPS_BUFFER_LENGTH (MAX_GPS_MSG_LENGTH+1)
+#define GPS_BUFFER_SIZE 100
+#define MSG_GPS_BUFFER_SIZE (GPS_BUFFER_SIZE+1)
 #define MAX_NUM_GPS_MSG_READ_TRIES 10
 
 #define VERBOSE_GPS_OUTPUT 0
+#define GPGGA_MSG_HEADER "$GPGGA"
 
+const char DEFAULT_EMPTY_GPS_MSG[] = ",,,,";
 
 class GpsIf {
 private:
@@ -28,19 +31,23 @@ private:
 	double long_pos;
 	double alt_pos;
 	uint8_t last_update_time_sec;
+	uint8_t buffer_index;
+	char gps_msg_buffer[MSG_GPS_BUFFER_SIZE];
+	
 	char* getGpsPositionMessagePayload(void);
 	void initializeDataMembers(void);
+	void initializeGpsMessageBuffer(void);
 	char* getEmptyGpsPositionMessage(void);
+	char* readGpsMessage(void); 
+	char* getGpsMessage(void);
+	char* encodeGpsMessage(char* msg_ptr);
 
 public:
 	TinyGPSPlus gps;
-	char gps_msg_buffer[MSG_GPS_BUFFER_LENGTH];
 	GpsIf(void);
 	void begin(void);
-	void initializeGpsMessageBuffer(void);
 	char* getGpsPositionMessage(void);
-	char* encodeGpsMessage(void);
-	void print(void) const;  
+	void print(void) const;
 };
 
 #endif

@@ -23,7 +23,6 @@ GpsIf::GpsIf(void) {
 	initializeDataMembers();
 }
 
-
 /**
  * @brief Initialize GPS interface data members
  * @details Sets all GPS data members to default values including time validity,
@@ -41,8 +40,8 @@ void GpsIf::initializeDataMembers(void) {
 	lat_pos = 0.0;
 	long_pos = 0.0;
 	alt_pos = 0.0;
-		
 	last_update_time_sec = 0;
+	buffer_index = 0;
 
 	return;
 }
@@ -82,112 +81,174 @@ void GpsIf::begin(void) {
 }
 
 
-char* GpsIf::encodeGpsMessage(void) {
+char* GpsIf::getGpsMessage(void) {
+    // This function (attempts to) get the next GPGGA GPS message from the GPS sensor
+    // If a GPGGA message is received, the message is encoded and a 3D position sentence is returned
+    // Otherwise a default empty sentence is returned
+    uint8_t number_tries = 0;
+    uint8_t gpgga_msg_found = 0;
+    char* gps_msg_ptr = nullptr;
+    char* msg_ptr = nullptr;
 
-	for (uint8_t i=0; i<MAX_NUM_GPS_MSG_READ_TRIES; i++) {
-		
-		if (VERBOSE_GPS_OUTPUT) {
-			Serial.print(F(" ~ GPS Read Try: "));
-			Serial.println(i);
-		}
+    do {
+        gps_msg_ptr = readGpsMessage();
+ 
+        if (gps_msg_ptr != nullptr) {
+            // Then a gga message was found
+            //Serial.println(my_ptr);
+            gpgga_msg_found = 1;
+        }
+        else {
+            // Increment the try counter
+            number_tries++;
+        }
+
+    } while ((gpgga_msg_found == 0) || (number_tries < MAX_NUM_GPS_MSG_READ_TRIES));
+
+	if (VERBOSE_GPS_OUTPUT) {
+		Serial.println(" ~ Out of Do While Loop ...");
+	}	
+
+    if (gpgga_msg_found) {
+        // Then encode the message and return the formatted partial message
+        msg_ptr = encodeGpsMessage(gps_msg_ptr);
+    }
+    else {
+        // Return the default empty string
+		msg_ptr = getEmptyGpsPositionMessage();
+    }
+
+    return msg_ptr;
+}
+
+
+char* GpsIf::readGpsMessage(void) {
+    // This function reads a GPS message from the GPS sensor
+    // This funciton returns a nullptr until a complete message is received, at which point the function 
+    // returns a pointer to the received message
+    char* msg_ptr = nullptr;
+    
+    while (Serial1.available()) {
+        // Read one character at a time
+        char rc = (char)Serial1.read();
+
+        // Detect start of a new NMEA message
+        if (rc == '$') {
+            buffer_index = 0;
+        }
+
+        // Store character if space remains
+        if (buffer_index < GPS_BUFFER_SIZE) {
+            gps_msg_buffer[buffer_index++] = rc;
+
+            // Null terminate the string
+            gps_msg_buffer[buffer_index] = '\0';
+        }
+        else {
+            // Prevent buffer overflow
+            buffer_index = 0;
+        }
+
+        // NMEA messages end with newline
+        if (rc == '\n') {
+            if (strncmp(gps_msg_buffer, GPGGA_MSG_HEADER, strlen(GPGGA_MSG_HEADER)) == 0) { 
+                msg_ptr = gps_msg_buffer;
+                break;
+            }
+
+            // Reset for next message
+            buffer_index = 0;
+        }
+    }
+
+    return msg_ptr;
+}
+
+
+char* GpsIf::encodeGpsMessage(char* msg_ptr) {
+	// This method encodes the received GPS Messages
 	
-		while (Serial1.available() > 0) {
-			if (gps.encode(Serial1.read())) {
+    for (uint8_t i=0; i<strlen(msg_ptr); i++) {
+        gps.encode(gps_msg_buffer[i]);
+    }
 				
-				time_is_valid = gps.time.isValid();
-				update_time_hour = gps.time.hour();
-				update_time_min = gps.time.minute();
-				update_time_sec = gps.time.second();
-				position_is_valid = gps.location.isValid();
-				lat_pos = gps.location.lat();
-				long_pos = gps.location.lng();
-				alt_pos = gps.altitude.meters();
-				
-				//print();
-				
-				return getGpsPositionMessagePayload();
-			}
-		}
-		
-		if (i == MAX_NUM_GPS_MSG_READ_TRIES-1) {	
-			if (VERBOSE_GPS_OUTPUT) {
-				Serial.println(F(" ~ Max number of GPS Message Reads Encountered with no valid Position. Returning Null ..."));
-			}
-		}
+	time_is_valid = gps.time.isValid();
+	update_time_hour = gps.time.hour();
+	update_time_min = gps.time.minute();
+	update_time_sec = gps.time.second();
+	position_is_valid = gps.location.isValid();
+	lat_pos = gps.location.lat();
+	long_pos = gps.location.lng();
+	alt_pos = gps.altitude.meters();
+	
+	if (VERBOSE_GPS_OUTPUT) {	
+		print();
 	}
-
-	return nullptr;
+				
+	return getGpsPositionMessagePayload();
 }
 
 
 char* GpsIf::getGpsPositionMessage(void) {
 	// This method gets input from the GPS serial source
 
-	char* return_ptr = encodeGpsMessage();
+	char* return_ptr = nullptr;
 	
-	if (return_ptr == nullptr) {
-		return_ptr = getEmptyGpsPositionMessage();
-	}
-	
+	return_ptr = getGpsMessage();
+
 	return return_ptr;
 }
 
 
 char* GpsIf::getGpsPositionMessagePayload(void) {
 	// This method populates and returns the GPS Position Message 'Payload'
+
+	// Time from TinyGPS can be 0 and still valid. As a result, guard against it 
+	uint8_t update_time_sum = update_time_hour + update_time_min + update_time_sec;
 	
-	bool update_not_performed = true;
+	if (0) {
+		Serial.println(gps_msg_buffer);
+		Serial.println();
+	}
 	
-	if (time_is_valid && update_not_performed) {
-		update_not_performed = false;
-		
+	if (time_is_valid && (update_time_sum > 0)) {
+
 		if (VERBOSE_GPS_OUTPUT) {
 			Serial.println(F(" ~ Time is Valid."));
 		}
 		
-		// Only update if the time has changed	
-		if (update_time_sec != last_update_time_sec) {
-
-			if (VERBOSE_GPS_OUTPUT) {
-				Serial.println(F(" ~ Time has been updated."));
-			}	
-		
-			// Update the last update time
-			last_update_time_sec = update_time_sec;
-			
-			
-			// Construct the output message
-			if (position_is_valid) {
-				snprintf(gps_msg_buffer, sizeof(gps_msg_buffer), "%02d:%02d:%02d,%1.6f,%1.6f,%1.1f", update_time_hour, update_time_min, update_time_sec, lat_pos, long_pos, alt_pos);
-			}
-			else {
-				snprintf(gps_msg_buffer, sizeof(gps_msg_buffer), "%02d:%02d:%02d,,,", update_time_hour, update_time_min, update_time_sec);
-			}
-
-			if (0) {
-				Serial.println(gps_msg_buffer);
-				Serial.println();
-			}
-			
-			return gps_msg_buffer;
+		// Update the last update time
+		last_update_time_sec = update_time_sec;
+					
+		// Construct the output message
+		if (position_is_valid) {
+			snprintf(gps_msg_buffer, sizeof(gps_msg_buffer), "%02d:%02d:%02d,%1.6f,%1.6f,%1.1f", update_time_hour, update_time_min, update_time_sec, lat_pos, long_pos, alt_pos);
 		}
+		else {
+			snprintf(gps_msg_buffer, sizeof(gps_msg_buffer), "%02d:%02d:%02d,,,", update_time_hour, update_time_min, update_time_sec);
+		}
+
+		return gps_msg_buffer;
 	}		
-	
-	if (VERBOSE_GPS_OUTPUT) {
-		Serial.println(F(" ~ Returning Null Ptr as the GPS message."));
-	}
+	else {
+		if (VERBOSE_GPS_OUTPUT) {
+			Serial.println(F(" ~ Returning Null Ptr as the GPS message."));
+		}
 		
-	return nullptr;
+		return getEmptyGpsPositionMessage();
+	}
 }
 
 
 char* GpsIf::getEmptyGpsPositionMessage(void)  {
-	snprintf(gps_msg_buffer, sizeof(gps_msg_buffer), ",,,,");
+	// This method returns an Empty GPS Position Message, which is returned if the current GPS position fix is not valid
+	snprintf(gps_msg_buffer, sizeof(gps_msg_buffer), DEFAULT_EMPTY_GPS_MSG);
 	return gps_msg_buffer;
 }
 
 
 void GpsIf::print(void) const {
+	// This method prints the GPS Interface Data Members
 	Serial.println(F("\n ~ Printing GPS Sensor Interface Data Members ..."));
 
 	Serial.print(F("     Update Time is Valid: "));
@@ -211,7 +272,7 @@ void GpsIf::print(void) const {
 	Serial.print(F("     GPS Message Buffer: "));
 	Serial.println(gps_msg_buffer);	
 	
-	Serial.println(F(""));
+	Serial.println();
 	
     return;
 }

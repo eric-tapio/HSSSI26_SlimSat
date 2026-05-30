@@ -94,7 +94,6 @@ public:
 	void print(void) const;
 	
 	void collectBusData(void);
-		
 };
 
 #endif

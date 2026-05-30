@@ -29,7 +29,7 @@
 #include <gps_if.h>
 
 
-#define VERBOSE_BUS_OUTPUT 0
+#define VERBOSE_BUS_OUTPUT 1
 
 #define GS_FULL_HEADER_ID "$GS99"
 #define STRNCMP_MATCHES_RESULT 0
@@ -37,11 +37,13 @@
 #define MAX_SERIAL_TERM_BUFFER_CHARS (31+1)
 #define USE_GPS_SENSOR 1
 
-#define GET_CMD_INPUT_FROM_LORA_RADIO 1
+// The following #defines are used only during system development
+#define GET_CMD_INPUT_FROM_LORA_RADIO 0
 #define TRANSMIT_RESPONSES_USING_LORA_RADIO 1
 
 #define TEST_LORA_TRASMIT_MESSAGE "This is a test LoRa Message"
 #define MULTI_MESSAGE_INTER_TRANSMISSION_DELAY_IN_MS 300
+
 
 
 /**
@@ -63,7 +65,6 @@ private:
 	uint8_t serial_msg_data_index; // Current index in the serial receive buffer
 	uint8_t new_serial_msg_rxd; // Flag indicating new command received
 	uint8_t new_serial_msg_to_process; // Flag indicating new command ready to process
-	
 	int16_t radio_status_code;
 	
 	
@@ -76,7 +77,7 @@ private:
 
 public:
 	// Data Member Objects
-	BusDb Bus_database; // Spacecraft bus database object
+	BusDb Bus_database; // Bus database object
 	Payload Payload1; // Payload subsystem object
 	NmeaMsgHandler Msg_handler; // NMEA message handler object
 	SimpleTimer Payload_timer; // Timer for payload operations
@@ -100,7 +101,7 @@ public:
 	 * @details Executes the main operational loop including command checking,
 	 * command handling, and response transmission
 	 */
-	void performBusOperationIteration(void);
+	void performBusOpLoopIteration(void);
 	
 	/**
 	 * @brief Initialize the bus system
@@ -150,7 +151,7 @@ public:
 	 * @details Executes payload-specific operations including data streaming
 	 * and command processing based on current system mode
 	 */
-	void performPayloadOp(void);
+	void performPayloadOpLoopIteration(void);
 
 	// Serial Terminal Input methods
 	/**
@@ -174,23 +175,21 @@ public:
 	
 	void getInputFromSerialTerm(void);
 
+	// Many of these methods will be removed for the final version of the code, once development has been completed
 	void transmitResponseMessages(void);
 	void transmitMessageToLoraRadio(char* msg);
 	void transmitMessageToLoraRadio(const char* msg);
-
-	void transmitMessageUsingSerialTerm(char* msg);
-	
-	void transmitMessageFromSerialTermToLoraRadio(void);
-	void transmitResponseMessageFromLoraRadioToSerialTerm(void);
-	
-	void transmitLoraRadioTestMessage(void);
 	void getReceivedRadioMessage(void);
 	char* getReceivedMsgFromLoraRadioUsingInterrupt(void);
+	
+	void transmitMessageUsingSerialTerm(char* msg);
+	void transmitMessageFromSerialTermToLoraRadio(void);
+	void transmitResponseMessageFromLoraRadioToSerialTerm(void);
+	void transmitLoraRadioTestMessage(void);
 	void getReceivedMsgFromLoraRadioUsingBlocking(void);
-	
-	
+
 	uint8_t CmdMsgIsForGs(char* msg);
-	void performGsOperationIteration(void);
+	void performGsOpLoopIteration(void);
 	
 	void performPartialPayloadOp(void);
 	uint8_t recordPartialBusData(void);

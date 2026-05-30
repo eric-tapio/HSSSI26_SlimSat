@@ -31,6 +31,10 @@ void loop() {
   // Get the latest GPS Position Message
   gps_pos_msg = gps_if.getGpsPositionMessage();
   
+  if (1) {
+    gps_if.print();
+  }
+  
   if (gps_pos_msg != nullptr) {
     Serial.println(gps_pos_msg);
   }
