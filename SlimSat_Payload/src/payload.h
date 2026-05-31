@@ -1,5 +1,5 @@
 /**
- * @file payload.h
+ * @file simple_payload.h
  * @brief SlimSat Payload System Header
  * 
  * @details This header file defines the Payload class which manages the
@@ -16,60 +16,42 @@
 #define SLIMSAT_PAYLOAD_HEADER
 
 #include <Arduino.h>
+#include <ping_sensor.h>
 #include <payload_data.h>
 
-#define VERBOSE_PAYLOAD_OUTPUT 1
-#define VERY_SHORT_DELAY_IN_MS 100
-#define SHORT_DELAY_IN_MS 1000
-#define LONG_DELAY_IN_MS 5000
-
-const uint8_t RADFET_CTRL_R2_PIN = A1;
-const uint8_t RADFET_CTRL_EN_PIN = A2;
-const uint8_t RADFET_CTRL_R1_PIN = A3;
-const uint8_t V_BOOST_EN_PIN = A4;
-const uint8_t ADC_INPUT_PIN = A5;
-const uint8_t XIAO_EN_PIN = 9;
-const uint8_t NUMBER_RADFETS = 2;
-const uint8_t NUM_ADC_MEASUREMENTS_TO_TAKE = 5;
+#define SENSOR_2_MEASUREMENT_ARY_INDEX 1
+#define VERBOSE_PAYLOAD_OUTPUT 0
 
 
 /**
  * @brief SlimSat Payload System Class
  * 
  * @details The Payload class manages the complete payload subsystem including
- * sensor operations, measurement collection, data processing, and command handling.
+ * sensor operations, measurement collection, data processing, and optionally any command handling.
  * It can be expanded and customized by the Payload Team as needed for specific
- * mission requirements. The class integrates ultrasonic sensors and provides
- * comprehensive measurement and data management capabilities.
+ * mission requirements.
  */
+ 
 class Payload {
 private:
 	// The private portion of the class can be changed to whatever is needed to tailor 
     // the interface to support the sensor(s) used by the SlimSat Team
 	
-	void turn12vBoostOn(void);
-	void turn12vBoostOff(void);
-	void turnXiaoOn(void);
-	void turnXiaoOff(void);
-	void setRadfetCtrlEnHigh(void);
-	void setRadfetCtrlEnLow(void);
-	void setRadfetCtrlR1High(void);
-	void setRadfetCtrlR1Low(void);
-	void setRadfetCtrlR2High(void);
-	void setRadfetCtrlR2Low(void);
-	void readRadfetOutputs(PlDataRec& pl_data_rec);
-	uint16_t readRadfetOutput(uint8_t radfet_index);
 
 public:
+	Ping_Sensor Ping;
+	double getSensor2Measurement(void) const;
+
 	// **************************************************
-	// The following public interface shall not be modified.
-	// However, new methods may be added, and requires approval by the U of L SW team
-	
+	// The following public interface section shall not be modified.
 	// Constructors
 	Payload(void);
 
 	void initializePayload(void);
 	void performPayloadLoopIteration(PlDataRec& pl_data_rec);
+
+	//
+	// **************************************************
 };
 
 #endif
