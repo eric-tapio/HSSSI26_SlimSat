@@ -17,9 +17,10 @@
 
 #include <Arduino.h>
 
-#define BUFFER_CAPACITY_NUM_MSGS 20
+#define BUFFER_CAPACITY_NUM_MSGS 10 //20
 #define BUFFER_MSG_LENGTH 32
 
+// Originally was:
 //#define BUFFER_CAPACITY_NUM_MSGS 10
 //#define BUFFER_MSG_LENGTH 34
 

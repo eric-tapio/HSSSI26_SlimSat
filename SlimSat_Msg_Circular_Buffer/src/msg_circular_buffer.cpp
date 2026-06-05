@@ -87,16 +87,14 @@ void MsgCircularBuffer::printCircularBufferMsgs(void) const {
 		start_index = msg_index * msg_length;
 		msg_data_ptr = &(buffer_ptr[start_index]);
 
-		if (1) {
-			Serial.print(F("\n      start_index["));
-			Serial.print(msg_index);
-			Serial.print(F("] = "));
-			Serial.println(start_index);
-			Serial.print(F("      Buffer Data Msg["));
-			Serial.print(msg_index);
-			Serial.print(F("] = "));
-			Serial.println(msg_data_ptr);
-		}
+		Serial.print(F("\n      start_index["));
+		Serial.print(msg_index);
+		Serial.print(F("] = "));
+		Serial.println(start_index);
+		Serial.print(F("      Buffer Data Msg["));
+		Serial.print(msg_index);
+		Serial.print(F("] = "));
+		Serial.println(msg_data_ptr);
 	}
 
 	Serial.println(F("\n ~ Done Printing Circular Buffer Msgs ..."));
@@ -395,6 +393,7 @@ void MsgCircularBuffer::initEntireBufferAry(void) {
 
 	return;
 }
+
 
 /**
  * @brief Print entire buffer array
