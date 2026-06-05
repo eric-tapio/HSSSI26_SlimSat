@@ -21,7 +21,7 @@
 #include <RadioLib.h>
 #include <bus_pin_definitions.h>
 
-#define DEFAULT_SLIMSAT_FREQUENCY_IN_HZ 434000000
+#define DEFAULT_SLIMSAT_FREQUENCY_IN_HZ 438000000
 #define DEFAULT_SLIMSAT_BANDWIDTH_IN_HZ 125000
 #define DEFAULT_SLIMSAT_SPREAD_FACTOR 9
 #define DEFAULT_SLIMSAT_SYNC_WORD 0x12
@@ -40,8 +40,6 @@
 
 #define VERBOSE_LORA_OUTPUT 0
 
-//#define TRANSMIT_BEACON 0
-
 /**
  * @brief LoRa Radio Communication Class
  * 
@@ -51,58 +49,33 @@
  * as a wrapper for LoRa radio operations within the SlimSat system.
  */
  
- 
- // Note: to successfully receive data, the following
-  // settings have to be the same on both transmitter
-  // and receiver:
-  // - carrier frequency
-  // - bandwidth
-  // - spreading factor
-  // - coding rate
-  // - sync word
-  
-  
-  // If needed, 'listen' mode can be disabled by calling any of the following methods:
-  // radio.standby()
-  // radio.sleep()
-  // radio.transmit();
-  // radio.receive();
-  // radio.scanChannel();
-  
- // No longer class members
- //volatile uint8_t transmitted_flag;
- //void setReceiveFlag(void); 
- //void setTransmitFlag(void); 
+// Note: SX1276 begin defaults are:
+//  float freq = 434.0
+//	float bw = 125.0
+//	uint8_t sf = 9
+//	uint8_t cr = 7
+//	uint8_t syncWord = RADIOLIB_SX127X_SYNC_WORD -> 0x12
+//	int8_t power = 10
+//	uint16_t preambleLength = 8
+//	uint8_t gain = 0
+//
+// Note: to successfully receive data, the following settings have to be the same on both transmitter
+// and receiver:
+// - carrier frequency
+// - bandwidth
+// - spreading factor
+// - coding rate
+// - sync word
+
+// Non-Class member function
 void setOperationDoneFlag(void);
 
-// Note:
-//  SX1276 begin defaults are:
-//		float freq = 434.0
-//		float bw = 125.0
-//		uint8_t sf = 9
-//		uint8_t cr = 7
-//		uint8_t syncWord = RADIOLIB_SX127X_SYNC_WORD -> 0x12        //  7     0   default LoRa sync word
-//		int8_t power = 10
-//		uint16_t preambleLength = 8
-//		uint8_t gain = 0
 
 class LoRaRadio{
 private:
 	// Data Members
-	// Note: LORA_DIO1_PIN is no longer connected to the LORA! IS this a problem? TBD Substituting BUS_PL_IF_A5_PIN for now, which may be used, if necessary
-		//SX1276 radio = new Module(LORA_NSS_CS_PIN, LORA_DIO0_G0_PIN, LORA_RST_PIN, LORA_DIO1_PIN);
-	
-	
+
 	SX1276 radio = new Module(LORA_NSS_CS_PIN, LORA_DIO0_G0_PIN, LORA_RST_PIN, LORA_INT_PIN);
-	//SX1276 radio = new Module(LORA_NSS_CS_PIN, LORA_DIO0_G0_PIN, LORA_RST_PIN, BUS_PL_IF_A5_PIN);
-	
-	// if (USING_SLIMSAT_MODULE_CONFIG) {
-		// SX1276 radio = new Module(LORA_NSS_CS_PIN, LORA_DIO0_G0_PIN, LORA_RST_PIN, BUS_PL_IF_A5_PIN);
-	// }
-	// else {
-		//Using SW Dev Board Config
-		// SX1276 radio = new Module(LORA_NSS_CS_PIN, LORA_DIO0_G0_PIN, LORA_RST_PIN, BUS_PL_IF_A5_PIN);
-	// }
 	
 	uint32_t frequency_in_hz; // LoRa radio frequency in Hz
 	uint8_t spread_factor; // LoRa spread factor, accepted range is 6 to 12
@@ -131,9 +104,6 @@ public:
 	 * @details Initializes LoRa radio with default configuration values
 	 */
 	LoRaRadio(void);
-	
-	// Destructors
-	//~LoRaRadio(void);
 	
 	int16_t beginUsingStandardDefaultValues(void);
 	int16_t begin(void);
@@ -212,14 +182,10 @@ public:
 	
 	int16_t startTransmit(const char* msg);
 	int16_t startTransmit(char* msg);
-	//void finishTransmit(void);
 	
 	int16_t receiveUsingBlocking(void);
-	//int16_t receiveUsingInterrupt(void);
-	//int8_t receiveUsingInterrupt(void);
 	char* receiveUsingInterrupt(void);
 	int16_t startReceive(void);
-	//uint8_t readData(void);
 	
 	void initializeRxMessageBuffer(void);
 	void setRadioParameters(void);
@@ -235,8 +201,6 @@ public:
 	float getRssi(void);
 	float getSnr(void);
 	float getFrequencyError(void);
-	//float getDataRate(void);
-
 	/**
 	 * @brief Print LoRa radio information
 	 * @details Outputs current LoRa radio configuration for debugging
@@ -244,8 +208,6 @@ public:
 	void print(void) const;
 	
 	char* getReceivedMsg(void);
-	//uint8_t readDataOriginal(void);
-	
 	void setInterruptAction(void);
 	char* handleReceivedPacket(void);
 	void handleEndOfTransmission(void);

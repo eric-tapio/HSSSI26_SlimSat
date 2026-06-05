@@ -23,6 +23,7 @@ void setPacketReceivedFlag(void) {
 	packet_received = true;
 }
 
+
 /**
  * @brief Default constructor for the LoRa Wrapper class
  * @details Initializes the LoRa radio with default configuration by
@@ -30,7 +31,6 @@ void setPacketReceivedFlag(void) {
  */
 LoRaRadio::LoRaRadio(void) {
 	// Default constructor for the LoRa Wrapper class
-	
 	initializeLoRa();
 }
 
@@ -68,13 +68,13 @@ void LoRaRadio::initializeLoRa(void) {
 
 
 void LoRaRadio::setInterruptAction(void) {
-	// Looks like this should be done only after starting the LoRa, so moved it from initialize, which is called during construction to it's own method
-	// set the function that will be called when new packet is received
-	//radio.setDio0Action(setPacketReceivedFlag, RISING);
+	// Setting the Interrupt action should only be done after starting the LoRa
+	// Set the function that will be called when new packet is received
 	radio.setPacketReceivedAction(setPacketReceivedFlag);
 	
 	return;
 }
+
 
 void LoRaRadio::setRadioParameters(void) {
 	// This method sets the radio settings to default values
@@ -161,16 +161,16 @@ int16_t LoRaRadio::begin(void) {
 
 float LoRaRadio::covnertHzToMhz(uint32_t hertz_value) {
 	// This method converts a value in Hz to MHz
-
 	return float(hertz_value) / NUM_HZ_PER_MHZ;
 }
 
+
 float LoRaRadio::covnertHzToKhz(uint32_t hertz_value) {
 	// This method converts a value in Hz to kHz
-
 	return float(hertz_value) / NUM_HZ_PER_KHZ;
 }
-	
+
+
 /**
  * @brief Set LoRa radio frequency
  * @details Configures the operating frequency of the LoRa radio with
@@ -554,75 +554,6 @@ int16_t LoRaRadio::transmitUsingInterrupt(char* msg) {
 	return radio_return_code;
 }
 
-// int16_t LoRaRadio::transmitUsingInterruptOriginal(const char* msg) {
-	// // This method transmitts a message (using an interrupt)
-	
-	// radio_return_code = RADIOLIB_ERR_NONE;	
-	// radio_return_code = startTransmit(msg);
-	
-	// // Wait for the the tranmission to complete
-	// do {
-		// delay(RADIO_TX_WAIT_IN_MS);
-	// } while (packet_received == false);
-	
-	// // Transmission Complete!
-	
-	// if (radio_return_code == RADIOLIB_ERR_NONE) {
-		// if (VERBOSE_LORA_OUTPUT) {
-			// // Packet was successfully sent
-			// Serial.println(F("[SX1276] Transmission finished!"));
-		// }
-	// }
-	// else {
-		// if (VERBOSE_LORA_OUTPUT) {
-			// Serial.print(F("[SX1276] Failed, code "));
-			// Serial.println(radio_return_code);
-		// }
-	// }
-		
-	// // Clean up after transmission is finished
-	// // This will ensure transmitter is disabled,
-	// // RF switch is powered down etc.
-	// finishTransmit();
-		
-	// return radio_return_code;
-// }
-
-
-// int16_t LoRaRadio::transmitUsingInterrupt(char* msg) {
-	// // This method transmitts a message (using an interrupt)
-	
-	// radio_return_code = RADIOLIB_ERR_NONE;	
-	// radio_return_code = startTransmit(msg);
-	
-	// // Wait for the the tranmission to complete
-	// do {
-		// delay(RADIO_TX_WAIT_IN_MS);
-	// } while (packet_received == false);
-	
-	// // Transmission Complete!
-	
-	// if (radio_return_code == RADIOLIB_ERR_NONE) {
-		// if (VERBOSE_LORA_OUTPUT) {
-			// // Packet was successfully sent
-			// Serial.println(F("[SX1276] Transmission finished!"));
-		// }
-	// }
-	// else {
-		// if (VERBOSE_LORA_OUTPUT) {
-			// Serial.print(F(" ~ Failed, code "));
-			// Serial.println(radio_return_code);
-		// }
-	// }
-		
-	// // Clean up after transmission is finished
-	// // This will ensure transmitter is disabled,
-	// // RF switch is powered down etc.
-	// finishTransmit();
-		
-	// return radio_return_code;
-// }
-
 
 int16_t LoRaRadio::startTransmit(const char* msg) {
 	// This method starts the transmission of a message (using an interrupt)
@@ -653,19 +584,6 @@ int16_t LoRaRadio::startTransmit(char* msg) {
 
 	return radio_return_code;
 }
-
-
-// void LoRaRadio::finishTransmit(void) {
-	// // This method finishes the transmission of a message 
-	// if (VERBOSE_LORA_OUTPUT) {
-		// Serial.println(F("\n ~ Finishing Transmit ..."));
-	// }
-
-	// radio.finishTransmit();
-	// in_receive_mode = false; // Set the radio to Receive Mode
-	
-	// return;
-// }
 
 
 int16_t LoRaRadio::transmitUsingBlocking(char* msg) {
@@ -759,15 +677,13 @@ char* LoRaRadio::receiveUsingInterrupt(void) {
 	// This method receives a message (using an interrupt)
 	
 	if (packet_received) {
-		// Clear the packet_received immediately (Right! The radio is fast. I neglected to do this)
+		// Clear the packet_received immediately
 		packet_received = false;
 
 		if (in_receive_mode) {
 			// Handle the received packet
 			char* msg_ptr = handleReceivedPacket();
 			
-			// Then switch to transmit mode and send a response
-			//transmitResponse();
 			return msg_ptr;
 		} 
 		else {
@@ -775,22 +691,13 @@ char* LoRaRadio::receiveUsingInterrupt(void) {
 		}
 	}
 
-	// Still need to do these:
-  	//initializeRxMessageBuffer();
-	//radio_return_code = RADIOLIB_ERR_NONE;
-	//radio_return_code = startReceive();
-	//uint8_t num_bytes = readData();
-
-	//return radio_return_code;
-	//return num_bytes;
 	return nullptr;
 }
 
 
 char* LoRaRadio::handleReceivedPacket(void) {
   // Handle the received packet
-    initializeRxMessageBuffer(); // Yes, this is needed here, otherwise will get ghosts from longer prior msgs
-	// And flush the radio buffer, too. I am getting the last message transmitted in the radio buffer, and the radio thinks it is a new message received!
+    initializeRxMessageBuffer(); // Empty the message buffer so that the LoRa does not take the last message transmitted as a newly received message
 	
     uint8_t num_bytes = radio.getPacketLength();
   	radio_return_code = radio.readData(rx_msg_buffer, num_bytes);
@@ -807,14 +714,13 @@ char* LoRaRadio::handleReceivedPacket(void) {
 		
 		// As a result return a ptr to the message
 		return char_rx_msg_buffer;
-		//return &(rx_msg_buffer[0]);
 		}
 	else {
 		if (VERBOSE_LORA_OUTPUT) {
 			Serial.print(F("Receive failed, code "));
 			Serial.println(radio_return_code);
 		}
-		// return nullptr
+		
 		return nullptr;
 	}
 }
@@ -822,13 +728,12 @@ char* LoRaRadio::handleReceivedPacket(void) {
 
  void LoRaRadio::handleEndOfTransmission(void) {
 	// Handle the end of transmission
-	// finishTransmit cleans up the internal state and puts the module in standby
-	radio.finishTransmit(); 
-	//Serial.println(F("Tx Done. Going into Rx Mode ..."));
+	// This method cleans up the internal state and puts the LoRa module in standby
+	radio.finishTransmit();
 
 	radio.standby(); // This is being used to explicitly clear the internal radio buffer (does not do it all by itself
 	packet_received = false;  // Hard flag set prevents ground-station from listening to itsself
-	delay(COMPLETE_END_OF_TRANSMISSION_DELAY_IN_MS);                // delay to allow radio state to settle
+	delay(COMPLETE_END_OF_TRANSMISSION_DELAY_IN_MS);  // delay to allow radio state to settle
 
 	// Switch back to receive mode using interrupt-driven method
 
@@ -936,26 +841,6 @@ float LoRaRadio::getFrequencyError(void) {
 		
 	return frequency_error_in_hz;
 }
-
-
-// Get DataRate has been removed from RadioLib in Vers 7.6.0
-// float LoRaRadio::getDataRate(void) {
-	// // This method gets the LoRa radio transmission data rate (for when using blocking)
-	// if (VERBOSE_LORA_OUTPUT) {
-		// Serial.println(F("\n ~ Getting LoRa Data Rate Value ..."));
-	// }
-	
-	// datarate = radio.getDataRate();
-	
-	// if (VERBOSE_LORA_OUTPUT) {
-		// // print Datarate
-		// Serial.print(F("[SX1276] Datarate:\t"));
-		// Serial.print(datarate);
-		// Serial.println(F(" bps"));
-	// }
-	
-	// return datarate;
-// }
 
 
 void LoRaRadio::initializeRxMessageBuffer(void) {
