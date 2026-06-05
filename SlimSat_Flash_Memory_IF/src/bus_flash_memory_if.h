@@ -55,6 +55,7 @@
 #define INITIAL_PAYLOAD_DATA_START_WRITE_ADDRESS PAYLOAD_DATA_START_WRITE_SECTOR_NUMBER*FLASH_SECTOR_SIZE_IN_BYTES
 
 #define VERBOSE_BUS_FLASH_MEMORY_OUTPUT 0
+#define OUTPUT_BUS_FLASH_MEMORY_ERRORS_TO_USER 1
 
 
 class FlashMemoryIf {
@@ -103,7 +104,7 @@ public:
             }
         }
         else {
-            if (1) {
+            if (OUTPUT_BUS_FLASH_MEMORY_ERRORS_TO_USER) {
                 Serial.println(F(" - Failed to write to flash!"));
             }
         }
@@ -127,7 +128,7 @@ public:
             }
         }
 		else {
-            if (1) {
+            if (OUTPUT_BUS_FLASH_MEMORY_ERRORS_TO_USER) {
 				Serial.println(" - Failed to read from flash!");
 				Serial.print(F("     From specified address: "));
 				Serial.println(address);

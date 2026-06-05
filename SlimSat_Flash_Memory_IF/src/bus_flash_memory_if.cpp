@@ -35,13 +35,15 @@ FlashMemoryIf::FlashMemoryIf(void) : flash(&flashTransport){
 uint8_t FlashMemoryIf::flashEraseChip(void) {
 	// This method erases the entire flash chip
 	
-	flash_return_result = flash.eraseChip();
+	uint8_t flash_erase_result = flash.eraseChip();
+	//flash_return_result = flash.eraseChip();
 	flash.waitUntilReady();
 	
 	// Initialize the DB Values
 	initializeBusFlashMemoryDbValues();
 	
-	return flash_return_result;
+	//return flash_return_result;
+	return flash_erase_result;
 }
 
 
@@ -698,7 +700,7 @@ void FlashMemoryIf::writePartialPayloadDataRecordToFlash(PlDataRec& pl_data) {
 	uint8_t num_bytes_written = 0;
 	
 	//if (VERBOSE_BUS_FLASH_MEMORY_OUTPUT) {
-	if (1) {
+	if (0) {
 		Serial.println(F(" ~ Writing Partial Payload Data Record to Flash Memory ..."));
 	}
 	// uint8_t num_bytes_read_wrote = 0;
