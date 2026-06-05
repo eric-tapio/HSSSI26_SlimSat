@@ -11,7 +11,7 @@
 #ifndef BUS_PIN_NUMBERS_HEADER
 #define BUS_PIN_NUMBERS_HEADER
 
-#define USING_SLIMSAT_MODULE_CONFIG 0
+#define USING_SLIMSAT_MODULE_CONFIG 1
 
 // Pin Numbering
 #if (USING_SLIMSAT_MODULE_CONFIG == 1)
@@ -57,5 +57,5 @@
 #define INA219_2_I2C_ADR 0x41 // System Monitor, was 42
 #define INA219_3_I2C_ADR 0x40 // Solar Monitor
 // Note: TMP75A_I2C_ADR is set in the conditional code above
-//#define TMP75A_I2C_ADR 0x4F   // Panel Temp Sensor, was 4B. Is 4B on Dev board
+//#define TMP75A_I2C_ADR 0x4F   // Panel Temp Sensor, was 4B, and still is 4B on the Dev board
 #endif

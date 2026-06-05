@@ -434,7 +434,6 @@ char* SlimSatBus::getBusCmdFromSerialTerm(void) {
 }
 
 
-//char* SlimSatBus::getBusCmdFromLoraRadio(void) {
 char* SlimSatBus::getReceivedMsgFromLoraRadio(void) {
 	// This method checks and gets Bus commands from the LoRa
 	char* rxd_message_ptr = nullptr;
@@ -457,36 +456,6 @@ char* SlimSatBus::getReceivedMsgFromLoraRadio(void) {
 
 	return rxd_message_ptr;
 }
-
-
-// char* SlimSatBus::getReceivedMsgFromLoraRadioUsingInterrupt(void) {
-	// // This method checks and gets Bus commands from the LoRa
-	
-	// if (VERBOSE_BUS_OUTPUT) {
-		// Serial.println(F("\n ~ Getting Command from LoRa Radio (Using Interrupt) ..."));
-	// }
-	
-	// uint8_t num_bytes_rxd = LoRa.receiveUsingInterrupt();
-	
-	// if (num_bytes_rxd > 0) {
-		// if (VERBOSE_BUS_OUTPUT) {
-			// Serial.print(F("\n ~ Received Message with length of: "));
-			// Serial.println(num_bytes_rxd);
-		// }
-		
-		// // Then a message has been received
-		// // Get the message from the LoRa Buffer
-		// char* rxd_message = LoRa.getReceivedMsg();
-		// Serial.print(F("\n ~ Rx'd Message from LoRa: "));
-		// Serial.println(rxd_message);
-		
-		// return rxd_message;
-	// }
-	// else {
-		// //Serial.print(F("\n ~ No LoRa Message Rx'd ..."));
-		// return nullptr;
-	// }
-// }
 
 
 void SlimSatBus::getReceivedMsgFromLoraRadioUsingBlocking(void) {
@@ -619,7 +588,7 @@ void SlimSatBus::getReceivedRadioMessage(void) {
 	
 	if (msg_ptr != nullptr) {
 		//Serial.print(F("\n ~ Received LoRa Test Message is: "));
-		Serial.print(F(" ~ Rx's LoRa Msg: "));
+		Serial.print(F(" ~ Rx'd LoRa Msg: "));
 		Serial.println(msg_ptr);
 	}
 	
