@@ -48,6 +48,7 @@ public:
 	void begin(void);
 	char* getGpsPositionMessage(void);
 	void print(void) const;
+	uint8_t testGpsDeviceConnectivity(void) const;
 };
 
 #endif

@@ -276,3 +276,22 @@ void GpsIf::print(void) const {
 	
     return;
 }
+
+
+uint8_t GpsIf::testGpsDeviceConnectivity(void) const {
+	uint8_t char_count = 0;
+	
+	for (uint8_t i=0; i<10; i++) {
+		
+		while (Serial1.available()) {
+			// Read a character from the GPS device
+			char rc = (char)Serial1.read();
+			Serial.print(rc);
+			char_count++;
+		}
+		
+		delay(100);
+	}
+	
+	return char_count;
+}
