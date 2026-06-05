@@ -3,7 +3,12 @@
 // Copyright (c) 2025, Eric Tapio. All rights reserved.
 // Licensed under the MIT license. See LICENSE file in the project root for full license information.
 
-// Adafruit TinyUSB is needed if running on the Adafruit ItsyBitsy. Otherwise it can be commented out 
+// This is a LoRa Radio V&V sketch. Run this TX sketch using one system with a LoRa radio and
+// run the RX sketch on another system with a LoRa radio to ensure connectivity.
+// Ensure that #define GET_CMD_INPUT_FROM_LORA_RADIO is set to 0 in slimsat_bus.h
+// Then type a string input into the Arduino IDE serial terminal and press the Enter key.
+// Verify that the message typed is received on by the RX system
+
 #include <Adafruit_TinyUSB.h> // for Serial
 #include <slimsat_bus.h>
 
@@ -20,7 +25,7 @@ void setup(void) {
 
 	Serial.println(F("\n ~ Running SlimSat Bus/LoRa Radio Transmit Message From Serial Input ...\n"));
 
-	// Initialize the S/C Bus
+	// Initialize the SlimSat Bus
 	Slimsat.initializeBus();
 
 	Serial.println(F(" ~ Enter a message to transmit: "));

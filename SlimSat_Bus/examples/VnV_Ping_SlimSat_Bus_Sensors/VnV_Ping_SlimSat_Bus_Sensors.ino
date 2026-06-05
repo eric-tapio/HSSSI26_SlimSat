@@ -13,7 +13,7 @@
 SlimSatBus Slimsat;
 
 uint8_t error_count = 0;
-const char EMPTY_GPS_MSG[] = ",,,,";
+
 
 void setup(void) {
 	// Initialize the SlimSat SW Simulator
@@ -51,20 +51,20 @@ void setup(void) {
 		error_count++;
 	}
 
-
-	Serial.println(F("\n ~ Starting GPS ..."));
+	// Start the GPS Device
 	Slimsat.startGps();
-	
-	// Read a message from GPS
-  uint gps_started = 0;
-	char* rxd_gps_msg_ptr = Slimsat.Gps.getGpsPositionMessage();
-	if ((rxd_gps_msg_ptr == nullptr) || (strcmp(rxd_gps_msg_ptr, EMPTY_GPS_MSG) == STR_CMP_MATCHES_VALUE)) {
-		Serial.println(F(" ~ Error: No GPS Message Rx'd"));
+
+	Serial.println(" ~ Reading data from the GPS device ...");
+	// Attempt to read characters from the GPS device
+  uint8_t num_rxd_chars = Slimsat.Gps.testGpsDeviceConnectivity();
+
+	if (num_rxd_chars == 0) {
 		error_count++;
+		Serial.println(F("\n ~ No data received from the GPS Device."));
+		Serial.println(F(" ~ Check your wiring."));
 	}
 	else {
-		Serial.println(F(" ~ GPS Message Rx'd"));
-		Serial.println(rxd_gps_msg_ptr);
+		Serial.println(F("\n ~ Data successfully received from the GPS Device."));
 	}
 
 	Serial.println(F("\n ~ Ping of SlimSat Bus Sensors complete."));
@@ -82,6 +82,5 @@ void setup(void) {
 }
 
 
-void loop(void) {
-	// Infinite loop
+void loop() {
 }

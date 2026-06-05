@@ -6,12 +6,11 @@
 // This is a LoRa Radio V&V sketch. Run this TX sketch using one system with a LoRa radio and
 // run the RX counterpart sketch on another system with a LoRa radio to ensure connectivity
 
-// Adafruit TinyUSB is needed if running on the Adafruit ItsyBitsy. Otherwise it can be commented out 
 #include <Adafruit_TinyUSB.h> // for Serial
 #include <slimsat_bus.h>
 
 #define MSG_LENGTH 100
-#define TEST_MSG "Hello World-"
+#define TEST_MSG "Hello SlimSat World-"
 
 // Construct the SlimSat Bus
 SlimSatBus Slimsat;
@@ -35,7 +34,7 @@ void setup(void) {
 
 	Serial.println(F("\n ~ Running SlimSat Bus/LoRa Radio Transmit Test Message ...\n"));
 
-	// Initialize the S/C Bus
+	// Initialize the SlimSat Bus
 	Slimsat.initializeBus();
 
 	return;
@@ -45,7 +44,7 @@ void setup(void) {
 void loop(void) {
 	Serial.println(F(" ~ Transmiting Test Messages ..."));
 
-	for (uint8_t i=0; i<10; i++) { 
+	for (uint8_t i=0; i<100; i++) { 
 		snprintf(msg_buffer, sizeof(msg_buffer), "%s%d\n", TEST_MSG, i);
 		Serial.println(msg_buffer);
 		Slimsat.transmitMessageToLoraRadio(msg_buffer);
