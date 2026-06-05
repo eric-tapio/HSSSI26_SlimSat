@@ -64,8 +64,17 @@ uint8_t BusPowerMonitor::start(void) {
 	// This method initializes the Bus Power Monitor
 	
 	uint8_t return_status_0 = 0;
-	uint8_t return_status_1 = HW_DEVICE_IS_PRESENT; // Simulate that this INA is present
-	uint8_t return_status_2 = HW_DEVICE_IS_PRESENT; // Simulate that this INA is present
+
+
+	uint8_t return_status_1 = 0;
+	uint8_t return_status_2 = 0;
+
+	if (USING_SLIMSAT_MODULE_CONFIG == 0) {
+		// Just 1 INA is present
+		return_status_1 = HW_DEVICE_IS_PRESENT; // Simulate that this INA is present
+		return_status_2 = HW_DEVICE_IS_PRESENT; // Simulate that this INA is present
+	}
+	
 	uint8_t return_status_3 = 0;
 	
 	// Start the INAs
@@ -311,28 +320,32 @@ void BusPowerMonitor::collectBusData(BusDataRec& Bus_data) {
 	Bus_data.bus_voltage_V_1 = getBusVoltage(0);
 	Bus_data.load_voltage_V_1 = getLoadVoltage(0);
 	Bus_data.current_mA_1 = getCurrent(0);
-	
-	Bus_data.shunt_voltage_mV_2 = getShuntVoltage(0);
-	Bus_data.bus_voltage_V_2 = getBusVoltage(0);
-	Bus_data.load_voltage_V_2 = getLoadVoltage(0);
-	Bus_data.current_mA_2 = getCurrent(0);
-	
-	Bus_data.shunt_voltage_mV_3 = getShuntVoltage(0);
-	Bus_data.bus_voltage_V_3 = getBusVoltage(0);
-	Bus_data.load_voltage_V_3 = getLoadVoltage(0);
-	Bus_data.current_mA_3 = getCurrent(0);
-	
-	// Change this once the other INA219s are present
-	//Bus_data.shunt_voltage_mV_2 = getShuntVoltage(1);
-	//Bus_data.bus_voltage_V_2 = getBusVoltage(1);
-	//Bus_data.load_voltage_V_2 = getLoadVoltage(1);
-	//Bus_data.current_mA_1 = getCurrent(1);
-	//Bus_data.power_mW_1 = getPower(1);
-	//Bus_data.shunt_voltage_mV_3 = getShuntVoltage(2);
-	//Bus_data.bus_voltage_V_3 = getBusVoltage(2);
-	//Bus_data.load_voltage_V_3 = getLoadVoltage(2);
-	//Bus_data.current_mA_3 = getCurrent(2);
-	//Bus_data.power_mW_1 = getPower(2);
+
+	#if (USING_SLIMSAT_MODULE_CONFIG == 1)
+		// All 3 INAs are present
+		Bus_data.shunt_voltage_mV_2 = getShuntVoltage(1);
+		Bus_data.bus_voltage_V_2 = getBusVoltage(1);
+		Bus_data.load_voltage_V_2 = getLoadVoltage(1);
+		Bus_data.current_mA_1 = getCurrent(1);
+		//Bus_data.power_mW_1 = getPower(1);
+		
+		Bus_data.shunt_voltage_mV_3 = getShuntVoltage(2);
+		Bus_data.bus_voltage_V_3 = getBusVoltage(2);
+		Bus_data.load_voltage_V_3 = getLoadVoltage(2);
+		Bus_data.current_mA_3 = getCurrent(2);
+		//Bus_data.power_mW_1 = getPower(2);
+	#else
+		// Just 1 INA is present, so use index 0 for all
+		Bus_data.shunt_voltage_mV_2 = getShuntVoltage(0);
+		Bus_data.bus_voltage_V_2 = getBusVoltage(0);
+		Bus_data.load_voltage_V_2 = getLoadVoltage(0);
+		Bus_data.current_mA_2 = getCurrent(0);
+		
+		Bus_data.shunt_voltage_mV_3 = getShuntVoltage(0);
+		Bus_data.bus_voltage_V_3 = getBusVoltage(0);
+		Bus_data.load_voltage_V_3 = getLoadVoltage(0);
+		Bus_data.current_mA_3 = getCurrent(0);
+	#endif
 	
 	return;
 }
@@ -343,10 +356,9 @@ float BusPowerMonitor::readThermistor(void) {
 
 	// The nRF52840 has a 10-bit ADC, so the max value is 1023.
 	// The voltage range is 0 to 3.6V, so the conversion factor is 3.6V/1024 steps.
-	//float mv_per_lsb = 3600.0F/1024.0F;
+	// float mv_per_lsb = 3600.0F/1024.0F;
 
 	uint16_t adc_value = analogRead(THERMISOTOR_AIN_PIN);
-	//float thermistor_V = (float)adc_value * MV_PER_LSB;
 	float thermistor_V = (float)adc_value * V_PER_LSB;
 	
 	return thermistor_V;
@@ -369,11 +381,12 @@ void BusPowerMonitor::rebootBus(void) {
 
 
 void BusPowerMonitor::initiateCutdown(void) {
+	// This method initiates a cutdown by starting the burn wire
 	if (VERBOSE_POWER_MONITOR_OUTPUT) {
 		Serial.println(F("\n ~ Initiating Cutdown (Burn wire) ..."));
 	}
 	
-	// Note, ultimately, need to swap the HIGH To LOW logic
+	// Put a timer on this, so that it turns off at some point?
 	digitalWrite(CUTDOWN_DO_PIN, HIGH);
 	
 	return;
