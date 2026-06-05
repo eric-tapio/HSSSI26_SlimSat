@@ -11,7 +11,7 @@
 #define INA219_I2C_ADR 0x40
 #define NUM_MILLVOLTS_PER_VOLT 1000
 
-#define VERBOSE_INA219_OUTPUT 0
+#define VERBOSE_INA219_OUTPUT 1
 
 class Ina219If {
 private:
