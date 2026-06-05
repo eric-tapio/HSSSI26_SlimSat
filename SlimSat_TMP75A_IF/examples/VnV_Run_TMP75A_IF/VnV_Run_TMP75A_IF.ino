@@ -1,0 +1,50 @@
+// CAPE-Twiggs HSSSI-26 SlimSat Project
+// August 30, 2025
+// Copyright (c) 2025, Eric Tapio. All rights reserved.
+// Licensed under the MIT license. See LICENSE file in the project root for full license information.
+
+#include <Adafruit_TinyUSB.h>
+#include <tmp75a_if.h>
+
+#define TMP_ADR 0x4B
+
+// Construct the TMP7A IF object
+//Tmp75aIf tmp75a_1; // Default constructor using TMP75A_I2C_ADR
+Tmp75aIf tmp75a_1(TMP_ADR); // Specific constructor using the specified I2C address
+
+void setup() {
+	// Open a serial port to the CPU
+  Serial.begin(115200);
+  while (!Serial) {
+		delay(10);   
+	}
+
+  Serial.println("\n ~ Running TMP75A IF Verification and Validation ...\n");
+
+  // Start th TMP75A sensor
+  bool success = tmp75a_1.begin();
+  if (success) {
+    Serial.println(" ~ TMP75A started.");
+  }
+  else {
+    Serial.println(" ~ Error: TMP75A was not started!");
+  }
+
+  // Print the object
+  tmp75a_1.print();
+
+  Serial.print("\n ~ TMP75A is Connected is: ");
+  Serial.println(tmp75a_1.isConnected());
+
+  return;
+}
+
+
+void loop() {
+  // Get the measured temperature
+  Serial.print(" ~ Temperature in Deg C is: ");
+  Serial.println(tmp75a_1.getTemperatureInDegC());
+  delay(1000);
+
+  return;
+}
