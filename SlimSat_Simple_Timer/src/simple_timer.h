@@ -19,9 +19,7 @@
 
 // Max interval in ms is 20 minutes
 #define MAX_INTERVAL_IN_MS 1200000L
-
 #define DEFAULT_INTERVAL_IN_MS 2000L
-
 #define SIMPLE_TIMER_VERBOSE_OUTPUT 0
 
 /**
