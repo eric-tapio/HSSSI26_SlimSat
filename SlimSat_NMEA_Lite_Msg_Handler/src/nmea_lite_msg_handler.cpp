@@ -63,7 +63,7 @@ void NmeaMsgHandler::print(void) const {
 	Serial.println(full_msg_header);
 	Serial.print(F("    Msg is Valid is: "));
 	Serial.println(msg_is_valid);
-	Serial.print(F("    Rx's Msg Count is: "));
+	Serial.print(F("    Rx'd Msg Count is: "));
 	Serial.println(rxd_valid_msg_count);
 	Serial.print(F("    Msg ID is: "));
 	Serial.println(cmd_id);

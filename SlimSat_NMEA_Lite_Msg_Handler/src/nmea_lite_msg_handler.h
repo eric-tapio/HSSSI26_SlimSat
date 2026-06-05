@@ -37,7 +37,6 @@
 #define SLIMSAT_MSG_OPTIONAL_CMD_ARG_1_FIELD_INDEX 3
 //#define SLIMSAT_MSG_OPTIONAL_CMD_ARG_2_FIELD_INDEX 4
 
-//#define SLIMSAT_MSG_TALKER "$G"
 
 #define SLIMSAT_MSG_START_CHAR '$'
 #define SLIMSAT_MSG_STOP_CHAR '*'
@@ -46,7 +45,6 @@
 #define MIN_SLIMSAT_CMD_ID 1
 #define MAX_SLIMSAT_CMD_ID 59
 
-//#define SLIMSAT_MSG_HEADER_LENGTH 5
 #define SLIMSAT_MSG_MAX_HEADER_LENGTH (5+1)
 
 #define MAX_MSG_HANDLER_MSG_LENGTH 160
@@ -149,8 +147,6 @@ public:
 	uint8_t constructMsgFragments(uint8_t cmd_id, uint8_t is_ack, char* msg);
 	uint8_t constructResponseMsgGivenMsgPayload(uint8_t cmd_id, uint8_t is_ack, char* msg);
 	void constructPayloadDataResponseMsg(PlDataRec& pl_data);
-
-	
 };
 
 #endif
