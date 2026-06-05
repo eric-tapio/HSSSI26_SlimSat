@@ -16,7 +16,6 @@
 
 
 #define RAISE_TMP75_HW_START_ERRORS 0
-
 #define VERBOSE_TMP75A_OUTPUT 0
  
 class Tmp75aIf {
